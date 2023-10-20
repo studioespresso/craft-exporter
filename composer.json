@@ -1,0 +1,46 @@
+{
+    "name": "studioespresso/craft-exporter",
+    "description": "Export all things",
+    "type": "craft-plugin",
+    "license": "proprietary",
+    "support": {
+        "email": "info@studioespresso.co",
+        "issues": "https://github.com/studioespresso/craft-exporter/issues?state=open",
+        "source": "https://github.com/studioespresso/craft-exporter",
+        "docs": "https://github.com/studioespresso/craft-exporter",
+        "rss": "https://github.com/studioespresso/craft-exporter/releases.atom"
+    },
+    "require": {
+        "craftcms/cms": "^4.5.0",
+        "putyourlightson/craft-sprig-core": "^2.0"
+    },
+    "require-dev": {
+        "craftcms/ecs": "dev-main",
+        "craftcms/phpstan": "dev-main"
+    },
+    "autoload": {
+        "psr-4": {
+            "studioespresso\\exporter\\": "src/"
+        }
+    },
+    "extra": {
+        "handle": "exporter",
+        "name": "Exporter",
+        "developer": "Studio Espresso",
+        "documentationUrl": "https://github.com/studioespresso/craft-exporter",
+        "class": "studioespresso\\exporter\\Exporter"
+    },
+    "scripts": {
+        "check-cs": "ecs check --ansi",
+        "fix-cs": "ecs check --ansi --fix",
+        "phpstan": "phpstan --memory-limit=1G"
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "yiisoft/yii2-composer": true,
+            "craftcms/plugin-installer": true
+        }
+    }
+}
+

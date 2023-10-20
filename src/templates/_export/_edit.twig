@@ -1,0 +1,14 @@
+{% extends "_layouts/cp" %}
+{% import "_includes/forms" as forms %}
+
+{% set title = 'New export' %}
+
+{% block content %}
+
+        {{  sprig('exporter/sprig/element/edit', {
+            'elementTypeOptions': elementTypeOptions,
+            'exportId': exportId,
+        }) }}
+
+
+{% endblock %}

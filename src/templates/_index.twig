@@ -1,0 +1,17 @@
+{% extends '_layouts/elementindex' %}
+
+{% set elementType = 'studioespresso\\exporter\\elements\\ExportElement' %}
+{% set canHaveDrafts = true %}
+{% set title = 'Exports'|t('exporter') %}
+
+{% do view.registerTranslations('exporter', [
+    'New export'
+]) %}
+
+{% block actionButton %}
+    {{ tag('a', {
+        class: 'btn submit add icon',
+        href: cpUrl('exporter/create'),
+        text: 'New export'|t('exporter'),
+    }) }}
+{% endblock %}
