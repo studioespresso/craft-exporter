@@ -1,11 +1,11 @@
-{% set elementType = elementType ?? 'craft\elements\Entry' %}
-
 {% set export = exportId ? craft.exports.id(exportId).one() : create('studioespresso\\exporter\\elements\\ExportElement') %}
-
 {% import "_includes/forms" as forms %}
 
 <form sprig s-action="exporter/element/save" s-method="post">
     {{ redirectInput('') }}
+    {% if export.id %}
+        {{ hiddenInput('elementId', export.id) }}
+    {% endif %}
 
     {{ forms.textField({
         first: true,
@@ -13,14 +13,20 @@
         instructions: "What this export will be called in the CP."|t('exporter'),
         id: 'name',
         name: 'name',
-        value: export.name,
+        value: name ?? export.name,
         errors: export.getErrors('name'),
         autofocus: true,
         required: true
     }) }}
 
-
-    {# TODO: Site dropdown to start with? #}
+    {% if export.id %}
+        {% set settings = export.getSettings() %}
+        {% set elementType = export.elementType %}
+        {% set showSiteOptions = true %}
+    {% else %}
+        {% set elementType = "craft\\elements\\Entry" %}
+        {% set showSiteOptions = false %}
+    {% endif %}
 
     <div class="field" tabindex="-1">
         <div class="heading">
@@ -42,32 +48,118 @@
     </div>
 
     {% if elementType == 'craft\\elements\\Entry' %}
-        {% set section = section ?? '' %}
-        {% set entryType = entryType ?? '' %}
+
+        {% set settings = settings ?? [] %}
+        {% if settings %}
+            {% set section = settings.section %}
+            {% set entryType = settings.entryType ?? '' %}
+        {% else %}
+            {% set entryType = '' %}
+            {% set section = '' %}
+        {% endif %}
+        <div class="flex-fields">
+            <div class="field width-50" id="elementType-entry-subfields">
+                <div class="heading">
+                    <label id="section-label" for="section">Section<span
+                                class="visually-hidden">Required</span><span class="required" aria-hidden="true"></span></label>
+                </div>
+                <div id="section-instructions" class="instructions"><p>Choose a section from which you want to start
+                        your
+                        export</p>
+                </div>
+                <div class="input ltr">
+                    <div class="select">
+                        <select sprig name="settings[section]" id="section" aria-describedby="section-instructions"
+                                aria-labelledby="section-label">
+                            <option value="" selected>---</option>
+                            {% for s in craft.app.sections.getAllSections() %}
+                                <option value="{{ s.id }}" {{ section == s.id ? 'selected' }}>{{ s.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+            {% if section %}
+                <div class="field width-50" id="elementType-entry-subfields">
+                    <div class="heading">
+                        <label id="section-label" for="section">Entry Type<span
+                                    class="visually-hidden">Required</span><span class="required"
+                                                                                 aria-hidden="true"></span></label>
+                    </div>
+                    <div id="section-instructions" class="instructions"><p>Choose which entry type you want to
+                            export</p>
+                    </div>
+                    <div class="input ltr">
+                        <div class="select">
+                            <select sprig name="settings[entryType]" id="section"
+                                    aria-describedby="section-instructions"
+                                    aria-labelledby="section-label">
+                                <option value="" selected>---</option>
+                                {% for s in craft.app.sections.getEntryTypesBySectionId(settings.section) %}
+                                    <option value="{{ s.id }}" {{ entryType == s.id ? 'selected' }}>{{ s.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    {% elseif elementType == 'craft\\elements\\Category' %}
+        {% set group = group ?? '' %}
         <div class="field" id="elementType-entry-subfields">
             <div class="heading">
-                <label id="section-label" for="section">Section<span
-                            class="visually-hidden">Required</span><span class="required" aria-hidden="true"></span></label>
+                <label id="group-label" for="group">Category Group<span
+                            class="visually-hidden">Required</span><span class="required"
+                                                                         aria-hidden="true"></span></label>
             </div>
-            <div id="section-instructions" class="instructions"><p>Choose a section from which you want to start your
+            <div id="group-instructions" class="instructions"><p>Choose a group from which you want to start your
                     export</p>
             </div>
             <div class="input ltr">
                 <div class="select">
-                    <select sprig name="section" id="section" aria-describedby="section-instructions"
-                            aria-labelledby="section-label">
+                    <select sprig name="group" id="group" aria-describedby="group-instructions"
+                            aria-labelledby="group-label">
                         <option value="" selected>---</option>
-                        {% for s in craft.app.sections.getAllSections() %}
-                            <option value="{{ s.handle }}" {{ section == s.handle ? 'selected' }}>{{ s.name }}</option>
+                        {% for s in craft.app.categories.getAllGroups() %}
+                            <option value="{{ s.handle }}" {{ group == s.handle ? 'selected' }}>{{ s.name }}</option>
                         {% endfor %}
                     </select>
                 </div>
             </div>
-    {% else %}
-        {# TODO: make categories exportable? #}
+        </div>
     {% endif %}
 
-    <button type="submit" class="btn submit">{{ "Next" }}</button>
+    {% if settings.section and settings.entryType %}
+        {% set showSiteOptions = true %}
+    {% endif %}
+    {% if showSiteOptions %}
 
+    <div class="field">
+        <div class="heading">
+            <label id="site-label" for="elementType">Site<span
+                        class="visually-hidden">Required</span><span class="required" aria-hidden="true"></span></label>
+        </div>
+        <div id="elementType-instructions" class="instructions"><p>Select one or our sites from which you want to export
+                elements.</p>
+        </div>
+        <div class="input ltr">
+            <ul>
+                {% for s in craft.app.sites.getAllSites() %}
+                    <li>
+                        <input type="checkbox" id="{{ s.id }}" class="checkbox" name="settings[sites][]"
+                               value="{{ s.id }}" {% if settings is defined and settings.sites is defined %}{% if s.id in settings.sites %}checked{% endif %}{% endif%} >
+                        <label for="{{ s.id }}">
+                            {{ s.name }}
+                        </label>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    {% endif %}
+    <hr>
+    <div class="field">
+        <button type="submit" class="btn submit">{{ "Next" }}</button>
+    </div>
 
 </form>

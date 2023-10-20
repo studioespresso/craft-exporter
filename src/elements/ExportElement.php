@@ -7,6 +7,7 @@ use craft\base\Element;
 use craft\elements\db\ElementQueryInterface;
 use craft\elements\User;
 use craft\helpers\Db;
+use craft\helpers\Json;
 use studioespresso\exporter\elements\db\ExportElementQuery;
 use studioespresso\exporter\records\ExportRecord;
 
@@ -17,6 +18,12 @@ class ExportElement extends Element
     public $elementType;
 
     public $settings;
+
+
+    public function getSettings(): null|array
+    {
+        return Json::decode($this->settings);
+    }
 
     /**
      * @inheritdoc
@@ -108,6 +115,14 @@ class ExportElement extends Element
         return true;
     }
 
+    /**
+     * @inheritDoc
+     */
+    public function canDelete(User $user): bool
+    {
+        return Craft::$app->getUser()->getIdentity()->can('exporter-deleteExports');
+    }
+
     protected static function defineTableAttributes(): array
     {
         return [
@@ -151,6 +166,19 @@ class ExportElement extends Element
         return sprintf('exporter/%s', $this->getCanonicalId());
     }
 
+    /**
+     * @inheritDoc
+     */
+    public function afterDelete(): void
+    {
+        if (!$this->propagating) {
+            Db::delete(ExportRecord::tableName(),[
+                'id' => $this->id]
+            );
+        }
+        parent::afterDelete();
+    }
+
 
     public function afterSave(bool $isNew): void
     {
@@ -159,9 +187,11 @@ class ExportElement extends Element
                 'id' => $this->id,
                 'name' => $this->name,
                 'elementType' => $this->elementType,
+                'settings' => $this->settings,
             ], [
                 'name' => $this->name,
                 'elementType' => $this->elementType,
+                'settings' => $this->settings,
             ]);
         }
 

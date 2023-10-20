@@ -9,9 +9,11 @@
 ]) %}
 
 {% block actionButton %}
-    {{ tag('a', {
-        class: 'btn submit add icon',
-        href: cpUrl('exporter/create'),
-        text: 'New export'|t('exporter'),
-    }) }}
+    {% if currentUser.can('exporter-createExports') %}
+        {{ tag('a', {
+            class: 'btn submit add icon',
+            href: cpUrl('exporter/create'),
+            text: 'New export'|t('exporter'),
+        }) }}
+    {% endif %}
 {% endblock %}

@@ -9,8 +9,10 @@ use craft\db\Table;
 use craft\events\DefineBehaviorsEvent;
 use craft\events\RegisterComponentTypesEvent;
 use craft\events\RegisterUrlRulesEvent;
+use craft\events\RegisterUserPermissionsEvent;
 use craft\services\Elements;
 use craft\services\Gc;
+use craft\services\UserPermissions;
 use craft\web\twig\variables\CraftVariable;
 use craft\web\UrlManager;
 use putyourlightson\sprig\Sprig;
@@ -44,13 +46,13 @@ class Exporter extends Plugin
         parent::init();
 
 
-
         // Defer most setup tasks until Craft is fully initialized
-        Craft::$app->onInit(function() {
+        Craft::$app->onInit(function () {
             Sprig::bootstrap();
             $this->registerElementTypes();
             $this->attachEventHandlers();
             $this->registerCpRoutes();
+            $this->registerUserPermissions();
         });
 
         $this->components = [
@@ -75,7 +77,7 @@ class Exporter extends Plugin
     private function registerElementTypes(): void
     {
         Event::on(Elements::class, Elements::EVENT_REGISTER_ELEMENT_TYPES,
-            function(RegisterComponentTypesEvent $event) {
+            function (RegisterComponentTypesEvent $event) {
                 $event->types[] = ExportElement::class;
             });
     }
@@ -85,9 +87,9 @@ class Exporter extends Plugin
         Event::on(
             UrlManager::class,
             UrlManager::EVENT_REGISTER_CP_URL_RULES,
-            function(RegisterUrlRulesEvent $event) {
+            function (RegisterUrlRulesEvent $event) {
                 $event->rules['exporter'] = ['template' => 'exporter/_index'];
-                $event->rules['exporter/create'] = 'exporter/element/create';
+                $event->rules['exporter/create'] = 'exporter/element/edit';
                 $event->rules['exporter/<elementId:\\d+>'] = 'exporter/element/edit';
 
             }
@@ -99,7 +101,7 @@ class Exporter extends Plugin
         Event::on(
             Gc::class,
             Gc::EVENT_RUN,
-            function(Event $event) {
+            function (Event $event) {
                 // Delete `elements` table rows without peers in our custom products table
                 Craft::$app->getGc()->deletePartialElements(
                     ExportElement::class,
@@ -119,11 +121,24 @@ class Exporter extends Plugin
         Event::on(
             CraftVariable::class,
             CraftVariable::EVENT_DEFINE_BEHAVIORS,
-            function(DefineBehaviorsEvent $e) {
+            function (DefineBehaviorsEvent $e) {
                 $e->sender->attachBehaviors([
                     CraftVariableBehavior::class,
                 ]);
             }
         );
+    }
+
+    private function registerUserPermissions()
+    {
+        Event::on(UserPermissions::class, UserPermissions::EVENT_REGISTER_PERMISSIONS, function (RegisterUserPermissionsEvent $event) {
+            $event->permissions[] = [
+                'heading' => Craft::t('exporter', 'Exporter'),
+                'permissions' => [
+                    'exporter-createExports' => ['label' => Craft::t('exporter', 'Create forms')],
+                    'exporter-deleteExports' => ['label' => Craft::t('exporter', 'Delete forms')],
+                ]
+            ];
+        });
     }
 }

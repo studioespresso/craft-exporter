@@ -1,13 +1,18 @@
 {% extends "_layouts/cp" %}
 {% import "_includes/forms" as forms %}
 
-{% set title = 'New export' %}
+
+{% set title = export ? export.name : 'New export' %}
+{% set crumbs = [
+    { label: "Exporter", url: url('exporter') },
+] %}
 
 {% block content %}
 
         {{  sprig('exporter/sprig/element/edit', {
             'elementTypeOptions': elementTypeOptions,
-            'exportId': exportId,
+            'exportId': export ? export.id : null,
+            's-trigger': 'load, refresh',
         }) }}
 
 
