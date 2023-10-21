@@ -126,7 +126,7 @@ class ExportElement extends Element
     protected static function defineTableAttributes(): array
     {
         return [
-            'name' => \Craft::t('exporter', 'Name'),
+            'elementType' => Craft::t('exporter', 'Element')
         ];
     }
 

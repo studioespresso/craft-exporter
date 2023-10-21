@@ -90,7 +90,7 @@ class Exporter extends Plugin
             function (RegisterUrlRulesEvent $event) {
                 $event->rules['exporter'] = ['template' => 'exporter/_index'];
                 $event->rules['exporter/create'] = 'exporter/element/edit';
-                $event->rules['exporter/<elementId:\\d+>'] = 'exporter/element/edit';
+                $event->rules['exporter/<elementId:\\d+>/<step:\\d+>'] = 'exporter/element/edit';
 
             }
         );

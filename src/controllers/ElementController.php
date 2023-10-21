@@ -31,16 +31,17 @@ class ElementController extends Controller
      * @throws UnauthorizedHttpException
      * @throws \Throwable
      */
-    public function actionEdit($elementId = null): \yii\web\Response
+    public function actionEdit($elementId = null, $step = 1): \yii\web\Response
     {
         if (!Craft::$app->getUser()->getIdentity()->can('exporter-createExports')) {
             throw new UnauthorizedHttpException("You are not authorized to create new exports");
         }
+        
         $element = ExportElement::findOne(['id' => $elementId]);
         return $this->renderTemplate('exporter/_export/_edit', [
             'export' => $element,
             'elementTypeOptions' => $this->config->getAvailableElementTypes(),
-            'step' => 1
+            'step' => $step
         ], View::TEMPLATE_MODE_CP);
     }
 
@@ -57,7 +58,7 @@ class ElementController extends Controller
         $export->elementType = $body['elementType'];
         $export->settings = Json::encode($body['settings']);
         Craft::$app->getElements()->saveElement($export);
-        $url = UrlHelper::cpUrl("/exporter/{$export->id}/2");
+        $url = UrlHelper::cpUrl("exporter/{$export->id}/2");
         return Craft::$app->getResponse()->getHeaders()->set('HX-Redirect', $url);
 
     }
