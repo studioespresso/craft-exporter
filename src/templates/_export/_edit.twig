@@ -1,6 +1,8 @@
 {% extends "_layouts/cp" %}
 {% import "_includes/forms" as forms %}
-
+{% if step is not defined and craft.app.request.getParam('step') %}
+    {% set step = craft.app.request.getParam('step') %}
+{% endif %}
 
 {% set title = export ? export.name : 'New export' %}
 {% set crumbs = [
@@ -9,7 +11,7 @@
 
 {% block content %}
 
-        {{  sprig('exporter/sprig/element/edit', {
+        {{  sprig('exporter/sprig/element/step_' ~ step, {
             'elementTypeOptions': elementTypeOptions,
             'exportId': export ? export.id : null,
             's-trigger': 'load, refresh',

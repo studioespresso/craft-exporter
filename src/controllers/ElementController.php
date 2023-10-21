@@ -40,6 +40,7 @@ class ElementController extends Controller
         return $this->renderTemplate('exporter/_export/_edit', [
             'export' => $element,
             'elementTypeOptions' => $this->config->getAvailableElementTypes(),
+            'step' => 1
         ], View::TEMPLATE_MODE_CP);
     }
 
@@ -56,8 +57,8 @@ class ElementController extends Controller
         $export->elementType = $body['elementType'];
         $export->settings = Json::encode($body['settings']);
         Craft::$app->getElements()->saveElement($export);
+        $url = UrlHelper::cpUrl("/exporter/{$export->id}/2");
+        return Craft::$app->getResponse()->getHeaders()->set('HX-Redirect', $url);
 
-        $redirect = Craft::$app->getRequest()->getValidatedBodyParam('redirect');
-        return $this->redirect(UrlHelper::cpUrl($redirect, ['export' => $export->uid]));
     }
 }
