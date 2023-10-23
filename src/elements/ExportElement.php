@@ -19,6 +19,10 @@ class ExportElement extends Element
 
     public $settings;
 
+    public $attributes;
+
+    public $fields;
+
 
     public function getSettings(): null|array
     {

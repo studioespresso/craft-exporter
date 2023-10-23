@@ -3,6 +3,7 @@
 namespace studioespresso\exporter\controllers;
 
 use Craft;
+use craft\errors\ElementNotFoundException;
 use craft\helpers\Json;
 use craft\helpers\UrlHelper;
 use craft\web\Controller;
@@ -36,7 +37,7 @@ class ElementController extends Controller
         if (!Craft::$app->getUser()->getIdentity()->can('exporter-createExports')) {
             throw new UnauthorizedHttpException("You are not authorized to create new exports");
         }
-        
+
         $element = ExportElement::findOne(['id' => $elementId]);
         return $this->renderTemplate('exporter/_export/_edit', [
             'export' => $element,
@@ -45,7 +46,7 @@ class ElementController extends Controller
         ], View::TEMPLATE_MODE_CP);
     }
 
-    public function actionSave()
+    public function actionStep1()
     {
         $body = $this->request->getBodyParams();
         if (!isset($body['elementId'])) {
@@ -59,6 +60,25 @@ class ElementController extends Controller
         $export->settings = Json::encode($body['settings']);
         Craft::$app->getElements()->saveElement($export);
         $url = UrlHelper::cpUrl("exporter/{$export->id}/2");
+        return Craft::$app->getResponse()->getHeaders()->set('HX-Redirect', $url);
+
+    }
+
+    public function actionStep2()
+    {
+        $body = $this->request->getBodyParams();
+        $elementId = Craft::$app->getRequest()->getRequiredBodyParam('elementId');
+        $export = ExportElement::findOne(['id' => $elementId]);
+
+        if(!$export) {
+            throw new ElementNotFoundException();
+        }
+
+        $attributes = array_filter($body['attributes']);
+        $export->attributes = $attributes;
+        Craft::$app->getElements()->saveElement($export);
+
+        $url = UrlHelper::cpUrl("exporter/{$export->id}/3");
         return Craft::$app->getResponse()->getHeaders()->set('HX-Redirect', $url);
 
     }

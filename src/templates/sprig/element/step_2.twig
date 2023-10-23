@@ -6,16 +6,38 @@
 
 {% import "_includes/forms" as forms %}
 
-<form sprig s-action="exporter/element/save" s-method="post">
+<form sprig s-action="exporter/element/step2" s-method="post">
     {{ redirectInput('') }}
     {% if export.id %}
         {{ hiddenInput('elementId', export.id) }}
     {% endif %}
+    {# TODO  Default fields: id, title, datecreated, postdate #}
 
+    <div class="default-fields">
+        <h3>{{ "Which default fields do you want to include in this export?"|t('exporter') }}</h3>
+        {{ forms.checkboxField({
+            label: 'Title'|t('exporter'),
+            id: 'default-title',
+            name: "attributes[title]",
+            value: 'title',
+        }) }}
+        {{ forms.checkboxField({
+            label: 'ID'|t('exporter'),
+            name: "attributes[id]",
+            value: 'id',
+        }) }}
+        {{ forms.checkboxField({
+            label: 'Date created'|t('exporter'),
+            name: "attributes[dateCreated]",
+            value: 'dateCreated',
+        }) }}
+    </div>
 
 
     <hr>
     <div class="field">
+        {{ hiddenInput('nextStep', '3') }}
         <button type="submit" class="btn submit">{{ "Next" }}</button>
     </div>
+
 </form>

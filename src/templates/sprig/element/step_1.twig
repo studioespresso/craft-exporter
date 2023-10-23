@@ -1,7 +1,7 @@
 {% set export = exportId ? craft.exports.id(exportId).one() : create('studioespresso\\exporter\\elements\\ExportElement') %}
 {% import "_includes/forms" as forms %}
 
-<form sprig s-action="exporter/element/save" s-method="post">
+<form sprig s-action="exporter/element/step1" s-method="post">
     {% if export.id %}
         {{ hiddenInput('elementId', export.id) }}
     {% endif %}
@@ -128,7 +128,7 @@
         </div>
     {% endif %}
 
-    {% if settings.section and settings.entryType %}
+    {% if settings is defined and settings.section is defined and settings.entryType is defined %}
         {% set showSiteOptions = true %}
     {% endif %}
     {% if showSiteOptions %}

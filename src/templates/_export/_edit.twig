@@ -1,10 +1,13 @@
 {% extends "_layouts/cp" %}
 {% import "_includes/forms" as forms %}
-{% if step is not defined and craft.app.request.getParam('step') %}
-    {% set step = craft.app.request.getParam('step') %}
-{% endif %}
 
-{% set title = export ? export.name : 'New export' %}
+{% set titles = {
+    1 : export ? export.name ~ ' - Element settings' : 'New export',
+    2 : export.name ~ ' - Field settings',
+    3 : export.name ~ ' - Export settings',
+} %}
+
+{% set title = attribute(titles, step) %}
 {% set crumbs = [
     { label: "Exporter", url: url('exporter') },
 ] %}

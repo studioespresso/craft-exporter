@@ -1,0 +1,22 @@
+{% if exportId is not defined %}
+    {% redirect 'exporter' %}
+{% endif %}
+
+{% set export = craft.exports.id(exportId).one() %}
+
+{% import "_includes/forms" as forms %}
+
+<form sprig s-action="exporter/element/save" s-method="post">
+    {{ redirectInput('') }}
+    {% if export.id %}
+        {{ hiddenInput('elementId', export.id) }}
+    {% endif %}
+     {# TODO  Default fields: id, title, datecreated, postdate #}
+
+
+
+    <hr>
+    <div class="field">
+        <button type="submit" class="btn submit">{{ "Next" }}</button>
+    </div>
+</form>
