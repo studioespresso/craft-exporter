@@ -7,7 +7,6 @@ use studioespresso\exporter\records\ExportRecord;
 
 class ExportElementQuery extends ElementQuery
 {
-
     public function init(): void
     {
         parent::init();

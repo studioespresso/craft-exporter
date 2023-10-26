@@ -2,7 +2,6 @@
 
 namespace studioespresso\exporter\variables;
 
-
 use Craft;
 use studioespresso\exporter\elements\db\ExportElementQuery;
 use studioespresso\exporter\elements\ExportElement;

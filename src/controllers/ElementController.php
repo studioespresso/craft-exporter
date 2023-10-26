@@ -10,6 +10,7 @@ use craft\web\Controller;
 use craft\web\View;
 use studioespresso\exporter\elements\ExportElement;
 use studioespresso\exporter\Exporter;
+use studioespresso\exporter\jobs\ExportJob;
 use studioespresso\exporter\services\ExportConfigurationService;
 use yii\web\UnauthorizedHttpException;
 
@@ -24,6 +25,27 @@ class ElementController extends Controller
     {
         $this->config = Exporter::getInstance()->configuration;
         parent::init();
+    }
+
+    public function actionRunExport()
+    {
+        $elementId = $this->request->getRequiredBodyParam('elementId');
+        $export = ExportElement::findOne(['id' => $elementId]);
+        Craft::debug(
+            Craft::t(
+                'exporter',
+                'Adding "{name}" job to the queue',
+                ['name' => $export->name]
+            ),
+            __METHOD__
+        );
+        Craft::$app->getQueue()
+            ->ttr(Exporter::$plugin->getSettings()->ttr)
+            ->priority(Exporter::$plugin->getSettings()->priority)
+            ->push(new ExportJob([
+            'elementId' => $export->id,
+            'exportName' => $export->name
+        ]));
     }
 
     /**
@@ -42,7 +64,7 @@ class ElementController extends Controller
         return $this->renderTemplate('exporter/_export/_edit', [
             'export' => $element,
             'elementTypeOptions' => $this->config->getAvailableElementTypes(),
-            'step' => $step
+            'step' => $step,
         ], View::TEMPLATE_MODE_CP);
     }
 
@@ -61,7 +83,6 @@ class ElementController extends Controller
         Craft::$app->getElements()->saveElement($export);
         $url = UrlHelper::cpUrl("exporter/{$export->id}/2");
         return Craft::$app->getResponse()->getHeaders()->set('HX-Redirect', $url);
-
     }
 
     public function actionStep2()
@@ -69,7 +90,7 @@ class ElementController extends Controller
         $body = $this->request->getBodyParams();
         $elementId = Craft::$app->getRequest()->getRequiredBodyParam('elementId');
         $export = ExportElement::findOne(['id' => $elementId]);
-        if(!$export) {
+        if (!$export) {
             throw new ElementNotFoundException();
         }
 
@@ -86,7 +107,7 @@ class ElementController extends Controller
         $body = $this->request->getBodyParams();
         $elementId = Craft::$app->getRequest()->getRequiredBodyParam('elementId');
         $export = ExportElement::findOne(['id' => $elementId]);
-        if(!$export) {
+        if (!$export) {
             throw new ElementNotFoundException();
         }
 

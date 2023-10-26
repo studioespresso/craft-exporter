@@ -9,4 +9,9 @@ use craft\base\Model;
  */
 class Settings extends Model
 {
+    /** @var int */
+    public $ttr = 300;
+
+    /** @var int */
+    public $priority = 1024;
 }

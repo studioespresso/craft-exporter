@@ -125,7 +125,7 @@ class ExportElement extends Element
     protected static function defineTableAttributes(): array
     {
         return [
-            'elementType' => Craft::t('exporter', 'Element')
+            'elementType' => Craft::t('exporter', 'Element'),
         ];
     }
 
@@ -140,8 +140,8 @@ class ExportElement extends Element
             [
                 'key' => '*',
                 'label' => 'All exports',
-                'criteria' => []
-            ]
+                'criteria' => [],
+            ],
         ];
     }
 
@@ -172,7 +172,7 @@ class ExportElement extends Element
     {
         if (!$this->propagating) {
             Db::delete(ExportRecord::tableName(), [
-                    'id' => $this->id]
+                    'id' => $this->id, ]
             );
         }
         parent::afterDelete();
