@@ -6,7 +6,7 @@
 
 {% import "_includes/forms" as forms %}
 
-<form sprig s-action="exporter/element/save" s-method="post">
+<form sprig s-action="exporter/element/step3" s-method="post">
     {{ redirectInput('') }}
     {% if export.id %}
         {{ hiddenInput('elementId', export.id) }}
@@ -41,33 +41,21 @@
     </div>
     <hr>
     <h2>{{ "Export delivery"|t('exporter') }}</h2>
-    {% set deliveryOptions = [
-        {value: 'email', label: 'by e-mail'},
-        {value: 'asset', label: 'As an asset'}
-    ] %}
-    <div class="field" id="elementType-entry-subfields">
-        <div class="heading">
-            <label id="group-label" for="group">How would you like to receive this export?<span
-                        class="visually-hidden">Required</span>
-                <span class="required" aria-hidden="true"></span></label>
-        </div>
-
-        <div class="input ltr">
-            <div class="select">
-                <select sprig name="settings[deliveryType]" id="group" aria-describedby="group-instructions"
-                        aria-labelledby="group-label">
-                    <option value="" selected>---</option>
-                    {% for type in deliveryOptions %}
-                        <option value="{{ type.value }}">{{ type.label }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-        </div>
-    </div>
-    {{ d(settings) }}
-    {% if settings.deliveryType is defined and settings.deliveryType == 'email' %}
-        hier
-    {% endif %}
+    {{ hiddenInput('settings[deliveryType]', 'email') }}
+    {{ forms.textField({
+        first: true,
+        label: "Email address?"|t('exporter'),
+        instructions: "Your export will be delivered by e-mail. Who should receive that e-mail?<br> To enter more than one address, seperate the with a comma."|t('exporter'),
+        id: 'email',
+        name: 'settings[email]',
+        value: settings.email ?? '',
+        errors: export.getErrors('email'),
+        required: true
+    }) }}
+{#    {{ d(settings) }}#}
+{#    {% if settings.deliveryType is defined and settings.deliveryType == 'email' %}#}
+{#        hier#}
+{#    {% endif %}#}
     <hr>
     <div class="field">
         <button type="submit" class="btn submit">{{ "Next" }}</button>

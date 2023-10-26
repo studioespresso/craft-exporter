@@ -1,0 +1,21 @@
+{% if exportId is not defined %}
+    {% redirect 'exporter' %}
+{% endif %}
+
+{% set export = craft.exports.id(exportId).one() %}
+
+{% import "_includes/forms" as forms %}
+
+<form sprig s-action="exporter/element/save" s-method="post">
+    {{ redirectInput('') }}
+    {% if export.id %}
+        {{ hiddenInput('elementId', export.id) }}
+    {% endif %}
+
+    <div>
+        Your export is now ready run.
+    </div>
+    <div class="field">
+        <button type="submit" class="btn submit">{{ "Run export" }}</button>
+    </div>
+</form>

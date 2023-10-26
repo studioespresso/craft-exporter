@@ -79,6 +79,21 @@ class ElementController extends Controller
 
         $url = UrlHelper::cpUrl("exporter/{$export->id}/3");
         return Craft::$app->getResponse()->getHeaders()->set('HX-Redirect', $url);
+    }
 
+    public function actionStep3()
+    {
+        $body = $this->request->getBodyParams();
+        $elementId = Craft::$app->getRequest()->getRequiredBodyParam('elementId');
+        $export = ExportElement::findOne(['id' => $elementId]);
+        if(!$export) {
+            throw new ElementNotFoundException();
+        }
+
+        $export->settings = Json::encode(array_merge($export->getSettings(), $body['settings']));
+        Craft::$app->getElements()->saveElement($export);
+
+        $url = UrlHelper::cpUrl("exporter/{$export->id}/4");
+        return Craft::$app->getResponse()->getHeaders()->set('HX-Redirect', $url);
     }
 }
