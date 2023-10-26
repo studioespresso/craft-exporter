@@ -12,6 +12,7 @@
         {{ hiddenInput('elementId', export.id) }}
     {% endif %}
     {# TODO  Default fields: id, title, datecreated, postdate #}
+    {% set attributes = export.getAttributes() %}
 
     <div class="default-fields">
         <h3>{{ "Which default fields do you want to include in this export?"|t('exporter') }}</h3>
@@ -20,16 +21,20 @@
             id: 'default-title',
             name: "attributes[title]",
             value: 'title',
+            checked: attributes['title'] ?? false
         }) }}
         {{ forms.checkboxField({
             label: 'ID'|t('exporter'),
             name: "attributes[id]",
             value: 'id',
+            checked: attributes['id'] ?? false
+
         }) }}
         {{ forms.checkboxField({
             label: 'Date created'|t('exporter'),
             name: "attributes[dateCreated]",
             value: 'dateCreated',
+            checked: attributes['dateCreated'] ?? false
         }) }}
     </div>
 

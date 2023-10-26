@@ -69,13 +69,12 @@ class ElementController extends Controller
         $body = $this->request->getBodyParams();
         $elementId = Craft::$app->getRequest()->getRequiredBodyParam('elementId');
         $export = ExportElement::findOne(['id' => $elementId]);
-
         if(!$export) {
             throw new ElementNotFoundException();
         }
 
         $attributes = array_filter($body['attributes']);
-        $export->attributes = $attributes;
+        $export->attributes = Json::encode($attributes);
         Craft::$app->getElements()->saveElement($export);
 
         $url = UrlHelper::cpUrl("exporter/{$export->id}/3");

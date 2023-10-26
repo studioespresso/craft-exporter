@@ -11,10 +11,63 @@
     {% if export.id %}
         {{ hiddenInput('elementId', export.id) }}
     {% endif %}
-     {# TODO  Default fields: id, title, datecreated, postdate #}
+    {% set settings = settings ?? [] %}
+    {% set settings = settings|merge(export.getSettings()) %}
 
+    {% set availableTypes = [
+        {value: 'xlsx', label: 'Excel (xlsx)'}
+    ] %}
 
+    <div class="field" id="elementType-entry-subfields">
+        <div class="heading">
+            <label id="group-label" for="group">File format<span
+                        class="visually-hidden">Required</span>
+                <span class="required" aria-hidden="true"></span></label>
+        </div>
+        <div id="group-instructions" class="instructions">
+            <p>As what file do you want to receive this export?</p>
+        </div>
+        <div class="input ltr">
+            <div class="select">
+                <select sprig name="settings[fileType]" id="group" aria-describedby="group-instructions"
+                        aria-labelledby="group-label">
+                    {#                    <option value="" selected>---</option> #}
+                    {% for type in availableTypes %}
+                        <option value="{{ type.value }}">{{ type.label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <h2>{{ "Export delivery"|t('exporter') }}</h2>
+    {% set deliveryOptions = [
+        {value: 'email', label: 'by e-mail'},
+        {value: 'asset', label: 'As an asset'}
+    ] %}
+    <div class="field" id="elementType-entry-subfields">
+        <div class="heading">
+            <label id="group-label" for="group">How would you like to receive this export?<span
+                        class="visually-hidden">Required</span>
+                <span class="required" aria-hidden="true"></span></label>
+        </div>
 
+        <div class="input ltr">
+            <div class="select">
+                <select sprig name="settings[deliveryType]" id="group" aria-describedby="group-instructions"
+                        aria-labelledby="group-label">
+                    <option value="" selected>---</option>
+                    {% for type in deliveryOptions %}
+                        <option value="{{ type.value }}">{{ type.label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+    </div>
+    {{ d(settings) }}
+    {% if settings.deliveryType is defined and settings.deliveryType == 'email' %}
+        hier
+    {% endif %}
     <hr>
     <div class="field">
         <button type="submit" class="btn submit">{{ "Next" }}</button>

@@ -24,11 +24,6 @@ class ExportElement extends Element
     public $fields;
 
 
-    public function getSettings(): null|array
-    {
-        return Json::decode($this->settings);
-    }
-
     /**
      * @inheritdoc
      */
@@ -167,7 +162,7 @@ class ExportElement extends Element
 
     protected function cpEditUrl(): ?string
     {
-        return sprintf('exporter/%s', $this->getCanonicalId());
+        return sprintf('exporter/%s/1', $this->getCanonicalId());
     }
 
     /**
@@ -176,11 +171,21 @@ class ExportElement extends Element
     public function afterDelete(): void
     {
         if (!$this->propagating) {
-            Db::delete(ExportRecord::tableName(),[
-                'id' => $this->id]
+            Db::delete(ExportRecord::tableName(), [
+                    'id' => $this->id]
             );
         }
         parent::afterDelete();
+    }
+
+    public function getSettings(): null|array
+    {
+        return Json::decode($this->settings);
+    }
+
+    public function getAttributes($names = null, $except = []): null|array
+    {
+        return Json::decode($this->attributes);
     }
 
 
@@ -191,11 +196,14 @@ class ExportElement extends Element
                 'id' => $this->id,
                 'name' => $this->name,
                 'elementType' => $this->elementType,
-                'settings' => $this->settings,
+                'attributes' => $this->attributes,
+                'fields' => $this->fields,
             ], [
                 'name' => $this->name,
                 'elementType' => $this->elementType,
                 'settings' => $this->settings,
+                'attributes' => $this->attributes,
+                'fields' => $this->fields,
             ]);
         }
 
