@@ -60,7 +60,11 @@ class ElementController extends Controller
             throw new UnauthorizedHttpException("You are not authorized to create new exports");
         }
 
-        $element = ExportElement::findOne(['id' => $elementId]);
+        $element = null;
+
+        if($elementId) {
+            $element = ExportElement::find()->id($elementId)->one();
+        }
         return $this->renderTemplate('exporter/_export/_edit', [
             'export' => $element,
             'elementTypeOptions' => $this->config->getAvailableElementTypes(),
@@ -80,6 +84,11 @@ class ElementController extends Controller
         $export->name = $body['name'];
         $export->elementType = $body['elementType'];
         $export->settings = Json::encode($body['settings']);
+
+        if(!$export->validate()) {
+            dd($export->getErrors());
+        }
+
         Craft::$app->getElements()->saveElement($export);
         $url = UrlHelper::cpUrl("exporter/{$export->id}/2");
         return Craft::$app->getResponse()->getHeaders()->set('HX-Redirect', $url);

@@ -188,6 +188,14 @@ class ExportElement extends Element
         return Json::decode($this->attributes);
     }
 
+    protected function defineRules(): array
+    {
+        $rules = parent::defineRules();
+        $rules[] = [['name', 'elementType'], 'required'];
+
+        return $rules;
+    }
+
 
     public function afterSave(bool $isNew): void
     {
@@ -196,6 +204,7 @@ class ExportElement extends Element
                 'id' => $this->id,
                 'name' => $this->name,
                 'elementType' => $this->elementType,
+                'settings' => $this->settings,
                 'attributes' => $this->attributes,
                 'fields' => $this->fields,
             ], [

@@ -29,8 +29,8 @@ class Install extends Migration
         if (!$this->db->tableExists(ExportRecord::tableName())) {
             $this->createTable(ExportRecord::tableName(), [
                 'id' => $this->integer()->notNull(),
-                'name' => $this->string(),
-                'elementType' => $this->string(),
+                'name' => $this->string()->notNull(),
+                'elementType' => $this->string()->notNull(),
                 'settings' => $this->json(),
                 'attributes' => $this->json(),
                 'fields' => $this->json(),
