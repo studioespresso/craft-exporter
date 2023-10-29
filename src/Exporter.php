@@ -22,6 +22,7 @@ use studioespresso\exporter\records\ExportRecord;
 use studioespresso\exporter\services\ExportConfigurationService;
 use studioespresso\exporter\variables\CraftVariableBehavior;
 use yii\base\Event;
+use yii\console\Application as ConsoleApplication;
 
 /**
  * Exporter plugin
@@ -51,6 +52,10 @@ class Exporter extends Plugin
     {
         parent::init();
         self::$plugin = $this;
+
+        if (Craft::$app instanceof ConsoleApplication) {
+            $this->controllerNamespace = 'studioespresso\exporter\console\controllers';
+        }
 
         // Defer most setup tasks until Craft is fully initialized
         Craft::$app->onInit(function() {

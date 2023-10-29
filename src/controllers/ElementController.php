@@ -83,7 +83,7 @@ class ElementController extends Controller
 
         $export->name = $body['name'];
         $export->elementType = $body['elementType'];
-        $export->settings = Json::encode($body['settings']);
+        $export->settings = Json::encode(array_merge($export->getSettings(), $body['settings']));
 
         if(!$export->validate()) {
             dd($export->getErrors());
@@ -105,6 +105,11 @@ class ElementController extends Controller
 
         $attributes = array_filter($body['attributes']);
         $export->attributes = Json::encode($attributes);
+
+        if(!$export->validate()) {
+            dd($export->getErrors());
+        }
+
         Craft::$app->getElements()->saveElement($export);
 
         $url = UrlHelper::cpUrl("exporter/{$export->id}/3");
@@ -121,6 +126,11 @@ class ElementController extends Controller
         }
 
         $export->settings = Json::encode(array_merge($export->getSettings(), $body['settings']));
+
+        if(!$export->validate()) {
+            dd($export->getErrors());
+        }
+
         Craft::$app->getElements()->saveElement($export);
 
         $url = UrlHelper::cpUrl("exporter/{$export->id}/4");

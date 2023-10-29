@@ -11,6 +11,7 @@
     {% if export.id %}
         {{ hiddenInput('elementId', export.id) }}
     {% endif %}
+    {{ d(export.getSettings()) }}
     {% set settings = settings ?? [] %}
     {% set settings = settings|merge(export.getSettings()) %}
 
@@ -40,6 +41,7 @@
         </div>
     </div>
     <hr>
+    {{ d(settings) }}
     <h2>{{ "Export delivery"|t('exporter') }}</h2>
     {{ hiddenInput('settings[deliveryType]', 'email') }}
     {{ forms.textField({

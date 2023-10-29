@@ -6,6 +6,7 @@ use Craft;
 use craft\base\Batchable;
 use craft\base\Element;
 use craft\db\QueryBatcher;
+use craft\helpers\Db;
 use craft\queue\BaseBatchedJob;
 use studioespresso\exporter\elements\ExportElement;
 
@@ -17,9 +18,10 @@ class ExportJob extends BaseBatchedJob
 
     protected function defaultDescription(): string
     {
-        return Craft::t('app', 'Running  {name}}', [
+        return Craft::t('app', 'Running  {name}', [
             'name' => $this->exportName,
         ]);
+        Db::each()
     }
 
     public function loadData(): Batchable
