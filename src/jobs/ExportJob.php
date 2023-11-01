@@ -68,7 +68,7 @@ class ExportJob extends BaseJob implements RetryableJobInterface
             $row = array_combine(array_values($export->getAttributes()), $values);
 
             // Fetch the custom field content, already prepped
-            $fieldValues = [];
+            $fieldValues = $export->parseFieldValues($element);
             $data[] = array_merge($row, $fieldValues);
         }
 

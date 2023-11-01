@@ -29,5 +29,14 @@ class ExportQueryService extends Component
         return $query;
     }
 
+    public function getFields(ExportElement $export, Element $element): array
+    {
+        $data = [];
+        foreach ($export->getFields() as $field) {
+            $data[$field] = $element->getFieldValue($field);
+        }
+        return $data;
+    }
+
 
 }

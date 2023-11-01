@@ -189,7 +189,7 @@ class ExportElement extends Element
     {
         $supportedFields = Exporter::getInstance()->configuration->getSupportedFieldTypes();
         $elementFields = $element->fieldLayout->getCustomFields();
-        return array_filter($elementFields,function ($field) use ($supportedFields) {
+        return array_filter($elementFields, function ($field) use ($supportedFields) {
             return in_array(get_class($field), $supportedFields);
         });
     }
@@ -207,6 +207,11 @@ class ExportElement extends Element
     public function getFields(): null|array
     {
         return Json::decode($this->fields);
+    }
+
+    public function parseFieldValues(Element $element): array
+    {
+        return Exporter::$plugin->query->getFields($this, $element);
     }
 
     protected function defineRules(): array

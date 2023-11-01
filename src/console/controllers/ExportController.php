@@ -29,6 +29,8 @@ class ExportController extends Controller
                 'elementId' => $export->id,
                 'exportName' => $export->name
             ]));
+
+        return true;
     }
 
     public function actionDebug($id): bool
@@ -46,7 +48,7 @@ class ExportController extends Controller
             $row = array_combine(array_values($export->getAttributes()), $values);
 
             // Fetch the custom field content, already prepped
-            $fieldValues = [];
+            $fieldValues = $export->parseFieldValues($element);
             $data[] = array_merge($row, $fieldValues);
         }
     }
