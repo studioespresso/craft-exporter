@@ -12,6 +12,7 @@
         {{ hiddenInput('elementId', export.id) }}
     {% endif %}
     {% set attributes = export.getAttributes() %}
+    {% set fields = export.getFields() %}
 
     <style>
         .default-fields .field, .custom-fields .field {
@@ -46,6 +47,14 @@
     <div class="custom-fields">
         <h2>{{ "Which custom fields do you want to include in this export?"|t('exporter') }}</h2>
         {% set availableFields = export.getSupportedFields(export.getElementQuery().one()) %}
+        {% for field in availableFields %}
+            {{ forms.checkboxField({
+                label: field.name,
+                name: "fields[" ~ field.handle ~ "]",
+                value: field.handle,
+                checked: fields[field.handle] ?? false
+            }) }}
+        {% endfor %}
     </div>
 
 

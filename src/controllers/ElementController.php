@@ -109,6 +109,9 @@ class ElementController extends Controller
         $attributes = array_filter($body['attributes']);
         $export->attributes = Json::encode($attributes);
 
+        $fields = array_filter($body['fields']);
+        $export->fields = Json::encode($fields);
+
         if(!$export->validate()) {
             dd($export->getErrors());
         }

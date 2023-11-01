@@ -204,6 +204,11 @@ class ExportElement extends Element
         return Json::decode($this->attributes);
     }
 
+    public function getFields(): null|array
+    {
+        return Json::decode($this->fields);
+    }
+
     protected function defineRules(): array
     {
         $rules = parent::defineRules();
