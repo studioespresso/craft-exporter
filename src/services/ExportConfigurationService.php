@@ -6,6 +6,7 @@ use craft\base\Component;
 use craft\elements\Category;
 use craft\elements\Entry;
 use craft\elements\Tag;
+use craft\fields\PlainText;
 use studioespresso\exporter\services\formats\Xlsx;
 
 class ExportConfigurationService extends Component
@@ -28,5 +29,14 @@ class ExportConfigurationService extends Component
         ];
 
         return $types;
+    }
+
+    public function getSupportedFieldTypes(): array
+    {
+        $fields = [
+          PlainText::class,
+        ];
+
+        return $fields;
     }
 }

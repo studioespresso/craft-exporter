@@ -4,11 +4,13 @@ namespace studioespresso\exporter\elements;
 
 use Craft;
 use craft\base\Element;
+use craft\elements\db\ElementQuery;
 use craft\elements\db\ElementQueryInterface;
 use craft\elements\User;
 use craft\helpers\Db;
 use craft\helpers\Json;
 use studioespresso\exporter\elements\db\ExportElementQuery;
+use studioespresso\exporter\Exporter;
 use studioespresso\exporter\records\ExportRecord;
 
 class ExportElement extends Element
@@ -172,10 +174,24 @@ class ExportElement extends Element
     {
         if (!$this->propagating) {
             Db::delete(ExportRecord::tableName(), [
-                    'id' => $this->id, ]
+                    'id' => $this->id,]
             );
         }
         parent::afterDelete();
+    }
+
+    public function getElementQuery(): ElementQuery
+    {
+        return Exporter::$plugin->query->buildQuery($this);
+    }
+
+    public function getSupportedFields(Element $element): array
+    {
+        $supportedFields = Exporter::getInstance()->configuration->getSupportedFieldTypes();
+        $elementFields = $element->fieldLayout->getCustomFields();
+        return array_filter($elementFields,function ($field) use ($supportedFields) {
+            return in_array(get_class($field), $supportedFields);
+        });
     }
 
     public function getSettings(): null|array

@@ -11,11 +11,16 @@
     {% if export.id %}
         {{ hiddenInput('elementId', export.id) }}
     {% endif %}
-    {# TODO  Default fields: id, title, datecreated, postdate #}
     {% set attributes = export.getAttributes() %}
 
+    <style>
+        .default-fields .field, .custom-fields .field {
+            margin: 12px 0;
+        }
+    </style>
+
     <div class="default-fields">
-        <h3>{{ "Which default fields do you want to include in this export?"|t('exporter') }}</h3>
+        <h2>{{ "Which default fields do you want to include in this export?"|t('exporter') }}</h2>
         {{ forms.checkboxField({
             label: 'ID'|t('exporter'),
             name: "attributes[id]",
@@ -36,9 +41,14 @@
             checked: attributes['dateCreated'] ?? false
         }) }}
     </div>
-
-
     <hr>
+
+    <div class="custom-fields">
+        <h2>{{ "Which custom fields do you want to include in this export?"|t('exporter') }}</h2>
+        {% set availableFields = export.getSupportedFields(export.getElementQuery().one()) %}
+    </div>
+
+
     <div class="field">
         {{ hiddenInput('nextStep', '3') }}
         <button type="submit" class="btn submit">{{ "Next" }}</button>
