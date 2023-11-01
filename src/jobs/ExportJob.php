@@ -3,14 +3,16 @@
 namespace studioespresso\exporter\jobs;
 
 use Craft;
-use craft\base\Batchable;
 use craft\base\Element;
-use craft\db\QueryBatcher;
-use craft\helpers\Db;
-use craft\queue\BaseBatchedJob;
+use craft\errors\ElementNotFoundException;
+use craft\helpers\Console;
+use craft\queue\BaseJob;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use studioespresso\exporter\elements\ExportElement;
+use yii\queue\RetryableJobInterface;
 
-class ExportJob extends BaseBatchedJob
+class ExportJob extends BaseJob implements RetryableJobInterface
 {
     public $exportName;
 
@@ -21,10 +23,9 @@ class ExportJob extends BaseBatchedJob
         return Craft::t('app', 'Running  {name}', [
             'name' => $this->exportName,
         ]);
-        Db::each()
     }
 
-    public function loadData(): Batchable
+    public function execute($queue): void
     {
         Craft::debug(
             Craft::t(
@@ -35,27 +36,94 @@ class ExportJob extends BaseBatchedJob
             __METHOD__
         );
         $export = ExportElement::findOne(['id' => $this->elementId]);
+
+        if(!$export) {
+            throw new ElementNotFoundException();
+        }
+
         $element = $export->elementType;
         $settings = $export->getSettings();
+        $limit = null;
         /** @var $element Element */
         switch ($element) {
             default:
                 $query = Craft::createObject($element)->find()->sectionId($settings['section']);
-            break;
+                break;
         }
 
-        return new QueryBatcher($query);
+        $data[] = array_values($export->getAttributes());
+
+        $total = (clone $query)->count();
+        $progress = 0;
+        Console::startProgress(0, $total);
+        foreach($query->limit($limit)->all() as $element){
+
+            $values = $element->toArray(array_keys($export->getAttributes()));
+            // Convert values to strings
+            $values = array_map(function ($item) {
+                return (string)$item;
+            }, $values);
+
+            $row = array_combine(array_values($export->getAttributes()), $values);
+
+            // Fetch the custom field content, already prepped
+            $fieldValues = [];
+            $data[] = array_merge($row, $fieldValues);
+            Console::updateProgress($progress++, $total);
+        }
+
+        // Normalise the columns. Due to repeaters/table fields, some rows might not have the correct columns.
+        // We need to have all rows have the same column definitions.
+        // First, find the row with the largest columns to use as our template for all other rows
+        $counts = array_map('count', $data);
+        $key = array_flip($counts)[max($counts)];
+        $largestRow = $data[$key];
+
+        // Now we have the largest row in columns, normalise all other rows, filling in blanks
+        $keys = array_keys($largestRow);
+        $template = array_fill_keys($keys, '');
+
+        $exportData = array_map(function ($item) use ($template) {
+            return array_merge($template, $item);
+        }, $data);
+
+
+        $rows = array_map(function ($row) {
+            return array_values($row);
+        }, $exportData);
+
+        array_unshift($rows, array_keys($exportData[0]));
+
+        try {
+            ob_end_clean();
+        } catch (\Throwable $e) {
+
+        }
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->fromArray($data);
+        $writer = new Xlsx($spreadsheet);
+        $path = Craft::$app->getPath()->getTempPath() . '/export.xlsx';
+        $writer->save($path);
+        Console::endProgress(true);
     }
 
-    protected function processItem(mixed $item): void
+
+
+    /**
+     * @inheritDoc
+     */
+    public function getTtr()
     {
-        Craft::debug(
-            Craft::t(
-                'exporter',
-                'Export: processing "{title}"',
-                ['title' => $item->title]
-            ),
-            __METHOD__
-        );
+        // TODO: Implement getTtr() method.
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function canRetry($attempt, $error)
+    {
+        // TODO: Implement canRetry() method.
     }
 }

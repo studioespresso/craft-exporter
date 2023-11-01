@@ -12,7 +12,8 @@
     },
     "require": {
         "craftcms/cms": "^4.5.0",
-        "putyourlightson/craft-sprig-core": "^2.0"
+        "putyourlightson/craft-sprig-core": "^2.0",
+        "phpoffice/phpspreadsheet": "1.29.0"
     },
     "require-dev": {
         "craftcms/ecs": "dev-main",

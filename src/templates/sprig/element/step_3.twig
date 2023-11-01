@@ -11,7 +11,7 @@
     {% if export.id %}
         {{ hiddenInput('elementId', export.id) }}
     {% endif %}
-    {{ d(export.getSettings()) }}
+
     {% set settings = settings ?? [] %}
     {% set settings = settings|merge(export.getSettings()) %}
 
@@ -41,7 +41,6 @@
         </div>
     </div>
     <hr>
-    {{ d(settings) }}
     <h2>{{ "Export delivery"|t('exporter') }}</h2>
     {{ hiddenInput('settings[deliveryType]', 'email') }}
     {{ forms.textField({
@@ -54,10 +53,6 @@
         errors: export.getErrors('email'),
         required: true
     }) }}
-{#    {{ d(settings) }}#}
-{#    {% if settings.deliveryType is defined and settings.deliveryType == 'email' %}#}
-{#        hier#}
-{#    {% endif %}#}
     <hr>
     <div class="field">
         <button type="submit" class="btn submit">{{ "Next" }}</button>

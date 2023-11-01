@@ -28,7 +28,5 @@ class ExportController extends Controller
                 'elementId' => $export->id,
                 'exportName' => $export->name
             ]));
-
-        return true;
     }
 }

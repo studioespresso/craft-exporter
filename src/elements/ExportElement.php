@@ -180,7 +180,7 @@ class ExportElement extends Element
 
     public function getSettings(): null|array
     {
-        return Json::decode($this->settings);
+        return Json::decode($this->settings) ?? [];
     }
 
     public function getAttributes($names = null, $except = []): null|array
