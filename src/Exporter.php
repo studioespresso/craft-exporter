@@ -20,6 +20,7 @@ use studioespresso\exporter\elements\ExportElement;
 use studioespresso\exporter\models\Settings;
 use studioespresso\exporter\records\ExportRecord;
 use studioespresso\exporter\services\ExportConfigurationService;
+use studioespresso\exporter\services\ExportQueryService;
 use studioespresso\exporter\variables\CraftVariableBehavior;
 use yii\base\Event;
 use yii\console\Application as ConsoleApplication;
@@ -31,6 +32,8 @@ use yii\console\Application as ConsoleApplication;
  * @author Studio Espresso <info@studioespresso.co>
  * @copyright Studio Espresso
  * @license https://craftcms.github.io/license/ Craft License
+ *
+ * @property ExportQueryService query
  **/
 class Exporter extends Plugin
 {
@@ -68,6 +71,7 @@ class Exporter extends Plugin
 
         $this->components = [
             'configuration' => ExportConfigurationService::class,
+            'query' => ExportQueryService::class,
         ];
     }
 

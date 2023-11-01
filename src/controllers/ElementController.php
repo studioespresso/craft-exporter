@@ -46,6 +46,9 @@ class ElementController extends Controller
             'elementId' => $export->id,
             'exportName' => $export->name
         ]));
+
+        $url = UrlHelper::cpUrl("exporter/{$export->id}/4");
+        return Craft::$app->getResponse()->getHeaders()->set('HX-Redirect', $url);
     }
 
     /**

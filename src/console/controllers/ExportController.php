@@ -3,6 +3,7 @@
 namespace studioespresso\exporter\console\controllers;
 
 use Craft;
+use craft\base\Element;
 use craft\console\Controller;
 use studioespresso\exporter\elements\ExportElement;
 use studioespresso\exporter\Exporter;
@@ -28,5 +29,25 @@ class ExportController extends Controller
                 'elementId' => $export->id,
                 'exportName' => $export->name
             ]));
+    }
+
+    public function actionDebug($id): bool
+    {
+        $export = ExportElement::find()->id($id)->one();
+        $query = Exporter::$plugin->query->buildQuery($export);
+        $data[] = array_values($export->getAttributes());
+        foreach($query->limit(1)->all() as $element){
+            $values = $element->toArray(array_keys($export->getAttributes()));
+            // Convert values to strings
+            $values = array_map(function ($item) {
+                return (string)$item;
+            }, $values);
+
+            $row = array_combine(array_values($export->getAttributes()), $values);
+
+            // Fetch the custom field content, already prepped
+            $fieldValues = [];
+            $data[] = array_merge($row, $fieldValues);
+        }
     }
 }

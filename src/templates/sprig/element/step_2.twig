@@ -17,18 +17,17 @@
     <div class="default-fields">
         <h3>{{ "Which default fields do you want to include in this export?"|t('exporter') }}</h3>
         {{ forms.checkboxField({
+            label: 'ID'|t('exporter'),
+            name: "attributes[id]",
+            value: 'id',
+            checked: attributes['id'] ?? false
+        }) }}
+        {{ forms.checkboxField({
             label: 'Title'|t('exporter'),
             id: 'default-title',
             name: "attributes[title]",
             value: 'title',
             checked: attributes['title'] ?? false
-        }) }}
-        {{ forms.checkboxField({
-            label: 'ID'|t('exporter'),
-            name: "attributes[id]",
-            value: 'id',
-            checked: attributes['id'] ?? false
-
         }) }}
         {{ forms.checkboxField({
             label: 'Date created'|t('exporter'),

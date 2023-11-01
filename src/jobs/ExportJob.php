@@ -55,8 +55,9 @@ class ExportJob extends BaseJob implements RetryableJobInterface
 
         $total = (clone $query)->count();
         $progress = 0;
-        Console::startProgress(0, $total);
-        foreach($query->limit($limit)->all() as $element){
+        foreach($query->all() as $element){
+            $this->setProgress($queue, $progress / $total);
+            $progress++;
 
             $values = $element->toArray(array_keys($export->getAttributes()));
             // Convert values to strings
@@ -69,7 +70,6 @@ class ExportJob extends BaseJob implements RetryableJobInterface
             // Fetch the custom field content, already prepped
             $fieldValues = [];
             $data[] = array_merge($row, $fieldValues);
-            Console::updateProgress($progress++, $total);
         }
 
         // Normalise the columns. Due to repeaters/table fields, some rows might not have the correct columns.
@@ -106,7 +106,6 @@ class ExportJob extends BaseJob implements RetryableJobInterface
         $writer = new Xlsx($spreadsheet);
         $path = Craft::$app->getPath()->getTempPath() . '/export.xlsx';
         $writer->save($path);
-        Console::endProgress(true);
     }
 
 
