@@ -10,6 +10,7 @@ use craft\queue\BaseJob;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use studioespresso\exporter\elements\ExportElement;
+use studioespresso\exporter\Exporter;
 use yii\queue\RetryableJobInterface;
 
 class ExportJob extends BaseJob implements RetryableJobInterface
@@ -41,17 +42,10 @@ class ExportJob extends BaseJob implements RetryableJobInterface
             throw new ElementNotFoundException();
         }
 
-        $element = $export->elementType;
-        $settings = $export->getSettings();
-        $limit = null;
-        /** @var $element Element */
-        switch ($element) {
-            default:
-                $query = Craft::createObject($element)->find()->sectionId($settings['section']);
-                break;
-        }
-
-        $data[] = array_values($export->getAttributes());
+        $query = Exporter::$plugin->query->buildQuery($export);
+        $attributes = array_values($export->getAttributes());
+        $fields = array_values($export->getFields());
+        $data[] = array_merge($attributes, $fields);
 
         $total = (clone $query)->count();
         $progress = 0;
