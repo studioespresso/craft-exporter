@@ -164,6 +164,9 @@ class ExportElement extends Element
 
     protected function cpEditUrl(): ?string
     {
+        if ($this->isReadyToRun()) {
+            return sprintf('exporter/%s/run', $this->getCanonicalId());
+        }
         return sprintf('exporter/%s/1', $this->getCanonicalId());
     }
 
@@ -207,6 +210,11 @@ class ExportElement extends Element
     public function getFields(): null|array
     {
         return Json::decode($this->fields);
+    }
+
+    public function isReadyToRun(): bool
+    {
+        return true;
     }
 
     public function parseFieldValues(Element $element): array

@@ -57,6 +57,28 @@ class ElementController extends Controller
      * @throws UnauthorizedHttpException
      * @throws \Throwable
      */
+    public function actionRun($elementId = null): \yii\web\Response
+    {
+        if (!Craft::$app->getUser()->getIdentity()->can('exporter-createExports')) {
+            throw new UnauthorizedHttpException("You are not authorized to create new exports");
+        }
+
+        $element = null;
+        if($elementId) {
+            $element = ExportElement::find()->id($elementId)->one();
+        }
+
+        return $this->renderTemplate('exporter/_export/_run', [
+            'export' => $element,
+        ], View::TEMPLATE_MODE_CP);
+    }
+
+    /**
+     * @param $elementId
+     * @return \yii\web\Response
+     * @throws UnauthorizedHttpException
+     * @throws \Throwable
+     */
     public function actionEdit($elementId = null, $step = 1): \yii\web\Response
     {
         if (!Craft::$app->getUser()->getIdentity()->can('exporter-createExports')) {

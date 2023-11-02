@@ -106,6 +106,7 @@ class Exporter extends Plugin
                 $event->rules['exporter'] = ['template' => 'exporter/_index'];
                 $event->rules['exporter/create'] = 'exporter/element/edit';
                 $event->rules['exporter/<elementId:\\d+>/<step:\\d+>'] = 'exporter/element/edit';
+                $event->rules['exporter/<elementId:\\d+>/run'] = 'exporter/element/run';
             }
         );
     }

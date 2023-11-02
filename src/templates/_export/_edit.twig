@@ -14,12 +14,11 @@
 ] %}
 
 {% block content %}
-
+    {# Render edit steps or show  #}
         {{  sprig('exporter/sprig/element/step_' ~ step, {
             'elementTypeOptions': elementTypeOptions,
             'exportId': export ? export.id : null,
-            's-trigger': 'load, refresh',
+            's-trigger': 'load',
         }) }}
-
 
 {% endblock %}

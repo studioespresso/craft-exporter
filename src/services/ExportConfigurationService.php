@@ -25,7 +25,7 @@ class ExportConfigurationService extends Component
     public function getAvailableFileTypes(): array
     {
         $types = [
-            Xlsx::class => 'Xlsx'
+            Xlsx::class => 'Excel (xlsx)'
         ];
 
         return $types;
