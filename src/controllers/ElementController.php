@@ -96,7 +96,7 @@ class ElementController extends Controller
         }
         return $this->renderTemplate('exporter/_export/_edit', [
             'export' => $element,
-            'elementTypeOptions' => $this->elementHelper->getAvailableElementTypes(),
+            'elementTypeOptions' => $this->elementHelper->getElementTypesOnly(),
             'step' => $step,
         ], View::TEMPLATE_MODE_CP);
     }

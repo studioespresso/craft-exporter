@@ -14,9 +14,9 @@ use studioespresso\exporter\Exporter;
  */
 class ExporterVariable
 {
-    public function getGroupsForElementType($element): array
+    public function getElementTypeSettings($element): array
     {
-        return Exporter::getInstance()->elements->getGroupItemsForType($element);
+        return Exporter::getInstance()->elements->getElementTypeSettings($element);
     }
 
 }

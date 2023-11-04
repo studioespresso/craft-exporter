@@ -39,8 +39,8 @@
             <div class="select">
                 <select sprig name="elementType" id="elementType" aria-describedby="elementType-instructions"
                         aria-labelledby="elementType-label">
-                    {% for t, label in elementTypeOptions %}
-                        <option value="{{ t }}" {{ elementType == t ? 'selected' }}>{{ label }}</option>
+                    {% for t, element in elementTypeOptions %}
+                        <option value="{{ t }}" {{ elementType == t ? 'selected' }}>{{ element }}</option>
                     {% endfor %}
                 </select>
             </div>
@@ -57,8 +57,9 @@
     {% endif %}
 
     {% if elementType is defined %}
-        {% set groupOptions = craft.exporter.getGroupsForElementType(elementType) %}
-        {% if groupOptions %}
+        {% set elementOptions = craft.exporter.getElementTypeSettings(elementType) %}
+        {% if elementOptions.group is defined %}
+            {% set groupOptions = elementOptions.group %}
             <div class="flex-fields">
                 <div class="field width-50" id="elementType-entry-subfields">
                     <div class="heading">

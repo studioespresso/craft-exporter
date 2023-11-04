@@ -2,36 +2,18 @@
 
 namespace studioespresso\exporter\helpers;
 
-use craft\base\ElementInterface;
 use craft\base\Event;
-use craft\elements\Category;
-use craft\elements\Entry;
-use craft\elements\Tag;
-use craft\models\CategoryGroup;
-use craft\services\Categories;
-use craft\services\Sections;
-use studioespresso\exporter\events\RegisterExportableElementGroups;
 use studioespresso\exporter\events\RegisterExportableElementTypes;
 
 class ElementTypeHelper
 {
     public const EVENT_REGISTER_EXPORTABLE_ELEMENT_TYPES = 'registerExportableElementTypes';
 
-    public const EVENT_REGISTER_EXPORTABLE_ELEMENT_GROUPS = 'registerExportableElementGroups';
 
-    public const SUPPORTED_ELEMENT_TYPES = [
-        Entry::class => 'Entries',
-        Category::class => "Categories",
-        Tag::class => "Tags"
-    ];
+    public const SUPPORTED_ELEMENT_TYPES = [];
 
-
-    public const SUPPORT_ELEMENT_GROUPS = [];
 
     private static ?array $_supportedElementTypes = null;
-
-    private static ?array $_supportedElementGroups = null;
-
 
     public function getAvailableElementTypes(): array
     {
@@ -53,32 +35,26 @@ class ElementTypeHelper
         return self::$_supportedElementTypes;
     }
 
-    public function getExportElementGroups()
+    public function getElementTypesOnly(): array
     {
-        if (self::$_supportedElementGroups !== null) {
-            return self::$_supportedElementGroups;
+        if (self::$_supportedElementTypes == null) {
+            $this->getAvailableElementTypes();
         }
 
-        $event = new RegisterExportableElementGroups([
-            'elementGroups' => self::SUPPORT_ELEMENT_GROUPS,
-        ]);
+        $types = [];
+        foreach ($this->getAvailableElementTypes() as $class => $data) {
+            $types[$class] = $data['label'];
+        }
 
-        Event::trigger(self::class, self::EVENT_REGISTER_EXPORTABLE_ELEMENT_GROUPS, $event);
-
-        self::$_supportedElementGroups = array_merge(
-            self::SUPPORT_ELEMENT_GROUPS,
-            $event->elementGroups
-        );
-
-        return self::$_supportedElementGroups;
+        return $types;
     }
 
-    public function getGroupItemsForType($element)
+    public function getElementTypeSettings($element)
     {
-        $this->getExportElementGroups();
-        if(!isset(self::$_supportedElementGroups[$element])) {
+        $this->getAvailableElementTypes();
+        if (!isset(self::$_supportedElementTypes[$element])) {
             // throw exception here
         }
-        return self::$_supportedElementGroups[$element];
+        return self::$_supportedElementTypes[$element];
     }
 }

@@ -70,7 +70,7 @@ class Exporter extends Plugin
         }
 
         // Defer most setup tasks until Craft is fully initialized
-        Craft::$app->onInit(function() {
+        Craft::$app->onInit(function () {
             Sprig::bootstrap();
             $this->registerElementTypes();
             $this->attachEventHandlers();
@@ -103,7 +103,7 @@ class Exporter extends Plugin
     private function registerElementTypes(): void
     {
         Event::on(Elements::class, Elements::EVENT_REGISTER_ELEMENT_TYPES,
-            function(RegisterComponentTypesEvent $event) {
+            function (RegisterComponentTypesEvent $event) {
                 $event->types[] = ExportElement::class;
             });
     }
@@ -113,7 +113,7 @@ class Exporter extends Plugin
         Event::on(
             UrlManager::class,
             UrlManager::EVENT_REGISTER_CP_URL_RULES,
-            function(RegisterUrlRulesEvent $event) {
+            function (RegisterUrlRulesEvent $event) {
                 $event->rules['exporter'] = ['template' => 'exporter/_index'];
                 $event->rules['exporter/create'] = 'exporter/element/edit';
                 $event->rules['exporter/<elementId:\\d+>/<step:\\d+>'] = 'exporter/element/edit';
@@ -127,7 +127,7 @@ class Exporter extends Plugin
         Event::on(
             Gc::class,
             Gc::EVENT_RUN,
-            function(Event $event) {
+            function (Event $event) {
                 // Delete `elements` table rows without peers in our custom products table
                 Craft::$app->getGc()->deletePartialElements(
                     ExportElement::class,
@@ -147,7 +147,7 @@ class Exporter extends Plugin
         Event::on(
             CraftVariable::class,
             CraftVariable::EVENT_DEFINE_BEHAVIORS,
-            function(DefineBehaviorsEvent $e) {
+            function (DefineBehaviorsEvent $e) {
                 $e->sender->attachBehaviors([
                     CraftVariableBehavior::class,
                 ]);
@@ -157,7 +157,7 @@ class Exporter extends Plugin
         Event::on(
             CraftVariable::class,
             CraftVariable::EVENT_INIT,
-            function(Event $event) {
+            function (Event $event) {
                 /** @var CraftVariable $variable */
                 $variable = $event->sender;
                 $variable->set('exporter', ExporterVariable::class);
@@ -168,39 +168,32 @@ class Exporter extends Plugin
             ElementTypeHelper::class,
             ElementTypeHelper::EVENT_REGISTER_EXPORTABLE_ELEMENT_TYPES,
             function (RegisterExportableElementTypes $event) {
-                $event->elementTypes = [Submission::class => "Formie submissions"];
-        });
-
-        Event::on(
-            ElementTypeHelper::class,
-            ElementTypeHelper::EVENT_REGISTER_EXPORTABLE_ELEMENT_GROUPS,
-            function (RegisterExportableElementGroups $event) {
-
-                $event->elementGroups = [
+                $event->elementTypes = [
                     Entry::class => [
-                        "label" => "Section",
-                        "instructions" => "Choose a group from which you want to start your export",
-                        "items" => Craft::$app->getSections()->getEditableSections()
+                        "label" => "Entries",
+                        "group" => [
+                            "parameter" => "sectionId",
+                            "label" => "Section",
+                            "instructions" => "Choose a group from which you want to start your export",
+                            "items" => Craft::$app->getSections()->getEditableSections()
+                        ]
                     ],
-                    Category::class => [
-                        "label" => "Group",
-                        "items" => Craft::$app->getCategories()->getEditableGroups()
-                    ],
-                    Submission::class => [
-                        "label" => "Form",
-                        "items" => Formie::getInstance()->getForms()->getAllForms(),
-                        "nameProperty" => "title"
+                    Submission::class =>  [
+                        "label" => "Formie submissions",
+                        "group" => [
+                            "label" => "Form",
+                            "parameter" => "formId",
+                            "items" => Formie::getInstance()->getForms()->getAllForms(),
+                            "nameProperty" => "title"
+                        ]
                     ]
                 ];
             });
-
-
-
     }
 
     private function registerUserPermissions()
     {
-        Event::on(UserPermissions::class, UserPermissions::EVENT_REGISTER_PERMISSIONS, function(RegisterUserPermissionsEvent $event) {
+        Event::on(UserPermissions::class, UserPermissions::EVENT_REGISTER_PERMISSIONS, function (RegisterUserPermissionsEvent $event) {
             $event->permissions[] = [
                 'heading' => Craft::t('exporter', 'Exporter'),
                 'permissions' => [

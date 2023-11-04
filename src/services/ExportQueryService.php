@@ -10,6 +10,7 @@ use craft\elements\db\ElementQuery;
 use craft\elements\Entry;
 use craft\elements\Tag;
 use studioespresso\exporter\elements\ExportElement;
+use studioespresso\exporter\Exporter;
 use studioespresso\exporter\services\formats\Xlsx;
 
 class ExportQueryService extends Component
@@ -18,14 +19,15 @@ class ExportQueryService extends Component
     {
         $element = $export->elementType;
         $settings = $export->getSettings();
+        $elementOptions = Exporter::getInstance()->elements->getElementTypeSettings($element);
         $limit = null;
         /** @var $element Element */
-        switch ($element) {
-            default:
-                $query = Craft::createObject($element)->find()->sectionId($settings['group']);
-                break;
-        }
+        $query = Craft::createObject($element)->find();
 
+        if(isset($elementOptions['group'])) {
+            $group = $elementOptions['group']['parameter'];
+            $query->$group($settings['group']);
+        }
         // TODO: Take run-settings into account here: limit, dates, etc
         return $query;
     }
