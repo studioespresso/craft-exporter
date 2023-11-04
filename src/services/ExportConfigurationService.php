@@ -19,7 +19,7 @@ class ExportConfigurationService extends Component
             Tag::class,
         ];
 
-        return $types;
+        return ['Craft' => $types];
     }
 
     public function getAvailableFileTypes(): array

@@ -6,6 +6,8 @@ use Craft;
 use craft\base\Model;
 use craft\base\Plugin;
 use craft\db\Table;
+use craft\elements\Category;
+use craft\elements\Entry;
 use craft\events\DefineBehaviorsEvent;
 use craft\events\RegisterComponentTypesEvent;
 use craft\events\RegisterUrlRulesEvent;
@@ -17,11 +19,17 @@ use craft\web\twig\variables\CraftVariable;
 use craft\web\UrlManager;
 use putyourlightson\sprig\Sprig;
 use studioespresso\exporter\elements\ExportElement;
+use studioespresso\exporter\events\RegisterExportableElementGroups;
+use studioespresso\exporter\events\RegisterExportableElementTypes;
+use studioespresso\exporter\helpers\ElementTypeHelper;
 use studioespresso\exporter\models\Settings;
 use studioespresso\exporter\records\ExportRecord;
 use studioespresso\exporter\services\ExportConfigurationService;
 use studioespresso\exporter\services\ExportQueryService;
 use studioespresso\exporter\variables\CraftVariableBehavior;
+use studioespresso\exporter\variables\ExporterVariable;
+use verbb\formie\elements\Submission;
+use verbb\formie\Formie;
 use yii\base\Event;
 use yii\console\Application as ConsoleApplication;
 
@@ -34,6 +42,7 @@ use yii\console\Application as ConsoleApplication;
  * @license https://craftcms.github.io/license/ Craft License
  *
  * @property ExportQueryService query
+ * @property ElementTypeHelper elements
  **/
 class Exporter extends Plugin
 {
@@ -71,8 +80,10 @@ class Exporter extends Plugin
 
         $this->components = [
             'configuration' => ExportConfigurationService::class,
+            'elements' => ElementTypeHelper::class,
             'query' => ExportQueryService::class,
         ];
+
     }
 
 
@@ -142,6 +153,49 @@ class Exporter extends Plugin
                 ]);
             }
         );
+
+        Event::on(
+            CraftVariable::class,
+            CraftVariable::EVENT_INIT,
+            function(Event $event) {
+                /** @var CraftVariable $variable */
+                $variable = $event->sender;
+                $variable->set('exporter', ExporterVariable::class);
+            }
+        );
+
+        Event::on(
+            ElementTypeHelper::class,
+            ElementTypeHelper::EVENT_REGISTER_EXPORTABLE_ELEMENT_TYPES,
+            function (RegisterExportableElementTypes $event) {
+                $event->elementTypes = [Submission::class => "Formie submissions"];
+        });
+
+        Event::on(
+            ElementTypeHelper::class,
+            ElementTypeHelper::EVENT_REGISTER_EXPORTABLE_ELEMENT_GROUPS,
+            function (RegisterExportableElementGroups $event) {
+
+                $event->elementGroups = [
+                    Entry::class => [
+                        "label" => "Section",
+                        "instructions" => "Choose a group from which you want to start your export",
+                        "items" => Craft::$app->getSections()->getEditableSections()
+                    ],
+                    Category::class => [
+                        "label" => "Group",
+                        "items" => Craft::$app->getCategories()->getEditableGroups()
+                    ],
+                    Submission::class => [
+                        "label" => "Form",
+                        "items" => Formie::getInstance()->getForms()->getAllForms(),
+                        "nameProperty" => "title"
+                    ]
+                ];
+            });
+
+
+
     }
 
     private function registerUserPermissions()

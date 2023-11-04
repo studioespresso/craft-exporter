@@ -10,6 +10,7 @@ use craft\web\Controller;
 use craft\web\View;
 use studioespresso\exporter\elements\ExportElement;
 use studioespresso\exporter\Exporter;
+use studioespresso\exporter\helpers\ElementTypeHelper;
 use studioespresso\exporter\jobs\ExportBatchJob;
 use studioespresso\exporter\services\ExportConfigurationService;
 use yii\web\UnauthorizedHttpException;
@@ -18,12 +19,15 @@ class ElementController extends Controller
 {
     private ExportConfigurationService $config;
 
+    private ElementTypeHelper $elementHelper;
+
     /**
      * @inheritDoc
      */
     public function init(): void
     {
         $this->config = Exporter::getInstance()->configuration;
+        $this->elementHelper = Exporter::getInstance()->elements;
         parent::init();
     }
 
@@ -92,7 +96,7 @@ class ElementController extends Controller
         }
         return $this->renderTemplate('exporter/_export/_edit', [
             'export' => $element,
-            'elementTypeOptions' => $this->config->getAvailableElementTypes(),
+            'elementTypeOptions' => $this->elementHelper->getAvailableElementTypes(),
             'step' => $step,
         ], View::TEMPLATE_MODE_CP);
     }

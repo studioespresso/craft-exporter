@@ -22,6 +22,9 @@ class ExportBatchJob extends BaseBatchedJob
 
     public $elementId;
 
+    /**
+     * @var ExportElement
+     */
     public $export;
 
     public $fields = [];
