@@ -8,6 +8,9 @@ use craft\elements\Entry;
 use craft\elements\Tag;
 use craft\fields\PlainText;
 use studioespresso\exporter\services\formats\Xlsx;
+use verbb\formie\fields\formfields\Email;
+use verbb\formie\fields\formfields\MultiLineText;
+use verbb\formie\fields\formfields\Name;
 
 class ExportConfigurationService extends Component
 {
@@ -35,6 +38,9 @@ class ExportConfigurationService extends Component
     {
         $fields = [
           PlainText::class,
+            MultiLineText::class,
+            Name::class,
+            Email::class
         ];
 
         return $fields;

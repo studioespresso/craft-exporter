@@ -64,12 +64,13 @@
                 <div class="field width-50" id="elementType-entry-subfields">
                     <div class="heading">
                         <label id="group-label" for="group">{{ groupOptions.label|t('exporter') }}<span
-                                    class="visually-hidden">Required</span><span class="required" aria-hidden="true"></span></label>
+                                    class="visually-hidden">Required</span><span class="required"
+                                                                                 aria-hidden="true"></span></label>
                     </div>
                     {% if groupOptions.instructions is defined %}
-                    <div id="group-instructions" class="instructions">
-                        <p>{{ groupOptions.instructions|t('exporter') }}</p>
-                    </div>
+                        <div id="group-instructions" class="instructions">
+                            <p>{{ groupOptions.instructions|t('exporter') }}</p>
+                        </div>
                     {% endif %}
                     <div class="input ltr">
                         <div class="select">
@@ -89,86 +90,39 @@
                         </div>
                     </div>
                 </div>
+                {% if elementOptions.subGroup is defined and settings.group is defined %}
+
+                    {% set subGroupSettings = elementOptions.subGroup %}
+                    <div class="field width-50" id="elementType-entry-subfields">
+                        <div class="heading">
+                            <label id="section-label" for="section">{{ subGroupSettings.label|t('exporter') }}<span
+                                        class="visually-hidden">Required</span><span class="required"
+                                                                                     aria-hidden="true"></span></label>
+                        </div>
+                        {% if subGroupSettings.instructions is defined %}
+                            <div id="section-instructions" class="instructions">
+                                <p>Choose which entry type you want to export</p>
+                            </div>
+                        {% endif %}
+                        <div class="input ltr">
+                            <div class="select">
+                                <select sprig name="settings[subGroup]" id="section"
+                                        aria-describedby="section-instructions"
+                                        aria-labelledby="section-label">
+                                    <option value="" selected>---</option>
+                                    {% for s in craft.exporter.getSubGroupItems(subGroupSettings, group) %}
+                                        <option value="{{ s.id }}" {{ subGroup == s.id ? 'selected' }}>{{ s.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                {% endif %}
             </div>
         {% endif %}
     {% endif %}
 
-
-
-
-
-{#    {% if elementType == 'craft\\elements\\Entry' %}#}
-
-{#        <div class="flex-fields">#}
-{#            <div class="field width-50" id="elementType-entry-subfields">#}
-{#                <div class="heading">#}
-{#                    <label id="group-label" for="group">Section<span#}
-{#                                class="visually-hidden">Required</span><span class="required" aria-hidden="true"></span></label>#}
-{#                </div>#}
-{#                <div id="group-instructions" class="instructions">#}
-{#                    <p>Choose a group from which you want to start your export</p>#}
-{#                </div>#}
-{#                <div class="input ltr">#}
-{#                    <div class="select">#}
-{#                        <select sprig name="settings[group]" id="group" aria-describedby="group-instructions"#}
-{#                                aria-labelledby="group-label">#}
-{#                            <option value="" selected>---</option>#}
-{#                            {% for s in craft.app.sections.getAllSections() %}#}
-{#                                <option value="{{ s.id }}" {{ group == s.id ? 'selected' }}>{{ s.name }}</option>#}
-{#                            {% endfor %}#}
-{#                        </select>#}
-{#                    </div>#}
-{#                </div>#}
-{#            </div>#}
-{#            {% if group %}#}
-{#                <div class="field width-50" id="elementType-entry-subfields">#}
-{#                    <div class="heading">#}
-{#                        <label id="section-label" for="section">Entry Type<span#}
-{#                                    class="visually-hidden">Required</span><span class="required"#}
-{#                                                                                 aria-hidden="true"></span></label>#}
-{#                    </div>#}
-{#                    <div id="section-instructions" class="instructions"><p>Choose which entry type you want to#}
-{#                            export</p>#}
-{#                    </div>#}
-{#                    <div class="input ltr">#}
-{#                        <div class="select">#}
-{#                            <select sprig name="settings[subGroup]" id="section"#}
-{#                                    aria-describedby="section-instructions"#}
-{#                                    aria-labelledby="section-label">#}
-{#                                <option value="" selected>---</option>#}
-{#                                {% for s in craft.app.sections.getEntryTypesBySectionId(settings.group) %}#}
-{#                                    <option value="{{ s.id }}" {{ subGroup == s.id ? 'selected' }}>{{ s.name }}</option>#}
-{#                                {% endfor %}#}
-{#                            </select>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                </div>#}
-{#            {% endif %}#}
-{#        </div>#}
-{#    {% elseif elementType == 'craft\\elements\\Category' %}#}
-{#        {% set group = group ?? '' %}#}
-{#        <div class="field" id="elementType-entry-subfields">#}
-{#            <div class="heading">#}
-{#                <label id="group-label" for="group">Category Group<span#}
-{#                            class="visually-hidden">Required</span><span class="required"#}
-{#                                                                         aria-hidden="true"></span></label>#}
-{#            </div>#}
-{#            <div id="group-instructions" class="instructions"><p>Choose a group from which you want to start your#}
-{#                    export</p>#}
-{#            </div>#}
-{#            <div class="input ltr">#}
-{#                <div class="select">#}
-{#                    <select sprig name="group" id="group" aria-describedby="group-instructions"#}
-{#                            aria-labelledby="group-label">#}
-{#                        <option value="" selected>---</option>#}
-{#                        {% for s in craft.app.categories.getAllGroups() %}#}
-{#                            <option value="{{ s.handle }}" {{ group == s.handle ? 'selected' }}>{{ s.name }}</option>#}
-{#                        {% endfor %}#}
-{#                    </select>#}
-{#                </div>#}
-{#            </div>#}
-{#        </div>#}
-{#    {% endif %}#}
 
     {% if settings is defined and settings.group is defined and settings.subGroup is defined %}
         {% set showSiteOptions = true %}

@@ -19,4 +19,12 @@ class ExporterVariable
         return Exporter::getInstance()->elements->getElementTypeSettings($element);
     }
 
+    public function getSubGroupItems($options, $id)
+    {
+        $object = \Craft::createObject($options['class']);
+        $function = $options['function'];
+        return $object->$function($id);
+    }
+
+
 }

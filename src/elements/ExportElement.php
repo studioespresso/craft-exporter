@@ -196,10 +196,9 @@ class ExportElement extends Element
         $elementFields = $element->fieldLayout->getCustomFields();
 
         return array_filter($elementFields, function ($field) use ($supportedFields) {
-            d(get_class($field));
+            return true;
             //return in_array(get_class($field), $supportedFields);
         });
-        exit;
     }
 
     public function getSettings(): null|array

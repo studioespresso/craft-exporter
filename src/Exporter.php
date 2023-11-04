@@ -14,6 +14,7 @@ use craft\events\RegisterUrlRulesEvent;
 use craft\events\RegisterUserPermissionsEvent;
 use craft\services\Elements;
 use craft\services\Gc;
+use craft\services\Sections;
 use craft\services\UserPermissions;
 use craft\web\twig\variables\CraftVariable;
 use craft\web\UrlManager;
@@ -176,6 +177,13 @@ class Exporter extends Plugin
                             "label" => "Section",
                             "instructions" => "Choose a group from which you want to start your export",
                             "items" => Craft::$app->getSections()->getEditableSections()
+                        ],
+                        "subGroup" => [
+                            'label' => "Entry type",
+                            "instructions" => "Choose which entrytype you want to export",
+                            'parameter' => 'id',
+                            'class' => Sections::class,
+                            'function' => 'getEntryTypesBySectionId'
                         ]
                     ],
                     Submission::class =>  [
