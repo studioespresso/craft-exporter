@@ -23,6 +23,7 @@ use studioespresso\exporter\elements\ExportElement;
 use studioespresso\exporter\events\RegisterExportableElementGroups;
 use studioespresso\exporter\events\RegisterExportableElementTypes;
 use studioespresso\exporter\helpers\ElementTypeHelper;
+use studioespresso\exporter\helpers\FieldTypeHelper;
 use studioespresso\exporter\models\Settings;
 use studioespresso\exporter\records\ExportRecord;
 use studioespresso\exporter\services\ExportConfigurationService;
@@ -44,6 +45,7 @@ use yii\console\Application as ConsoleApplication;
  *
  * @property ExportQueryService query
  * @property ElementTypeHelper elements
+ * @property FieldTypeHelper fields
  **/
 class Exporter extends Plugin
 {
@@ -82,6 +84,7 @@ class Exporter extends Plugin
         $this->components = [
             'configuration' => ExportConfigurationService::class,
             'elements' => ElementTypeHelper::class,
+            'fields' => FieldTypeHelper::class,
             'query' => ExportQueryService::class,
         ];
 
