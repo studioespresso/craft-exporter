@@ -34,6 +34,7 @@ class Install extends Migration
                 'settings' => $this->json(),
                 'attributes' => $this->json(),
                 'fields' => $this->json(),
+                'runSettings' => $this->json(),
                 'dateCreated' => $this->dateTime()->notNull(),
                 'dateUpdated' => $this->dateTime()->notNull(),
                 'uid' => $this->uid(),

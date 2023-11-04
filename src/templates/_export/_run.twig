@@ -11,6 +11,8 @@
 {% endblock %}
 
 {% block content %}
-
-
+    {{  sprig('exporter/sprig/run', {
+        'exportId': export ? export.id : null,
+        's-trigger': 'load',
+    }) }}
 {% endblock %}

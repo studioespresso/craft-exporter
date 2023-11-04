@@ -1,0 +1,60 @@
+{% set export = exportId ? craft.exports.id(exportId).one() : create('studioespresso\\exporter\\elements\\ExportElement') %}
+{% import "_includes/forms" as forms %}
+
+<form sprig s-action="exporter/element/run-export" s-method="post">
+    {{ redirectInput('') }}
+    {% if export.id %}
+        {{ hiddenInput('elementId', export.id) }}
+    {% endif %}
+
+    <style>
+        .run-settings .field, .custom-fields .field {
+            margin: 12px 0;
+        }
+    </style>
+    {% set runSettings = runSettings ?? [] %}
+    {% set runSettings = runSettings|merge(export.getRunSettings()) %}
+
+    <div class="run-settings">
+        <h2>{{ "Element selection settings"|t('exporter') }}</h2>
+        <p>{{ "Here you can customize which items should be included in the export you're about to run" }}</p>
+        {% set selectionOptions = [
+            {value: 'all', label: 'All items'},
+            {value: 'limit', label: 'Last x numer of items'},
+            {value: 'dateFrom', label: 'Items created between a date and today'},
+            {value: 'dateRange', label: 'Items created between 2 dates'},
+
+        ] %}
+
+        <div class="field" id="elementType-entry-subfields">
+            <div class="heading">
+                <label id="group-label" for="group">Selection<span
+                            class="visually-hidden">Required</span>
+                    <span class="required" aria-hidden="true"></span></label>
+            </div>
+            <div class="input ltr">
+                <div class="select">
+                    <select sprig name="runSettings[elementSelection]" id="group" aria-describedby="group-instructions"
+                            aria-labelledby="group-label">
+                        {% for option in selectionOptions %}
+                            <option value="{{ option.value }}" {% if runSettings.elementSelection is defined and runSettings.elementSelection == option.value %}selected{% endif %}>{{ option.label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% if runSettings.elementSelection is defined and runSettings.elementSelection == 'limit' %}
+
+    {% elseif runSettings.elementSelection is defined and runSettings.elementSelection == 'dateFrom' %}
+
+    {% elseif runSettings.elementSelection is defined and runSettings.elementSelection == 'dateRange' %}
+
+    {% endif %}
+    <hr>
+    <div class="field">
+        {{ hiddenInput('nextStep', '3') }}
+        <button type="submit" class="btn submit">{{ "Start export" }}</button>
+    </div>
+    {{ d(runSettings) }}
+</form>

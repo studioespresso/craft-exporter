@@ -25,6 +25,8 @@ class ExportElement extends Element
 
     public $fields;
 
+    public $runSettings;
+
 
     /**
      * @inheritdoc
@@ -212,6 +214,11 @@ class ExportElement extends Element
         return Json::decode($this->fields);
     }
 
+    public function getRunSettings(): null|array
+    {
+        return Json::decode($this->runSettings) ?? [];
+    }
+
     public function isReadyToRun(): bool
     {
         return true;
@@ -241,12 +248,14 @@ class ExportElement extends Element
                 'settings' => $this->settings,
                 'attributes' => $this->attributes,
                 'fields' => $this->fields,
+                'runSettings' => $this->runSettings,
             ], [
                 'name' => $this->name,
                 'elementType' => $this->elementType,
                 'settings' => $this->settings,
                 'attributes' => $this->attributes,
                 'fields' => $this->fields,
+                'runSettings' => $this->runSettings,
             ]);
         }
 

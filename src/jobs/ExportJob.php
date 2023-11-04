@@ -6,6 +6,7 @@ use Craft;
 use craft\base\Element;
 use craft\errors\ElementNotFoundException;
 use craft\helpers\Console;
+use craft\queue\BaseBatchedJob;
 use craft\queue\BaseJob;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
@@ -13,7 +14,7 @@ use studioespresso\exporter\elements\ExportElement;
 use studioespresso\exporter\Exporter;
 use yii\queue\RetryableJobInterface;
 
-class ExportJob extends BaseJob implements RetryableJobInterface
+class ExportJob extends BaseBatchedJob implements RetryableJobInterface
 {
     public $exportName;
 

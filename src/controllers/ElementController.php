@@ -29,26 +29,26 @@ class ElementController extends Controller
 
     public function actionRunExport()
     {
-        $elementId = $this->request->getRequiredBodyParam('elementId');
-        $export = ExportElement::findOne(['id' => $elementId]);
-        Craft::debug(
-            Craft::t(
-                'exporter',
-                'Adding "{name}" job to the queue',
-                ['name' => $export->name]
-            ),
-            __METHOD__
-        );
-        Craft::$app->getQueue()
-            ->ttr(Exporter::$plugin->getSettings()->ttr)
-            ->priority(Exporter::$plugin->getSettings()->priority)
-            ->push(new ExportJob([
-            'elementId' => $export->id,
-            'exportName' => $export->name
-        ]));
-
-        $url = UrlHelper::cpUrl("exporter/{$export->id}/4");
-        return Craft::$app->getResponse()->getHeaders()->set('HX-Redirect', $url);
+//        $elementId = $this->request->getRequiredBodyParam('elementId');
+//        $export = ExportElement::findOne(['id' => $elementId]);
+//        Craft::debug(
+//            Craft::t(
+//                'exporter',
+//                'Adding "{name}" job to the queue',
+//                ['name' => $export->name]
+//            ),
+//            __METHOD__
+//        );
+//        Craft::$app->getQueue()
+//            ->ttr(Exporter::$plugin->getSettings()->ttr)
+//            ->priority(Exporter::$plugin->getSettings()->priority)
+//            ->push(new ExportJob([
+//            'elementId' => $export->id,
+//            'exportName' => $export->name
+//        ]));
+//
+//        $url = UrlHelper::cpUrl("exporter/{$export->id}/4");
+//        return Craft::$app->getResponse()->getHeaders()->set('HX-Redirect', $url);
     }
 
     /**
