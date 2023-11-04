@@ -10,7 +10,7 @@ use craft\web\Controller;
 use craft\web\View;
 use studioespresso\exporter\elements\ExportElement;
 use studioespresso\exporter\Exporter;
-use studioespresso\exporter\jobs\ExportJob;
+use studioespresso\exporter\jobs\ExportBatchJob;
 use studioespresso\exporter\services\ExportConfigurationService;
 use yii\web\UnauthorizedHttpException;
 

@@ -221,7 +221,7 @@ class ExportElement extends Element
 
     public function isReadyToRun(): bool
     {
-        return true;
+        return false;
     }
 
     public function parseFieldValues(Element $element): array

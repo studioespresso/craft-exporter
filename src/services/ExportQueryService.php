@@ -22,10 +22,12 @@ class ExportQueryService extends Component
         /** @var $element Element */
         switch ($element) {
             default:
-                $query = Craft::createObject($element)->find()->sectionId($settings['section']);
+                $query = Craft::createObject($element)->find()->limit(10)->sectionId($settings['section']);
                 break;
         }
 
+
+        // TODO: Take run-settings into account here: limit, dates, etc
         return $query;
     }
 

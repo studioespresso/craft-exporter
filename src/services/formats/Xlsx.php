@@ -38,7 +38,8 @@ class Xlsx extends Component
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->fromArray($data);
         $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
-        $path = Craft::$app->getPath()->getTempPath() . '/export.xlsx';
+        $date = new \DateTime();
+        $path = Craft::$app->getPath()->getTempPath() . "/export_{$date->format("d-m-Y-H-i-s")}.xlsx";
         $writer->save($path);
         return $path;
     }

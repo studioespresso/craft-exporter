@@ -7,7 +7,7 @@ use craft\base\Element;
 use craft\console\Controller;
 use studioespresso\exporter\elements\ExportElement;
 use studioespresso\exporter\Exporter;
-use studioespresso\exporter\jobs\ExportJob;
+use studioespresso\exporter\jobs\ExportBatchJob;
 
 class ExportController extends Controller
 {
@@ -25,9 +25,12 @@ class ExportController extends Controller
         Craft::$app->getQueue()
             ->ttr(Exporter::$plugin->getSettings()->ttr)
             ->priority(Exporter::$plugin->getSettings()->priority)
-            ->push(new ExportJob([
+            ->push(new ExportBatchJob([
                 'elementId' => $export->id,
-                'exportName' => $export->name
+                'exportName' => $export->name,
+                'fields' => $export->getFields(),
+                'attributes' => $export->getAttributes(),
+                'runSettings' => $export->getRunSettings(),
             ]));
 
         return true;
@@ -45,11 +48,9 @@ class ExportController extends Controller
         foreach($query->limit(2)->all() as $element){
             $values = $element->toArray(array_keys($export->getAttributes()));
             // Convert values to strings
-            $values = array_map(function ($item) {
+            $row = array_map(function ($item) {
                 return (string)$item;
             }, $values);
-
-            $row = array_combine(array_values($export->getAttributes()), $values);
 
             // Fetch the custom field content, already prepped
             $fieldValues = $export->parseFieldValues($element);
