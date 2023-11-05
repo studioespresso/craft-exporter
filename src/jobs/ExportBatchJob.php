@@ -112,6 +112,7 @@ class ExportBatchJob extends BaseBatchedJob
             $xlsx = New \studioespresso\exporter\services\formats\Xlsx();
             $file = $xlsx->create($this->export, $this->data);
             // Once the file has been generated, deliver the file according to the selected method
+            Exporter::getInstance()->mail->send($this->export, $file);
         }
     }
 }

@@ -28,6 +28,7 @@ use studioespresso\exporter\models\Settings;
 use studioespresso\exporter\records\ExportRecord;
 use studioespresso\exporter\services\ExportConfigurationService;
 use studioespresso\exporter\services\ExportQueryService;
+use studioespresso\exporter\services\MailService;
 use studioespresso\exporter\variables\CraftVariableBehavior;
 use studioespresso\exporter\variables\ExporterVariable;
 use verbb\formie\elements\Submission;
@@ -53,6 +54,7 @@ use yii\console\Application as ConsoleApplication;
  * @property ExportQueryService query
  * @property ElementTypeHelper elements
  * @property FieldTypeHelper fields
+ * @property MailService mail
  **/
 class Exporter extends Plugin
 {
@@ -96,6 +98,7 @@ class Exporter extends Plugin
             'elements' => ElementTypeHelper::class,
             'fields' => FieldTypeHelper::class,
             'query' => ExportQueryService::class,
+            'mail' => MailService::class,
         ];
 
     }
@@ -106,13 +109,13 @@ class Exporter extends Plugin
         return Craft::createObject(Settings::class);
     }
 
-//    protected function settingsHtml(): ?string
-//    {
-//        return Craft::$app->view->renderTemplate('exporter/_settings.twig', [
-//            'plugin' => $this,
-//            'settings' => $this->getSettings(),
-//        ]);
-//    }
+    protected function settingsHtml(): ?string
+    {
+        return Craft::$app->view->renderTemplate('exporter/_settings.twig', [
+            'plugin' => $this,
+            'settings' => $this->getSettings(),
+        ]);
+    }
 
     private function registerElementTypes(): void
     {
@@ -198,6 +201,7 @@ class Exporter extends Plugin
                 ElementTypeHelper::EVENT_REGISTER_EXPORTABLE_ELEMENT_TYPES,
                 function (RegisterExportableElementTypes $event) {
                     $event->elementTypes = array_merge($event->elementTypes, [
+                        // TODO Move all this to a model?
                         Submission::class => [
                             "label" => "Formie submissions",
                             "group" => [

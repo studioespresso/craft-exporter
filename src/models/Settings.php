@@ -14,4 +14,6 @@ class Settings extends Model
 
     /** @var int */
     public $priority = 1024;
+
+    public $emailTemplate = '';
 }

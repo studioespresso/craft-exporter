@@ -3,4 +3,12 @@
 
 {% import '_includes/forms.twig' as forms %}
 
-{# ... #}
+{{ forms.autosuggestField({
+    label: "HTML Email Template"|t('exporter'),
+    instructions: "The template Craft CMS will use for HTML emails"|t('exporter'),
+    id: 'emailTemplate',
+    name: 'emailTemplate',
+    suggestions: craft.cp.getTemplateSuggestions(),
+    suggestEnvVars: true,
+    value: settings.emailTemplate,
+}) }}
