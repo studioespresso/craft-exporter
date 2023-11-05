@@ -6,7 +6,7 @@ class RelationFieldParser implements BaseFieldParser
 {
     public function getValue($element, $handle)
     {
-        $relation =  $element->getFieldValue($handle);
+        $relation =  $element->getFieldValue($handle)->one();
         if(isset($relation->title)) {
             return $relation->title;
         }

@@ -20,7 +20,6 @@ class FieldTypeHelper
     public const SUPPORTED_FIELD_TYPES = [
         PlainTextParser::class => [
             PlainText::class,
-            \craft\ckeditor\Field::class,
         ],
         RelationFieldParser::class => [
             Entries::class,

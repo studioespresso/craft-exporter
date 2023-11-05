@@ -6,7 +6,6 @@ use Craft;
 use craft\base\Model;
 use craft\base\Plugin;
 use craft\db\Table;
-use craft\elements\Category;
 use craft\elements\Entry;
 use craft\events\DefineBehaviorsEvent;
 use craft\events\RegisterComponentTypesEvent;
@@ -20,8 +19,9 @@ use craft\web\twig\variables\CraftVariable;
 use craft\web\UrlManager;
 use putyourlightson\sprig\Sprig;
 use studioespresso\exporter\elements\ExportElement;
-use studioespresso\exporter\events\RegisterExportableElementGroups;
 use studioespresso\exporter\events\RegisterExportableElementTypes;
+use studioespresso\exporter\events\RegisterExportableFieldTypes;
+use studioespresso\exporter\fields\PlainTextParser;
 use studioespresso\exporter\helpers\ElementTypeHelper;
 use studioespresso\exporter\helpers\FieldTypeHelper;
 use studioespresso\exporter\models\Settings;
@@ -31,7 +31,14 @@ use studioespresso\exporter\services\ExportQueryService;
 use studioespresso\exporter\variables\CraftVariableBehavior;
 use studioespresso\exporter\variables\ExporterVariable;
 use verbb\formie\elements\Submission;
+use verbb\formie\fields\formfields\Agree;
+use verbb\formie\fields\formfields\Email;
+use verbb\formie\fields\formfields\MultiLineText;
+use verbb\formie\fields\formfields\Number;
+use verbb\formie\fields\formfields\Phone;
+use verbb\formie\fields\formfields\SingleLineText;
 use verbb\formie\Formie;
+use verbb\formie\integrations\feedme\fields\Name;
 use yii\base\Event;
 use yii\console\Application as ConsoleApplication;
 
@@ -135,7 +142,7 @@ class Exporter extends Plugin
             ElementTypeHelper::class,
             ElementTypeHelper::EVENT_REGISTER_EXPORTABLE_ELEMENT_TYPES,
             function (RegisterExportableElementTypes $event) {
-                $event->elementTypes = array_merge($event->elementTypes,[
+                $event->elementTypes = array_merge($event->elementTypes, [
                     Entry::class => [
                         "label" => "Entries",
                         "group" => [
@@ -158,15 +165,34 @@ class Exporter extends Plugin
 
     private function registerFieldParsers()
     {
-
+        Event::on(
+            FieldTypeHelper::class,
+            FieldTypeHelper::EVENT_REGISTER_EXPORTABLE_FIELD_TYPES,
+            function (RegisterExportableFieldTypes $event) {
+                if (Craft::$app->getPlugins()->isPluginEnabled('ckeditor')) {
+                    $event->fieldTypes[PlainTextParser::class][] = \craft\ckeditor\Field::class;
+                }
+                if (Craft::$app->getPlugins()->isPluginEnabled('redactor')) {
+                    $event->fieldTypes[PlainTextParser::class][] = \craft\redactor\Field::class;
+                }
+                if (Craft::$app->getPlugins()->isPluginEnabled('formie')) {
+                    $event->fieldTypes[PlainTextParser::class] = array_merge($event->fieldTypes[PlainTextParser::class], [
+                        Name::class,
+                        Email::class,
+                        SingleLineText::class,
+                        MultiLineText::class,
+                        Phone::class,
+                        Agree::class,
+                        Number::class,
+                    ]);
+                }
+            });
     }
 
     private function registerFormie()
     {
         // Register support for Formie if the plugin is installed and Enabled
-        if (Craft::$app->getPlugins()->isPluginInstalled('formie')
-            && Craft::$app->getPlugins()->isPluginEnabled('formie')
-        ) {
+        if (Craft::$app->getPlugins()->isPluginEnabled('formie')) {
             Event::on(
                 ElementTypeHelper::class,
                 ElementTypeHelper::EVENT_REGISTER_EXPORTABLE_ELEMENT_TYPES,

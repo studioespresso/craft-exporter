@@ -192,7 +192,7 @@ class ExportElement extends Element
 
     public function getSupportedFields(Element $element): array
     {
-        $supportedFields = Exporter::getInstance()->configuration->getSupportedFieldTypes();
+        $supportedFields = Exporter::getInstance()->fields->getAvailableFieldTypes();
         $elementFields = $element->fieldLayout->getCustomFields();
 
         return array_filter($elementFields, function ($field) use ($supportedFields) {

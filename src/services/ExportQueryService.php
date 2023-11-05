@@ -41,6 +41,7 @@ class ExportQueryService extends Component
         foreach ($export->getFields() as $handle) {
             $parser = Exporter::getInstance()->fields->isFieldSupported($layout->getFieldByHandle($handle));
             if(!$parser) {
+                $data[$handle] = "";
                 continue;
             }
             $object = Craft::createObject($parser);
