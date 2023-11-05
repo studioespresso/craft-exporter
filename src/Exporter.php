@@ -79,6 +79,9 @@ class Exporter extends Plugin
             $this->attachEventHandlers();
             $this->registerCpRoutes();
             $this->registerUserPermissions();
+            $this->registerSupportedElementTypes();
+            $this->registerFieldParsers();
+            $this->registerFormie();
         });
 
         $this->components = [
@@ -126,6 +129,63 @@ class Exporter extends Plugin
         );
     }
 
+    private function registerSupportedElementTypes()
+    {
+        Event::on(
+            ElementTypeHelper::class,
+            ElementTypeHelper::EVENT_REGISTER_EXPORTABLE_ELEMENT_TYPES,
+            function (RegisterExportableElementTypes $event) {
+                $event->elementTypes = array_merge($event->elementTypes,[
+                    Entry::class => [
+                        "label" => "Entries",
+                        "group" => [
+                            "parameter" => "sectionId",
+                            "label" => "Section",
+                            "instructions" => "Choose a group from which you want to start your export",
+                            "items" => Craft::$app->getSections()->getEditableSections()
+                        ],
+                        "subGroup" => [
+                            'label' => "Entry type",
+                            "instructions" => "Choose which entrytype you want to export",
+                            'parameter' => 'id',
+                            'class' => Sections::class,
+                            'function' => 'getEntryTypesBySectionId'
+                        ]
+                    ]
+                ]);
+            });
+    }
+
+    private function registerFieldParsers()
+    {
+
+    }
+
+    private function registerFormie()
+    {
+        // Register support for Formie if the plugin is installed and Enabled
+        if (Craft::$app->getPlugins()->isPluginInstalled('formie')
+            && Craft::$app->getPlugins()->isPluginEnabled('formie')
+        ) {
+            Event::on(
+                ElementTypeHelper::class,
+                ElementTypeHelper::EVENT_REGISTER_EXPORTABLE_ELEMENT_TYPES,
+                function (RegisterExportableElementTypes $event) {
+                    $event->elementTypes = array_merge($event->elementTypes, [
+                        Submission::class => [
+                            "label" => "Formie submissions",
+                            "group" => [
+                                "label" => "Form",
+                                "parameter" => "formId",
+                                "items" => Formie::getInstance()->getForms()->getAllForms(),
+                                "nameProperty" => "title"
+                            ]
+                        ]
+                    ]);
+                });
+        }
+    }
+
     private function attachEventHandlers(): void
     {
         Event::on(
@@ -167,39 +227,6 @@ class Exporter extends Plugin
                 $variable->set('exporter', ExporterVariable::class);
             }
         );
-
-        Event::on(
-            ElementTypeHelper::class,
-            ElementTypeHelper::EVENT_REGISTER_EXPORTABLE_ELEMENT_TYPES,
-            function (RegisterExportableElementTypes $event) {
-                $event->elementTypes = [
-                    Entry::class => [
-                        "label" => "Entries",
-                        "group" => [
-                            "parameter" => "sectionId",
-                            "label" => "Section",
-                            "instructions" => "Choose a group from which you want to start your export",
-                            "items" => Craft::$app->getSections()->getEditableSections()
-                        ],
-                        "subGroup" => [
-                            'label' => "Entry type",
-                            "instructions" => "Choose which entrytype you want to export",
-                            'parameter' => 'id',
-                            'class' => Sections::class,
-                            'function' => 'getEntryTypesBySectionId'
-                        ]
-                    ],
-                    Submission::class =>  [
-                        "label" => "Formie submissions",
-                        "group" => [
-                            "label" => "Form",
-                            "parameter" => "formId",
-                            "items" => Formie::getInstance()->getForms()->getAllForms(),
-                            "nameProperty" => "title"
-                        ]
-                    ]
-                ];
-            });
     }
 
     private function registerUserPermissions()
