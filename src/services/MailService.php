@@ -19,7 +19,7 @@ use verbb\formie\Formie;
 
 class MailService extends Component
 {
-    public function send(ExportElement $export, $path): void
+    public function send(ExportElement $export, $path): bool
     {
         $exportSettings = $export->getSettings();
         $pluginSettings = Exporter::getInstance()->getSettings();
@@ -47,6 +47,6 @@ class MailService extends Component
         $message->setTo($exportSettings['email']);
         $message->setHtmlBody($html);
 
-        Craft::$app->getMailer()->send($message);
+        return Craft::$app->getMailer()->send($message);
     }
 }

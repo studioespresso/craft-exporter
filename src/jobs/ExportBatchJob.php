@@ -121,7 +121,9 @@ class ExportBatchJob extends BaseBatchedJob
                     break;
             }
             // Once the file has been generated, deliver the file according to the selected method
-            Exporter::getInstance()->mail->send($this->export, $file);
+            if(Exporter::getInstance()->mail->send($this->export, $file)) {
+                unlink($file);
+            }
         }
     }
 }
