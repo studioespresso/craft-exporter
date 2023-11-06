@@ -34,7 +34,9 @@ class Xlsx extends Component
 
         }
 
+
         $spreadsheet = new Spreadsheet();
+        \PhpOffice\PhpSpreadsheet\Settings::setCache(Craft::$app->getCache());
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->fromArray($data);
         $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);

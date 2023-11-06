@@ -5,7 +5,10 @@ namespace studioespresso\exporter\helpers;
 use craft\base\Event;
 use craft\base\Field;
 use craft\fields\Assets;
+use craft\fields\Categories;
 use craft\fields\Entries;
+use craft\fields\Lightswitch;
+use craft\fields\Number;
 use craft\fields\PlainText;
 use studioespresso\exporter\events\RegisterExportableFieldTypes;
 use studioespresso\exporter\fields\PlainTextParser;
@@ -16,14 +19,16 @@ class FieldTypeHelper
 
     public const EVENT_REGISTER_EXPORTABLE_FIELD_TYPES = 'registerExportableFieldTypes';
 
-
     public const SUPPORTED_FIELD_TYPES = [
         PlainTextParser::class => [
             PlainText::class,
+            Number::class,
+            Lightswitch::class,
         ],
         RelationFieldParser::class => [
             Entries::class,
             Assets::class,
+            Categories::class,
         ]
     ];
 
@@ -61,11 +66,11 @@ class FieldTypeHelper
     public function isFieldSupported(Field $field)
     {
         $item = array_filter(self::$_supportedFieldTypes, function ($fields) use ($field) {
-                foreach($fields as $f) {
-                    if($f === get_class($field)) {
-                        return true;
-                    }
+            foreach ($fields as $f) {
+                if ($f === get_class($field)) {
+                    return true;
                 }
+            }
         });
 
         $parser = array_keys($item);

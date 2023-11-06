@@ -33,26 +33,39 @@ class ElementController extends Controller
 
     public function actionRunExport()
     {
-//        $elementId = $this->request->getRequiredBodyParam('elementId');
-//        $export = ExportElement::findOne(['id' => $elementId]);
-//        Craft::debug(
-//            Craft::t(
-//                'exporter',
-//                'Adding "{name}" job to the queue',
-//                ['name' => $export->name]
-//            ),
-//            __METHOD__
-//        );
-//        Craft::$app->getQueue()
-//            ->ttr(Exporter::$plugin->getSettings()->ttr)
-//            ->priority(Exporter::$plugin->getSettings()->priority)
-//            ->push(new ExportJob([
-//            'elementId' => $export->id,
-//            'exportName' => $export->name
-//        ]));
-//
-//        $url = UrlHelper::cpUrl("exporter/{$export->id}/4");
-//        return Craft::$app->getResponse()->getHeaders()->set('HX-Redirect', $url);
+        $body = $this->request->getBodyParams();
+        $elementId = Craft::$app->getRequest()->getRequiredBodyParam('elementId');
+        $export = ExportElement::findOne(['id' => $elementId]);
+        if (!$export) {
+            throw new ElementNotFoundException();
+        }
+
+        $export->settings = Json::encode(array_merge($export->getSettings(), $body['settings']));
+        $export->runSettings = Json::encode(array_merge($export->getRunSettings(), $body['runSettings']));
+
+        if(!$export->validate()) {
+            dd($export->getErrors());
+        }
+
+        Craft::$app->getElements()->saveElement($export);
+        Craft::debug(
+            Craft::t(
+                'exporter',
+                'Adding "{name}" job to the queue',
+                ['name' => $export->name]
+            ),
+            __METHOD__
+        );
+        Craft::$app->getQueue()
+            ->ttr(Exporter::$plugin->getSettings()->ttr)
+            ->priority(Exporter::$plugin->getSettings()->priority)
+            ->push(new ExportBatchJob([
+                'elementId' => $export->id,
+                'exportName' => $export->name,
+                'fields' => $export->getFields(),
+                'attributes' => $export->getAttributes(),
+                'runSettings' => $export->getRunSettings(),
+            ]));
     }
 
     /**
@@ -63,10 +76,6 @@ class ElementController extends Controller
      */
     public function actionRun($elementId = null): \yii\web\Response
     {
-        if (!Craft::$app->getUser()->getIdentity()->can('exporter-createExports')) {
-            throw new UnauthorizedHttpException("You are not authorized to create new exports");
-        }
-
         $element = null;
         if($elementId) {
             $element = ExportElement::find()->id($elementId)->one();
@@ -144,7 +153,7 @@ class ElementController extends Controller
 
         Craft::$app->getElements()->saveElement($export);
 
-        $url = UrlHelper::cpUrl("exporter/{$export->id}/3");
+        $url = UrlHelper::cpUrl("exporter/{$export->id}/run");
         return Craft::$app->getResponse()->getHeaders()->set('HX-Redirect', $url);
     }
 

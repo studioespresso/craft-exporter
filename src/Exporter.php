@@ -204,6 +204,7 @@ class Exporter extends Plugin
                         // TODO Move all this to a model?
                         Submission::class => [
                             "label" => "Formie submissions",
+                            // TODO: Add setting for localization or not
                             "group" => [
                                 "label" => "Form",
                                 "parameter" => "formId",

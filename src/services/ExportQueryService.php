@@ -9,6 +9,7 @@ use craft\elements\Category;
 use craft\elements\db\ElementQuery;
 use craft\elements\Entry;
 use craft\elements\Tag;
+use craft\helpers\DateTimeHelper;
 use studioespresso\exporter\elements\ExportElement;
 use studioespresso\exporter\Exporter;
 use studioespresso\exporter\helpers\FieldTypeHelper;
@@ -30,6 +31,22 @@ class ExportQueryService extends Component
             $group = $elementOptions['group']['parameter'];
             $query->$group($settings['group']);
         }
+        $runSettings = $export->getRunSettings();
+        switch ($runSettings['elementSelection']) {
+            case 'dateFrom':
+                $startDate = DateTimeHelper::toDateTime($runSettings['dateFrom']);
+                $now = DateTimeHelper::now();
+                $query->dateCreated(['and',
+                    ">= {$startDate->format(\DateTime::ATOM)}",
+                    "< {$now->format(\DateTime::ATOM)}"
+                ]);
+                break;
+            case 'limit':
+//                $query->limit($export->getRunSettings()['limit']);
+                break;
+        }
+
+
         // TODO: Take run-settings into account here: limit, dates, etc
         return $query;
     }

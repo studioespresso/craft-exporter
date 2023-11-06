@@ -22,6 +22,7 @@ class ExportElementQuery extends ElementQuery
           'exporter_exports.settings',
           'exporter_exports.attributes',
           'exporter_exports.fields',
+          'exporter_exports.runSettings',
         ]);
 
         return parent::beforePrepare();

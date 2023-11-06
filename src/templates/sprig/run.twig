@@ -45,16 +45,75 @@
         </div>
     </div>
     {% if runSettings.elementSelection is defined and runSettings.elementSelection == 'limit' %}
+        limit
+        {{ forms.textField({
+            type: 'number',
+            first: false,
+            label: "How many items do you want to export"|t('exporter'),
+            id: 'limit',
+            name: 'runSettings[limit]',
+            value: runSettings.limt ?? 100,
+            errors: export.getErrors('email'),
+            required: true
+        }) }}
+
 
     {% elseif runSettings.elementSelection is defined and runSettings.elementSelection == 'dateFrom' %}
+        {{ forms.dateField({
+            label: "Select a date from which you want the export to start.<br> Dates between the date you select and today will be taken into account."|t('exporter'),
+            id: 'dateFrom',
+            name: 'runSettings[dateFrom]',
+            value: runSettings.dateFrom ?? now,
+            errors: export.getErrors('dateFrom'),
+            required: true
+        }) }}
 
     {% elseif runSettings.elementSelection is defined and runSettings.elementSelection == 'dateRange' %}
-
     {% endif %}
     <hr>
+
+    {% set settings = settings ?? [] %}
+    {% set settings = settings|merge(export.getSettings()) %}
+
+    {% set availableTypes = [
+        {value: 'xlsx', label: 'Excel (xlsx)'}
+    ] %}
+
+    <div class="field" id="elementType-entry-subfields">
+        <div class="heading">
+            <label id="group-label" for="group">File format<span
+                        class="visually-hidden">Required</span>
+                <span class="required" aria-hidden="true"></span></label>
+        </div>
+        <div id="group-instructions" class="instructions">
+            <p>As what file do you want to receive this export?</p>
+        </div>
+        <div class="input ltr">
+            <div class="select">
+                <select sprig name="settings[fileType]" id="group" aria-describedby="group-instructions"
+                        aria-labelledby="group-label">
+                    {#                    <option value="" selected>---</option> #}
+                    {% for type in availableTypes %}
+                        <option value="{{ type.value }}">{{ type.label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <h2>{{ "Export delivery"|t('exporter') }}</h2>
+    {{ hiddenInput('settings[deliveryType]', 'email') }}
+    {{ forms.textField({
+        first: true,
+        label: "Email address?"|t('exporter'),
+        instructions: "Your export will be delivered by e-mail. Who should receive that e-mail?<br> To enter more than one address, seperate the with a comma."|t('exporter'),
+        id: 'email',
+        name: 'settings[email]',
+        value: settings.email ?? '',
+        errors: export.getErrors('email'),
+        required: true
+    }) }}
     <div class="field">
-        {{ hiddenInput('nextStep', '3') }}
         <button type="submit" class="btn submit">{{ "Start export" }}</button>
     </div>
-    {{ d(runSettings) }}
 </form>

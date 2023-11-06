@@ -2,8 +2,10 @@
 
 namespace studioespresso\exporter\fields;
 
+use craft\base\Element;
+
 interface BaseFieldParser
 {
-    public function getValue($element, $handle);
+    public function getValue(Element $element, string $handle);
 
 }
