@@ -27,25 +27,28 @@ class ExportQueryService extends Component
         /** @var $element Element */
         $query = Craft::createObject($element)->find();
 
-        if(isset($elementOptions['group'])) {
+        if (isset($elementOptions['group'])) {
             $group = $elementOptions['group']['parameter'];
             $query->$group($settings['group']);
         }
         $runSettings = $export->getRunSettings();
-        switch ($runSettings['elementSelection']) {
-            case 'dateFrom':
-                $startDate = DateTimeHelper::toDateTime($runSettings['dateFrom']);
-                $now = DateTimeHelper::now();
-                $query->dateCreated(['and',
-                    ">= {$startDate->format(\DateTime::ATOM)}",
-                    "< {$now->format(\DateTime::ATOM)}"
-                ]);
-                break;
-            case 'limit':
-//                $query->limit($export->getRunSettings()['limit']);
-                break;
-        }
+        if ($runSettings) {
 
+            switch ($runSettings['elementSelection']) {
+                case 'dateFrom':
+                    $startDate = DateTimeHelper::toDateTime($runSettings['dateFrom']);
+                    $now = DateTimeHelper::now();
+                    $query->dateCreated(['and',
+                        ">= {$startDate->format(\DateTime::ATOM)}",
+                        "< {$now->format(\DateTime::ATOM)}"
+                    ]);
+                    break;
+                case 'limit':
+//                $query->limit($export->getRunSettings()['limit']);
+                    break;
+            }
+
+        }
 
         // TODO: Take run-settings into account here: limit, dates, etc
         return $query;
@@ -57,7 +60,7 @@ class ExportQueryService extends Component
         $layout = $element->getFieldLayout();
         foreach ($export->getFields() as $handle) {
             $parser = Exporter::getInstance()->fields->isFieldSupported($layout->getFieldByHandle($handle));
-            if(!$parser) {
+            if (!$parser) {
                 $data[$handle] = "";
                 continue;
             }

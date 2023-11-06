@@ -117,6 +117,18 @@ class Exporter extends Plugin
         ]);
     }
 
+    public function getCpNavItem(): array
+    {
+        $ret = [
+            'label' => $this->getSettings()->pluginLabel,
+            'url' => $this->id,
+        ];
+        if (($iconPath = $this->cpNavIconPath()) !== null) {
+            $ret['icon'] = $iconPath;
+        }
+        return $ret;
+    }
+
     private function registerElementTypes(): void
     {
         Event::on(Elements::class, Elements::EVENT_REGISTER_ELEMENT_TYPES,

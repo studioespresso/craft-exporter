@@ -40,7 +40,9 @@ class MailService extends Component
         }
 
         $message = new Message();
-        $message->attach($path, ['fileName' => 'Export.xlsx', 'contentType' => 'application/xlsx']);
+
+        $fileName = "Export.{$exportSettings['fileType']}";
+        $message->attach($path, ['fileName' => $fileName, 'contentType' => "application/{$exportSettings['fileType']}"]);
         $message->setSubject("Your export");
         $message->setTo($exportSettings['email']);
         $message->setHtmlBody($html);

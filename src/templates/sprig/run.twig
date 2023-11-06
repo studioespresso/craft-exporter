@@ -13,7 +13,7 @@
         }
     </style>
     {% set runSettings = runSettings ?? [] %}
-    {% set runSettings = runSettings|merge(export.getRunSettings()) %}
+    {% set runSettings = export.getRunSettings()|merge(runSettings) %}
 
     <div class="run-settings">
         <h2>{{ "Element selection settings"|t('exporter') }}</h2>
@@ -73,10 +73,12 @@
     <hr>
 
     {% set settings = settings ?? [] %}
-    {% set settings = settings|merge(export.getSettings()) %}
+    {% set settings = export.getSettings()|merge(settings) %}
+    {{ d(settings) }}
 
     {% set availableTypes = [
-        {value: 'xlsx', label: 'Excel (xlsx)'}
+        {value: 'xlsx', label: 'Excel (xlsx)'},
+        {value: 'csv', label: 'CSV'}
     ] %}
 
     <div class="field" id="elementType-entry-subfields">
@@ -94,7 +96,7 @@
                         aria-labelledby="group-label">
                     {#                    <option value="" selected>---</option> #}
                     {% for type in availableTypes %}
-                        <option value="{{ type.value }}">{{ type.label }}</option>
+                        <option value="{{ type.value }}" {% if settings.fileType == type.value %}selected{% endif %}>{{ type.label }}</option>
                     {% endfor %}
                 </select>
             </div>

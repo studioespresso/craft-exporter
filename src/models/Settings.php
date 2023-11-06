@@ -16,4 +16,6 @@ class Settings extends Model
     public $priority = 1024;
 
     public $emailTemplate = '';
+
+    public $pluginLabel = 'Exports';
 }

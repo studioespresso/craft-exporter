@@ -7,7 +7,7 @@ use craft\base\Component;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use studioespresso\exporter\elements\ExportElement;
 
-class Xlsx extends Component
+class Csv extends Component
 {
     public function create(ExportElement $export, array $data): string
     {
@@ -38,9 +38,15 @@ class Xlsx extends Component
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->fromArray($data);
-        $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+
+        $writer = new \PhpOffice\PhpSpreadsheet\Writer\Csv($spreadsheet);
+        $writer->setDelimiter(';');
+        $writer->setEnclosure('"');
+        $writer->setLineEnding("\r\n");
+        $writer->setSheetIndex(0);
+
         $date = new \DateTime();
-        $path = Craft::$app->getPath()->getTempPath() . "/export_{$date->format("d-m-Y-H-i-s")}.xlsx";
+        $path = Craft::$app->getPath()->getTempPath() . "/export_{$date->format("d-m-Y-H-i-s")}.csv";
         $writer->save($path);
         return $path;
     }
