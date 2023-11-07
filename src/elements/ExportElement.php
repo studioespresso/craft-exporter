@@ -223,7 +223,7 @@ class ExportElement extends Element
 
     public function isReadyToRun(): bool
     {
-        return false;
+        return ($this->getSettings() && $this->getFields());
     }
 
     public function parseFieldValues(Element $element): array

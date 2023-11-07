@@ -37,20 +37,26 @@ class ExportQueryService extends Component
 
             switch ($runSettings['elementSelection']) {
                 case 'dateFrom':
-                    $startDate = DateTimeHelper::toDateTime($runSettings['dateFrom']);
-                    $now = DateTimeHelper::now();
+                    $dateStart = DateTimeHelper::toDateTime($runSettings['dateStart']);
+                    $dateEnd = DateTimeHelper::now();
                     $query->dateCreated(['and',
-                        ">= {$startDate->format(\DateTime::ATOM)}",
-                        "< {$now->format(\DateTime::ATOM)}"
+                        ">= {$dateStart->format(\DateTime::ATOM)}",
+                        "< {$dateEnd->format(\DateTime::ATOM)}"
+                    ]);
+                    break;
+                case 'dateRange':
+                    $dateStart = DateTimeHelper::toDateTime($runSettings['dateStart']);
+                    $dateEnd = DateTimeHelper::toDateTime($runSettings['dateEnd']);
+                    $query->dateCreated(['and',
+                        ">= {$dateStart->format(\DateTime::ATOM)}",
+                        "< {$dateEnd->format(\DateTime::ATOM)}"
                     ]);
                     break;
                 case 'limit':
-//                $query->limit($export->getRunSettings()['limit']);
+                    $query->limit($runSettings['dateEnd']);
                     break;
             }
-
         }
-
         // TODO: Take run-settings into account here: limit, dates, etc
         return $query;
     }

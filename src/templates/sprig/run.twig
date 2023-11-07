@@ -61,20 +61,35 @@
     {% elseif runSettings.elementSelection is defined and runSettings.elementSelection == 'dateFrom' %}
         {{ forms.dateField({
             label: "Select a date from which you want the export to start.<br> Dates between the date you select and today will be taken into account."|t('exporter'),
-            id: 'dateFrom',
-            name: 'runSettings[dateFrom]',
-            value: runSettings.dateFrom ?? now,
-            errors: export.getErrors('dateFrom'),
+            id: 'dateStart',
+            name: 'runSettings[dateStart]',
+            value: runSettings.dateStart ?? now,
+            errors: export.getErrors('dateStart'),
             required: true
         }) }}
 
     {% elseif runSettings.elementSelection is defined and runSettings.elementSelection == 'dateRange' %}
+        {{ forms.dateField({
+            label: "Select a date from which you want the export to start.<br> Dates between the date you select and today will be taken into account."|t('exporter'),
+            id: 'dateStart',
+            name: 'runSettings[dateStart]',
+            value: runSettings.dateStart ?? now,
+            errors: export.getErrors('dateStart'),
+            required: true
+        }) }}
+        {{ forms.dateField({
+            label: "Select a date from which you want the export to start.<br> Dates between the date you select and today will be taken into account."|t('exporter'),
+            id: 'dateEnd',
+            name: 'runSettings[dateEnd]',
+            value: runSettings.dateEnd ?? now,
+            errors: export.getErrors('dateEnd'),
+            required: true
+        }) }}
     {% endif %}
     <hr>
 
     {% set settings = settings ?? [] %}
     {% set settings = export.getSettings()|merge(settings) %}
-    {{ d(settings) }}
 
     {% set availableTypes = [
         {value: 'xlsx', label: 'Excel (xlsx)'},
