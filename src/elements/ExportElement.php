@@ -11,6 +11,7 @@ use craft\helpers\Db;
 use craft\helpers\Json;
 use studioespresso\exporter\elements\db\ExportElementQuery;
 use studioespresso\exporter\Exporter;
+use studioespresso\exporter\helpers\ElementTypeHelper;
 use studioespresso\exporter\records\ExportRecord;
 
 class ExportElement extends Element
@@ -126,10 +127,25 @@ class ExportElement extends Element
         return Craft::$app->getUser()->getIdentity()->can('exporter-deleteExports');
     }
 
+    public function getGroupLabel()
+    {
+        $elementSettings = Exporter::getInstance()->elements->getElementTypeSettings($this->elementType);
+        $settings = $this->getSettings();
+        $group = array_filter($elementSettings['group']['items'], function ($group) use ($settings) {
+           if($group->id == $settings['group']) {
+                return true;
+           }
+           return false;
+        });
+        $item = reset($group);
+        return isset($item->title) ? $item->title : $item->name;
+    }
+
     protected static function defineTableAttributes(): array
     {
         return [
             'elementType' => Craft::t('exporter', 'Element'),
+            'groupLabel' => "Group"
         ];
     }
 
@@ -170,19 +186,6 @@ class ExportElement extends Element
             return sprintf('exporter/%s/run', $this->getCanonicalId());
         }
         return sprintf('exporter/%s/1', $this->getCanonicalId());
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function afterDelete(): void
-    {
-        if (!$this->propagating) {
-            Db::delete(ExportRecord::tableName(), [
-                    'id' => $this->id,]
-            );
-        }
-        parent::afterDelete();
     }
 
     public function getElementQuery(): ElementQuery
@@ -262,5 +265,18 @@ class ExportElement extends Element
         }
 
         parent::afterSave($isNew);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function afterDelete(): void
+    {
+        if (!$this->propagating) {
+            Db::delete(ExportRecord::tableName(), [
+                    'id' => $this->id,]
+            );
+        }
+        parent::afterDelete();
     }
 }
