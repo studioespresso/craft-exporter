@@ -7,7 +7,7 @@
 ] %}
 
 {% block actionButton %}
-    <a href="/" class="btn submit">{{ "Edit export"|t('exporter') }}</a>
+    <a href="{{ cpUrl("exporter/" ~ export.getCanonicalId() ~ "/1") }}" class="btn submit">{{ "Edit export"|t('exporter') }}</a>
 {% endblock %}
 
 {% block content %}
