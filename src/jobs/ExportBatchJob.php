@@ -4,17 +4,11 @@ namespace studioespresso\exporter\jobs;
 
 use Craft;
 use craft\base\Batchable;
-use craft\base\Element;
 use craft\db\QueryBatcher;
 use craft\errors\ElementNotFoundException;
-use craft\helpers\Console;
 use craft\queue\BaseBatchedJob;
-use craft\queue\BaseJob;
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use studioespresso\exporter\elements\ExportElement;
 use studioespresso\exporter\Exporter;
-use yii\queue\RetryableJobInterface;
 
 class ExportBatchJob extends BaseBatchedJob
 {
@@ -110,19 +104,22 @@ class ExportBatchJob extends BaseBatchedJob
             );
             // Now that we have the data, pass it to a specific service to generate the file
             $settings = $this->export->getSettings();
+            $file = false;
             switch ($settings['fileType']) {
                 case 'xlsx':
-                    $xlsx = New \studioespresso\exporter\services\formats\Xlsx();
+                    $xlsx = new \studioespresso\exporter\services\formats\Xlsx();
                     $file = $xlsx->create($this->export, $this->data);
                     break;
                 case 'csv':
-                    $csv = New \studioespresso\exporter\services\formats\Csv();
+                    $csv = new \studioespresso\exporter\services\formats\Csv();
                     $file = $csv->create($this->export, $this->data);
                     break;
             }
-            // Once the file has been generated, deliver the file according to the selected method
-            if(Exporter::getInstance()->mail->send($this->export, $file)) {
-                unlink($file);
+            if ($file) {
+                // Once the file has been generated, deliver the file according to the selected method
+                if (Exporter::getInstance()->mail->send($this->export, $file)) {
+                    unlink($file);
+                }
             }
         }
     }

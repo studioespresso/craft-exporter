@@ -5,16 +5,10 @@ namespace studioespresso\exporter\services;
 use Craft;
 use craft\base\Component;
 use craft\base\Element;
-use craft\elements\Category;
 use craft\elements\db\ElementQuery;
-use craft\elements\Entry;
-use craft\elements\Tag;
 use craft\helpers\DateTimeHelper;
 use studioespresso\exporter\elements\ExportElement;
 use studioespresso\exporter\Exporter;
-use studioespresso\exporter\helpers\FieldTypeHelper;
-use studioespresso\exporter\services\formats\Xlsx;
-use verbb\formie\Formie;
 
 class ExportQueryService extends Component
 {
@@ -23,8 +17,7 @@ class ExportQueryService extends Component
         $element = $export->elementType;
         $settings = $export->getSettings();
         $elementOptions = Exporter::getInstance()->elements->getElementTypeSettings($element);
-        $limit = null;
-        /** @var $element Element */
+        /** @var Element $element */
         $query = Craft::createObject($element)->find()->siteId($settings['sites']);
 
         if (isset($elementOptions['group'])) {
@@ -34,14 +27,13 @@ class ExportQueryService extends Component
 
         $runSettings = $export->getRunSettings();
         if ($runSettings) {
-
             switch ($runSettings['elementSelection']) {
                 case 'dateFrom':
                     $dateStart = DateTimeHelper::toDateTime($runSettings['dateStart']);
                     $dateEnd = DateTimeHelper::now();
                     $query->dateCreated(['and',
                         ">= {$dateStart->format(\DateTime::ATOM)}",
-                        "< {$dateEnd->format(\DateTime::ATOM)}"
+                        "< {$dateEnd->format(\DateTime::ATOM)}",
                     ]);
                     break;
                 case 'dateRange':
@@ -49,7 +41,7 @@ class ExportQueryService extends Component
                     $dateEnd = DateTimeHelper::toDateTime($runSettings['dateEnd']);
                     $query->dateCreated(['and',
                         ">= {$dateStart->format(\DateTime::ATOM)}",
-                        "< {$dateEnd->format(\DateTime::ATOM)}"
+                        "< {$dateEnd->format(\DateTime::ATOM)}",
                     ]);
                     break;
                 case 'limit':
@@ -57,7 +49,7 @@ class ExportQueryService extends Component
                     break;
             }
         }
-        // TODO: Take run-settings into account here: limit, dates, etc
+
         return $query;
     }
 
@@ -78,6 +70,4 @@ class ExportQueryService extends Component
 
         return $data;
     }
-
-
 }

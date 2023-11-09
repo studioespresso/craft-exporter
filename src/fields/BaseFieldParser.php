@@ -2,10 +2,14 @@
 
 namespace studioespresso\exporter\fields;
 
+use craft\base\Component;
 use craft\base\Element;
 
-interface BaseFieldParser
+abstract class BaseFieldParser extends Component
 {
-    public function getValue(Element $element, string $handle);
+    abstract protected function getValue(Element $element, string $handle);
 
+    abstract protected function getOptionType(): string|bool;
+
+    abstract protected function getOptions(): array;
 }

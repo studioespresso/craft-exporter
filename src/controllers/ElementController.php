@@ -12,12 +12,10 @@ use studioespresso\exporter\elements\ExportElement;
 use studioespresso\exporter\Exporter;
 use studioespresso\exporter\helpers\ElementTypeHelper;
 use studioespresso\exporter\jobs\ExportBatchJob;
-use studioespresso\exporter\services\ExportConfigurationService;
 use yii\web\UnauthorizedHttpException;
 
 class ElementController extends Controller
 {
-    private ExportConfigurationService $config;
 
     private ElementTypeHelper $elementHelper;
 
@@ -26,7 +24,6 @@ class ElementController extends Controller
      */
     public function init(): void
     {
-        $this->config = Exporter::getInstance()->configuration;
         $this->elementHelper = Exporter::getInstance()->elements;
         parent::init();
     }
@@ -43,7 +40,7 @@ class ElementController extends Controller
         $export->settings = Json::encode(array_merge($export->getSettings(), $body['settings']));
         $export->runSettings = Json::encode(array_merge($export->getRunSettings(), $body['runSettings']));
 
-        if(!$export->validate()) {
+        if (!$export->validate()) {
             dd($export->getErrors());
         }
 
@@ -77,7 +74,7 @@ class ElementController extends Controller
     public function actionRun($elementId = null): \yii\web\Response
     {
         $element = null;
-        if($elementId) {
+        if ($elementId) {
             $element = ExportElement::find()->id($elementId)->one();
         }
 
@@ -100,7 +97,7 @@ class ElementController extends Controller
 
         $element = null;
 
-        if($elementId) {
+        if ($elementId) {
             $element = ExportElement::find()->id($elementId)->one();
         }
         return $this->renderTemplate('exporter/_export/_edit', [
@@ -123,7 +120,7 @@ class ElementController extends Controller
         $export->elementType = $body['elementType'];
         $export->settings = Json::encode(array_merge($export->getSettings(), $body['settings']));
 
-        if(!$export->validate()) {
+        if (!$export->validate()) {
             dd($export->getErrors());
         }
 
@@ -147,7 +144,7 @@ class ElementController extends Controller
         $fields = array_filter($body['fields']);
         $export->fields = Json::encode($fields);
 
-        if(!$export->validate()) {
+        if (!$export->validate()) {
             dd($export->getErrors());
         }
 
@@ -168,7 +165,7 @@ class ElementController extends Controller
 
         $export->settings = Json::encode(array_merge($export->getSettings(), $body['settings']));
 
-        if(!$export->validate()) {
+        if (!$export->validate()) {
             dd($export->getErrors());
         }
 

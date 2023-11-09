@@ -18,11 +18,11 @@ class Xlsx extends Component
         $keys = array_keys($largestRow);
         $template = array_fill_keys($keys, '');
 
-        $exportData = array_map(function ($item) use ($template) {
+        $exportData = array_map(function($item) use ($template) {
             return array_merge($template, $item);
         }, $data);
 
-        $rows = array_map(function ($row) {
+        $rows = array_map(function($row) {
             return array_values($row);
         }, $exportData);
 
@@ -31,7 +31,7 @@ class Xlsx extends Component
         try {
             ob_end_clean();
         } catch (\Throwable $e) {
-
+            Craft::error($e->getMessage());
         }
 
 

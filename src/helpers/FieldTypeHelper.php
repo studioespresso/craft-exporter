@@ -4,19 +4,22 @@ namespace studioespresso\exporter\helpers;
 
 use craft\base\Event;
 use craft\base\Field;
+use craft\base\FieldInterface;
 use craft\fields\Assets;
 use craft\fields\Categories;
+use craft\fields\Date;
 use craft\fields\Entries;
 use craft\fields\Lightswitch;
 use craft\fields\Number;
 use craft\fields\PlainText;
 use studioespresso\exporter\events\RegisterExportableFieldTypes;
+use studioespresso\exporter\fields\BaseFieldParser;
+use studioespresso\exporter\fields\DateTimeParser;
 use studioespresso\exporter\fields\PlainTextParser;
 use studioespresso\exporter\fields\RelationFieldParser;
 
 class FieldTypeHelper
 {
-
     public const EVENT_REGISTER_EXPORTABLE_FIELD_TYPES = 'registerExportableFieldTypes';
 
     public const SUPPORTED_FIELD_TYPES = [
@@ -29,7 +32,10 @@ class FieldTypeHelper
             Entries::class,
             Assets::class,
             Categories::class,
-        ]
+        ],
+        DateTimeParser::class => [
+            Date::class,
+        ],
     ];
 
 
@@ -63,9 +69,9 @@ class FieldTypeHelper
         return self::$_supportedFieldTypes;
     }
 
-    public function isFieldSupported(Field $field)
+    public function isFieldSupported(FieldInterface $field)
     {
-        $item = array_filter(self::$_supportedFieldTypes, function ($fields) use ($field) {
+        $item = array_filter(self::$_supportedFieldTypes, function($fields) use ($field) {
             foreach ($fields as $f) {
                 if ($f === get_class($field)) {
                     return true;
@@ -75,5 +81,13 @@ class FieldTypeHelper
 
         $parser = array_keys($item);
         return reset($parser);
+    }
+
+    public function getParser(Field $field): BaseFieldParser|bool
+    {
+        if ($this->isFieldSupported($field)) {
+            return \Craft::createObject($this->isFieldSupported($field));
+        }
+        return false;
     }
 }

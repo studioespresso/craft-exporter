@@ -2,7 +2,7 @@
 
 namespace studioespresso\exporter\variables;
 
-
+use craft\base\Field;
 use studioespresso\exporter\Exporter;
 
 /**
@@ -26,5 +26,19 @@ class ExporterVariable
         return $object->$function($id);
     }
 
+    public function getFieldParser(Field $field)
+    {
+        $parser = Exporter::getInstance()->fields->getParser($field);
+        return $parser;
 
+//        if (!$parser) {
+//            return false;
+//        }
+//
+//        return [
+//            'parser' => get_class($parser),
+//            'optionType' => $parser->getOptionType(),
+//            'options' => $parser->getOptions(),
+//        ];
+    }
 }

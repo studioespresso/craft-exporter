@@ -51,10 +51,10 @@ use yii\console\Application as ConsoleApplication;
  * @copyright Studio Espresso
  * @license https://craftcms.github.io/license/ Craft License
  *
- * @property ExportQueryService query
- * @property ElementTypeHelper elements
- * @property FieldTypeHelper fields
- * @property MailService mail
+ * @property-read ExportQueryService $query
+ * @property-read ElementTypeHelper $elements
+ * @property-read FieldTypeHelper $fields
+ * @property-read MailService $mail
  **/
 class Exporter extends Plugin
 {
@@ -62,15 +62,12 @@ class Exporter extends Plugin
     public bool $hasCpSettings = true;
     public bool $hasCpSection = true;
 
+    private $_settings;
+
     /**
      * @var null|Exporter
      */
     public static ?Exporter $plugin;
-
-
-    /**
-     * @var mixed|object|null
-     */
 
     public function init(): void
     {
@@ -92,17 +89,28 @@ class Exporter extends Plugin
             $this->registerFieldParsers();
             $this->registerFormie();
         });
-
-        $this->components = [
-            'configuration' => ExportConfigurationService::class,
-            'elements' => ElementTypeHelper::class,
-            'fields' => FieldTypeHelper::class,
-            'query' => ExportQueryService::class,
-            'mail' => MailService::class,
-        ];
-
     }
 
+    public static function config(): array
+    {
+        return [
+            'components' => [
+                'elements' => ['class' => ElementTypeHelper::class],
+                'fields' => ['class' => FieldTypeHelper::class],
+                'query' => ['class' => ExportQueryService::class],
+                'mail' => ['class' => MailService::class],
+            ]
+        ];
+    }
+
+    public function getSettings(): ?Settings
+    {
+        if (!isset($this->_settings)) {
+            $this->_settings = $this->createSettingsModel() ?: false;
+        }
+
+        return $this->_settings ?: null;
+    }
 
     protected function createSettingsModel(): ?Model
     {
@@ -164,16 +172,16 @@ class Exporter extends Plugin
                             "parameter" => "sectionId",
                             "label" => "Section",
                             "instructions" => "Choose a group from which you want to start your export",
-                            "items" => Craft::$app->getSections()->getEditableSections()
+                            "items" => Craft::$app->getSections()->getEditableSections(),
                         ],
                         "subGroup" => [
                             'label' => "Entry type",
                             "instructions" => "Choose which entrytype you want to export",
                             'parameter' => 'id',
                             'class' => Sections::class,
-                            'function' => 'getEntryTypesBySectionId'
-                        ]
-                    ]
+                            'function' => 'getEntryTypesBySectionId',
+                        ],
+                    ],
                 ]);
             });
     }
@@ -185,20 +193,20 @@ class Exporter extends Plugin
             FieldTypeHelper::EVENT_REGISTER_EXPORTABLE_FIELD_TYPES,
             function (RegisterExportableFieldTypes $event) {
                 if (Craft::$app->getPlugins()->isPluginEnabled('ckeditor')) {
-                    $event->fieldTypes[PlainTextParser::class][] = \craft\ckeditor\Field::class;
+                    $event->fieldTypes[PlainTextParser::class][] = \craft\ckeditor\Field::class; // @phpstan-ignore-line
                 }
                 if (Craft::$app->getPlugins()->isPluginEnabled('redactor')) {
-                    $event->fieldTypes[PlainTextParser::class][] = \craft\redactor\Field::class;
+                    $event->fieldTypes[PlainTextParser::class][] = \craft\redactor\Field::class; // @phpstan-ignore-line
                 }
                 if (Craft::$app->getPlugins()->isPluginEnabled('formie')) {
                     $event->fieldTypes[PlainTextParser::class] = array_merge($event->fieldTypes[PlainTextParser::class], [
-                        Name::class,
-                        Email::class,
-                        SingleLineText::class,
-                        MultiLineText::class,
-                        Phone::class,
-                        Agree::class,
-                        Number::class,
+                        Name::class, // @phpstan-ignore-line
+                        Email::class, // @phpstan-ignore-line
+                        SingleLineText::class, // @phpstan-ignore-line
+                        MultiLineText::class, // @phpstan-ignore-line
+                        Phone::class, // @phpstan-ignore-line
+                        Agree::class, // @phpstan-ignore-line
+                        Number::class, // @phpstan-ignore-line
                     ]);
                 }
             });
@@ -214,16 +222,17 @@ class Exporter extends Plugin
                 function (RegisterExportableElementTypes $event) {
                     $event->elementTypes = array_merge($event->elementTypes, [
                         // TODO Move all this to a model?
+                        /** @phpstan-ignore-next-line */
                         Submission::class => [
                             "label" => "Formie submissions",
                             // TODO: Add setting for localization or not
                             "group" => [
                                 "label" => "Form",
                                 "parameter" => "formId",
-                                "items" => Formie::getInstance()->getForms()->getAllForms(),
-                                "nameProperty" => "title"
-                            ]
-                        ]
+                                "items" => Formie::getInstance()->getForms()->getAllForms(), // @phpstan-ignore-line
+                                "nameProperty" => "title",
+                            ],
+                        ],
                     ]);
                 });
         }

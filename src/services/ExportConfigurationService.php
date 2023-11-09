@@ -14,35 +14,35 @@ use verbb\formie\fields\formfields\Name;
 
 class ExportConfigurationService extends Component
 {
-    public function getAvailableElementTypes(): array
+    public function getAvailableElementTypes()
     {
-        $types = [
-            Entry::class,
-            Category::class,
-            Tag::class,
-        ];
-
-        return ['Craft' => $types];
+//        $types = [
+//            Entry::class,
+//            Category::class,
+//            Tag::class,
+//        ];
+//
+//        return ['Craft' => $types];
     }
 
-    public function getAvailableFileTypes(): array
+    public function getAvailableFileTypes()
     {
-        $types = [
-            Xlsx::class => 'Excel (xlsx)'
-        ];
-
-        return $types;
+//        $types = [
+//            Xlsx::class => 'Excel (xlsx)'
+//        ];
+//
+//        return $types;
     }
 
-    public function getSupportedFieldTypes(): array
+    public function getSupportedFieldTypes()
     {
-        $fields = [
-          PlainText::class,
-            MultiLineText::class,
-            Name::class,
-            Email::class
-        ];
-
-        return $fields;
+//        $fields = [
+//          PlainText::class,
+//            MultiLineText::class,
+//            Name::class,
+//            Email::class
+//        ];
+//
+//        return $fields;
     }
 }
