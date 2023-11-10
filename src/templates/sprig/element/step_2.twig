@@ -49,29 +49,35 @@
         {% set availableFields = export.getSupportedFields(export.getElementQuery().one()) %}
         {% for field in availableFields %}
             {% set parser = craft.exporter.getFieldParser(field) %}
-            {{ forms.checkboxField({
-                label: field.name,
-                name: "fields[" ~ field.handle ~ "][handle]",
-                value: field.handle,
-                checked: fields[field.handle] ?? false
-            }) }}
-            {# TODO Only show parser option if field is enabled  #}
+            <div id="{{ field.handle }}-input-field" class="field checkboxfield"
+                 data-attribute="{{ field.handle }}-input">
+                <div class="input ltr">
+                    <input type="hidden" name="fields[{{ field.handle }}][handle]" value="">
+                    <input s-on:click="htmx.toggleClass('#{{ field.handle }}-option', 'hidden')" type="checkbox"
+                           id="{{ field.handle }}-input" class="checkbox" name="fields[{{ field.handle }}][handle]"
+                           value="{{ field.handle }}" checked="">
+                    <label for="{{ field.handle }}-input">
+                        {{ field.name }}
+                    </label>
+                </div>
+            </div>
             {% if parser and parser.getOptionType()|length %}
-                {% switch parser.getOptionType() %}
-                {% case 'select' %}
-                    <div class="input ltr">
-                        <div class="select">
-                            {# TODO: aria labels for this? #}
-                            {{ d(parser.getOptions()) }}
-                            <select name="fields[{{ field.handle }}][property]" id="">
-                                {% for key, label in parser.getOptions() %}
-                                    <option value="{{ key }}">{{ label }}</option>
-                                {% endfor %}
-                            </select>
-                            {# TODO: Add custom option? #}
+                <div id="{{ field.handle }}-option">
+                    {% switch parser.getOptionType() %}
+                    {% case 'select' %}
+                        <div class="input ltr">
+                            <div class="select">
+                                {# TODO: aria labels for this? #}
+                                <select name="fields[{{ field.handle }}][property]" id="">
+                                    {% for key, label in parser.getOptions() %}
+                                        <option value="{{ key }}">{{ label }}</option>
+                                    {% endfor %}
+                                </select>
+                                {# TODO: Add custom option? #}
+                            </div>
                         </div>
-                    </div>
-                {% endswitch %}
+                    {% endswitch %}
+                </div>
             {% endif %}
         {% endfor %}
     </div>
