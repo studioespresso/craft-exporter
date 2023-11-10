@@ -27,7 +27,6 @@ class ExportElement extends Element
 
     public $runSettings;
 
-
     /**
      * @inheritdoc
      */
@@ -140,11 +139,18 @@ class ExportElement extends Element
         return isset($item->title) ? $item->title : $item->name;
     }
 
+    public function getElementLabel()
+    {
+        $array = explode("\\", $this->elementType);
+        return end($array);
+    }
+
     protected static function defineTableAttributes(): array
     {
         return [
             'elementType' => Craft::t('exporter', 'Element'),
             'groupLabel' => "Group",
+            'elementLabel' => "Element",
         ];
     }
 
