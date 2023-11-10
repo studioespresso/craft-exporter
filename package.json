@@ -1,0 +1,25 @@
+{
+  "name": "craft-exporter",
+  "version": "1.0.0",
+  "description": "Element exporter for Craft CMS",
+  "private": true,
+  "scripts": {
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:serve": "vitepress serve docs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/studioespresso/craft-exporter.git"
+  },
+  "license": "proprietary",
+  "bugs": {
+    "url": "https://github.com/studioespresso/craft-exporter/issues"
+  },
+  "homepage": "https://github.com/studioespresso/craft-exporter#readme",
+  "devDependencies": {
+    "codemirror": "^5.44.0",
+    "vitepress": "^1.0.0-rc.25",
+    "vue": "^3.2.40"
+  }
+}
