@@ -4,9 +4,12 @@ namespace studioespresso\exporter\fields;
 
 class DateTimeParser extends BaseFieldParser
 {
-    public function getValue($element, $handle)
+    public function getValue($element, array $field)
     {
-        return $element->getFieldValue($handle);
+        $value =  $element->getFieldValue($field['handle']);
+        if ($value) {
+            return $value->format($field['property']);
+        }
     }
 
     public function getOptionType(): string
@@ -17,8 +20,8 @@ class DateTimeParser extends BaseFieldParser
     public function getOptions(): array
     {
         return [
-            'd/M/Y',
-            'm/d/Y',
+            'd/M/Y' => 'd/M/Y',
+            'm/d/Y' => 'm/d/Y',
         ];
     }
 }

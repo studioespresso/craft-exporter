@@ -6,6 +6,7 @@ use Craft;
 use craft\base\Component;
 use craft\base\Element;
 use craft\elements\db\ElementQuery;
+use craft\errors\FieldNotFoundException;
 use craft\helpers\DateTimeHelper;
 use studioespresso\exporter\elements\ExportElement;
 use studioespresso\exporter\Exporter;
@@ -57,15 +58,19 @@ class ExportQueryService extends Component
     {
         $data = [];
         $layout = $element->getFieldLayout();
-        foreach ($export->getFields() as $handle) {
-            $parser = Exporter::getInstance()->fields->isFieldSupported($layout->getFieldByHandle($handle));
+        foreach ($export->getFields() as $field) {
+            $parser = Exporter::getInstance()->fields->isFieldSupported($layout->getFieldByHandle($field['handle']));
             if (!$parser) {
-                $data[$handle] = "";
+                $data[$field] = "";
                 continue;
             }
             $object = Craft::createObject($parser);
 
-            $data[$handle] = $object->getValue($element, $handle);
+            if(!isset($field['handle'])) {
+                throw new FieldNotFoundException();
+            }
+            d($object->getValue($element, $field));
+            $data[$field['handle']] = $object->getValue($element, $field);
         }
 
         return $data;

@@ -7,7 +7,7 @@ use craft\base\Element;
 
 abstract class BaseFieldParser extends Component
 {
-    abstract protected function getValue(Element $element, string $handle);
+    abstract protected function getValue(Element $element, array $handle);
 
     abstract protected function getOptionType(): string|bool;
 

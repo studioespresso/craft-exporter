@@ -4,9 +4,9 @@ namespace studioespresso\exporter\fields;
 
 class PlainTextParser extends BaseFieldParser
 {
-    public function getValue($element, $handle)
+    public function getValue($element, $field)
     {
-        return $element->getFieldValue($handle);
+        return $element->getFieldValue($field['handle']);
     }
 
     public function getOptions(): array
