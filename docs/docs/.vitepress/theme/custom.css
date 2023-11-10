@@ -1,0 +1,16 @@
+:root {
+    --c-brand: #111928;
+    --c-brand-light: #faca30;
+}
+
+.custom-block.tip {
+    border-color: var(--c-brand);
+}
+
+.DocSearch {
+    --docsearch-primary-color: var(--c-brand) !important;
+}
+
+a > img {
+    display: inline-block;
+}
