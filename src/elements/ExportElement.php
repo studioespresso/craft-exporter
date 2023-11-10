@@ -130,7 +130,7 @@ class ExportElement extends Element
     {
         $elementSettings = Exporter::getInstance()->elements->getElementTypeSettings($this->elementType);
         $settings = $this->getSettings();
-        $group = array_filter($elementSettings['group']['items'], function ($group) use ($settings) {
+        $group = array_filter($elementSettings['group']['items'], function($group) use ($settings) {
             if ($group->id == $settings['group']) {
                 return true;
             }
@@ -197,7 +197,7 @@ class ExportElement extends Element
         $supportedFields = Exporter::getInstance()->fields->getAvailableFieldTypes();
         $elementFields = $element->fieldLayout->getCustomFields();
 
-        return array_filter($elementFields, function ($field) use ($supportedFields) {
+        return array_filter($elementFields, function($field) use ($supportedFields) {
             return true;
 //            return in_array(get_class($field), $supportedFields);
         });
@@ -227,7 +227,7 @@ class ExportElement extends Element
     {
         $headings = [];
         foreach ($this->getFields() as $field) {
-            if(is_array($field)) {
+            if (is_array($field)) {
                 $headings[] = $field['handle'];
             } else {
                 $headings[] = $field;
@@ -286,7 +286,7 @@ class ExportElement extends Element
     {
         if (!$this->propagating) {
             Db::delete(ExportRecord::tableName(), [
-                    'id' => $this->id,]
+                    'id' => $this->id, ]
             );
         }
         parent::afterDelete();

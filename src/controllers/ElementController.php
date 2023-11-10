@@ -16,7 +16,6 @@ use yii\web\UnauthorizedHttpException;
 
 class ElementController extends Controller
 {
-
     private ElementTypeHelper $elementHelper;
 
     /**

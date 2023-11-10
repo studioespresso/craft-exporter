@@ -31,4 +31,14 @@ class RelationFieldParser extends BaseFieldParser
     {
         return "select";
     }
+
+    public function getOptionLabel(): string|bool
+    {
+        return Craft::t('exporter', 'Select element property');
+    }
+
+    public function getOptionDescription(): string|bool
+    {
+        return Craft::t('exporter', 'Select which property on the selected element you want to include in the export.');
+    }
 }

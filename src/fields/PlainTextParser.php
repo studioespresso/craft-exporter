@@ -18,4 +18,14 @@ class PlainTextParser extends BaseFieldParser
     {
         return false;
     }
+
+    protected function getOptionLabel(): string|bool
+    {
+        // TODO: Implement getOptionLabel() method.
+    }
+
+    protected function getOptionDescription(): string|bool
+    {
+        // TODO: Implement getOptionDescription() method.
+    }
 }

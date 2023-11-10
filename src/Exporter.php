@@ -26,7 +26,6 @@ use studioespresso\exporter\helpers\ElementTypeHelper;
 use studioespresso\exporter\helpers\FieldTypeHelper;
 use studioespresso\exporter\models\Settings;
 use studioespresso\exporter\records\ExportRecord;
-use studioespresso\exporter\services\ExportConfigurationService;
 use studioespresso\exporter\services\ExportQueryService;
 use studioespresso\exporter\services\MailService;
 use studioespresso\exporter\variables\CraftVariableBehavior;
@@ -79,7 +78,7 @@ class Exporter extends Plugin
         }
 
         // Defer most setup tasks until Craft is fully initialized
-        Craft::$app->onInit(function () {
+        Craft::$app->onInit(function() {
             Sprig::bootstrap();
             $this->registerElementTypes();
             $this->attachEventHandlers();
@@ -99,7 +98,7 @@ class Exporter extends Plugin
                 'fields' => ['class' => FieldTypeHelper::class],
                 'query' => ['class' => ExportQueryService::class],
                 'mail' => ['class' => MailService::class],
-            ]
+            ],
         ];
     }
 
@@ -140,7 +139,7 @@ class Exporter extends Plugin
     private function registerElementTypes(): void
     {
         Event::on(Elements::class, Elements::EVENT_REGISTER_ELEMENT_TYPES,
-            function (RegisterComponentTypesEvent $event) {
+            function(RegisterComponentTypesEvent $event) {
                 $event->types[] = ExportElement::class;
             });
     }
@@ -150,7 +149,7 @@ class Exporter extends Plugin
         Event::on(
             UrlManager::class,
             UrlManager::EVENT_REGISTER_CP_URL_RULES,
-            function (RegisterUrlRulesEvent $event) {
+            function(RegisterUrlRulesEvent $event) {
                 $event->rules['exporter'] = ['template' => 'exporter/_index'];
                 $event->rules['exporter/create'] = 'exporter/element/edit';
                 $event->rules['exporter/<elementId:\\d+>/<step:\\d+>'] = 'exporter/element/edit';
@@ -164,7 +163,7 @@ class Exporter extends Plugin
         Event::on(
             ElementTypeHelper::class,
             ElementTypeHelper::EVENT_REGISTER_EXPORTABLE_ELEMENT_TYPES,
-            function (RegisterExportableElementTypes $event) {
+            function(RegisterExportableElementTypes $event) {
                 $event->elementTypes = array_merge($event->elementTypes, [
                     Entry::class => [
                         "label" => "Entries",
@@ -191,7 +190,7 @@ class Exporter extends Plugin
         Event::on(
             FieldTypeHelper::class,
             FieldTypeHelper::EVENT_REGISTER_EXPORTABLE_FIELD_TYPES,
-            function (RegisterExportableFieldTypes $event) {
+            function(RegisterExportableFieldTypes $event) {
                 if (Craft::$app->getPlugins()->isPluginEnabled('ckeditor')) {
                     $event->fieldTypes[PlainTextParser::class][] = \craft\ckeditor\Field::class; // @phpstan-ignore-line
                 }
@@ -219,7 +218,7 @@ class Exporter extends Plugin
             Event::on(
                 ElementTypeHelper::class,
                 ElementTypeHelper::EVENT_REGISTER_EXPORTABLE_ELEMENT_TYPES,
-                function (RegisterExportableElementTypes $event) {
+                function(RegisterExportableElementTypes $event) {
                     $event->elementTypes = array_merge($event->elementTypes, [
                         // TODO Move all this to a model?
                         /** @phpstan-ignore-next-line */
@@ -243,7 +242,7 @@ class Exporter extends Plugin
         Event::on(
             Gc::class,
             Gc::EVENT_RUN,
-            function (Event $event) {
+            function(Event $event) {
                 // Delete `elements` table rows without peers in our custom products table
                 Craft::$app->getGc()->deletePartialElements(
                     ExportElement::class,
@@ -263,7 +262,7 @@ class Exporter extends Plugin
         Event::on(
             CraftVariable::class,
             CraftVariable::EVENT_DEFINE_BEHAVIORS,
-            function (DefineBehaviorsEvent $e) {
+            function(DefineBehaviorsEvent $e) {
                 $e->sender->attachBehaviors([
                     CraftVariableBehavior::class,
                 ]);
@@ -273,7 +272,7 @@ class Exporter extends Plugin
         Event::on(
             CraftVariable::class,
             CraftVariable::EVENT_INIT,
-            function (Event $event) {
+            function(Event $event) {
                 /** @var CraftVariable $variable */
                 $variable = $event->sender;
                 $variable->set('exporter', ExporterVariable::class);
@@ -283,7 +282,7 @@ class Exporter extends Plugin
 
     private function registerUserPermissions()
     {
-        Event::on(UserPermissions::class, UserPermissions::EVENT_REGISTER_PERMISSIONS, function (RegisterUserPermissionsEvent $event) {
+        Event::on(UserPermissions::class, UserPermissions::EVENT_REGISTER_PERMISSIONS, function(RegisterUserPermissionsEvent $event) {
             $event->permissions[] = [
                 'heading' => Craft::t('exporter', 'Exporter'),
                 'permissions' => [

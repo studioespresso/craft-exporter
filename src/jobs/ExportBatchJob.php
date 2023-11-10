@@ -77,7 +77,7 @@ class ExportBatchJob extends BaseBatchedJob
 
         $values = $item->toArray(array_values($attributes));
         // Convert values to strings
-        $values = array_map(function ($item) {
+        $values = array_map(function($item) {
             return (string)$item;
         }, $values);
 

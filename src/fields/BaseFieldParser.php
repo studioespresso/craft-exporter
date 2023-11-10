@@ -11,5 +11,9 @@ abstract class BaseFieldParser extends Component
 
     abstract protected function getOptionType(): string|bool;
 
+    abstract protected function getOptionLabel(): string|bool;
+
+    abstract protected function getOptionDescription(): string|bool;
+
     abstract protected function getOptions(): array;
 }

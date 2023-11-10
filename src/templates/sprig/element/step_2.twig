@@ -65,15 +65,29 @@
                 <div id="{{ field.handle }}-option">
                     {% switch parser.getOptionType() %}
                     {% case 'select' %}
-                        <div class="input ltr">
-                            <div class="select">
-                                {# TODO: aria labels for this? #}
-                                <select name="fields[{{ field.handle }}][property]" id="">
-                                    {% for key, label in parser.getOptions() %}
-                                        <option value="{{ key }}">{{ label }}</option>
-                                    {% endfor %}
-                                </select>
-                                {# TODO: Add custom option? #}
+                        <div class="field">
+                            <div class="heading">
+                                <label id="{{ field.handle }}-options"
+                                       for="{{ field.handle }}-options">{{ parser.getOptionLabel()|length ? parser.getOptionLabel() : "Select an option" }}
+                                    <span class="visually-hidden">Required</span><span class="required"
+                                                                                       aria-hidden="true"></span>
+                                </label>
+                            </div>
+                            {% if parser.getOptionDescription() %}
+                                <div id="elementType-instructions" class="instructions">
+                                    <p>{{ parser.getOptionDescription() }}</p>
+                                </div>
+                            {% endif %}
+                            <div class="input ltr">
+                                <div class="select">
+                                    {# TODO: aria labels for this? #}
+                                    <select name="fields[{{ field.handle }}][property]" id="{{ field.handle }}-options">
+                                        {% for key, label in parser.getOptions() %}
+                                            <option value="{{ key }}">{{ label }}</option>
+                                        {% endfor %}
+                                    </select>
+                                    {# TODO: Add custom option? #}
+                                </div>
                             </div>
                         </div>
                     {% endswitch %}
