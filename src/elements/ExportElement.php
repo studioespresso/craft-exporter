@@ -125,6 +125,32 @@ class ExportElement extends Element
         return Craft::$app->getUser()->getIdentity()->can('exporter-deleteExports');
     }
 
+    public function scenarios()
+    {
+        return [
+            'step1' => ['name', 'group'],
+            'step2' => [],
+        ];
+    }
+
+    /**
+     * @param null $attributeNames
+     * @param true $clearErrors
+     * @inheritDoc
+     */
+    public function validate($attributeNames = null, $clearErrors = true): void
+    {
+        parent::validate();
+        if($this->scenario == 'step1') {
+            $settings = $this->getSettings();
+            if(!$settings['group']) {
+                $this->addError("group", "Group cannot be blank");
+            }
+        }
+
+    }
+
+
     public function getGroupLabel()
     {
         $elementSettings = Exporter::getInstance()->elements->getElementTypeSettings($this->elementType);

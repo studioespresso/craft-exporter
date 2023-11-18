@@ -115,11 +115,13 @@ class ElementController extends Controller
             $export = ExportElement::findOne(['id' => $body['elementId']]);
         }
 
+
         $export->name = $body['name'];
         $export->elementType = $body['elementType'];
         $export->settings = Json::encode(array_merge($export->getSettings(), $body['settings']));
 
 
+        $export->setScenario('step1');
         if (!$export->validate()) {
             Craft::$app->getUrlManager()->setRouteParams([
                 "export" => $export,
