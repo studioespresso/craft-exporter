@@ -13,7 +13,7 @@
         id: 'name',
         name: 'name',
         value: name ?? export.name,
-        errors: export.getErrors('name'),
+        errors: (errors is defined and attribute(errors, 'name')) ? attribute(errors, 'name'): false,
         required: true
     }) }}
 
@@ -90,8 +90,7 @@
                         </div>
                     </div>
                 </div>
-                {% if elementOptions.subGroup is defined and settings.group is defined %}
-
+                {% if elementOptions.subGroup is defined and subGroup|length and (settings and settings.group is defined) %}
                     {% set subGroupSettings = elementOptions.subGroup %}
                     <div class="field width-50" id="elementType-entry-subfields">
                         <div class="heading">

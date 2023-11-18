@@ -119,8 +119,13 @@ class ElementController extends Controller
         $export->elementType = $body['elementType'];
         $export->settings = Json::encode(array_merge($export->getSettings(), $body['settings']));
 
+
         if (!$export->validate()) {
-            dd($export->getErrors());
+            Craft::$app->getUrlManager()->setRouteParams([
+                "export" => $export,
+                "errors" => $export->getErrors()
+            ]);
+            return null;
         }
 
         Craft::$app->getElements()->saveElement($export);
