@@ -3,6 +3,16 @@
     "description": "Export all things",
     "type": "craft-plugin",
     "license": "proprietary",
+    "authors": [
+        {
+            "name": "Studio Espresso",
+            "homepage": "https://www.studioespresso.co"
+        },
+        {
+            "name": "Jan Henckens",
+            "homepage": "https://jan.henckens.be"
+        }
+    ],
     "support": {
         "email": "info@studioespresso.co",
         "issues": "https://github.com/studioespresso/craft-exporter/issues?state=open",
