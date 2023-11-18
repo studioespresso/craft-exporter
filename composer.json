@@ -35,7 +35,7 @@
         }
     },
     "extra": {
-        "handle": "element-exporter",
+        "handle": "exporter",
         "name": "Element Exporter",
         "developer": "Studio Espresso",
         "documentationUrl": "https://github.com/studioespresso/craft-exporter",
