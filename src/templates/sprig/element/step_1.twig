@@ -7,10 +7,6 @@
         {{ hiddenInput('elementId', export.id) }}
     {% endif %}
 
-    {#    {% if errors is defined %} #}
-    {#        {{ d(errors) }} #}
-    {#    {% endif %} #}
-
     {{ forms.textField({
         first: true,
         label: "Name"|t('exporter'),
@@ -69,33 +65,36 @@
                 <div class="field width-50" id="elementType-entry-subfields">
                     <div class="heading">
                         <label id="group-label" for="group">{{ groupOptions.label|t('exporter') }}<span
-                                    class="visually-hidden">Required</span><span class="required"
-                                                                                 aria-hidden="true"></span></label>
+                                    class="visually-hidden">Required</span>
+                            <span class="required" aria-hidden="true"></span>
+                        </label>
                     </div>
-                    {% if groupOptions.instructions is defined %}
-                        <div id="group-instructions" class="instructions">
-                            <p>{{ groupOptions.instructions|t('exporter') }}</p>
+                    {% if groupOptions.items|length %}
+                        {% if groupOptions.instructions is defined %}
+                            <div id="group-instructions" class="instructions">
+                                <p>{{ groupOptions.instructions|t('exporter') }}</p>
+                            </div>
+                        {% endif %}
+                        <div class="input ltr {% if errors is defined and attribute(errors, 'group') is defined %}errors{% endif %}">
+                            <div class="select">
+                                <select sprig name="settings[group]" id="group" aria-describedby="group-instructions"
+                                        aria-labelledby="group-label">
+                                    <option value="" selected>---</option>
+                                    {% for g in groupOptions.items %}
+                                        <option value="{{ g.id }}" {{ group == g.id ? 'selected' }}>
+                                            {% if groupOptions.nameProperty is defined %}
+                                                {{ attribute(g, groupOptions.nameProperty) }}
+                                            {% else %}
+                                                {{ g.name }}
+                                            {% endif %}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
                         </div>
-                    {% endif %}
-                    <div class="input ltr {% if errors is defined and attribute(errors, 'group') %}errors{% endif %}">
-                        <div class="select">
-                            <select sprig name="settings[group]" id="group" aria-describedby="group-instructions"
-                                    aria-labelledby="group-label">
-                                <option value="" selected>---</option>
-                                {% for g in groupOptions.items %}
-                                    <option value="{{ g.id }}" {{ group == g.id ? 'selected' }}>
-                                        {% if groupOptions.nameProperty is defined %}
-                                            {{ attribute(g, groupOptions.nameProperty) }}
-                                        {% else %}
-                                            {{ g.name }}
-                                        {% endif %}
-                                    </option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                    </div>
-                    {% if errors is defined and attribute(errors, 'group') %}
-                        {{ template.renderErrors(attribute(errors, 'group')) }}
+                        {{ template.renderErrors(errors ?? [], 'group') }}
+                    {% else %}
+                        <div class="error">{{ "No groups found to export"|t('exporter') }}</div>
                     {% endif %}
                 </div>
                 {% if elementOptions.subGroup is defined and subGroup|length and (settings and settings.group is defined) %}
@@ -170,13 +169,15 @@
 
 </form>
 
-{% macro renderErrors(errors) %}
-    <ul id="name-errors" class="errors">
-        {% for e in errors %}
-            <li>
-                <span class="visually-hidden">Error:</span>
-                {{ e }}
-            </li>
-        {% endfor %}
-    </ul>
+{% macro renderErrors(errors, attr) %}
+    {% if attribute(errors, attr) is defined %}
+        <ul id="name-errors" class="errors">
+            {% for e in attribute(errors, attr) %}
+                <li>
+                    <span class="visually-hidden">Error:</span>
+                    {{ e }}
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
 {% endmacro %}
