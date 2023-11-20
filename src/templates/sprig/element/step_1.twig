@@ -1,10 +1,17 @@
-{% set export = exportId ? craft.exports.id(exportId).one() : create('studioespresso\\exporter\\elements\\ExportElement') %}
+{% if export is not defined %}
+    {% set export = exportId ? craft.exports.id(exportId).one() : create('studioespresso\\exporter\\elements\\ExportElement') %}
+{% endif %}
 {% import "_includes/forms" as forms %}
 {% import _self as template %}
 
 <form sprig s-action="exporter/element/step1" s-method="post">
     {% if export.id %}
         {{ hiddenInput('elementId', export.id) }}
+    {% endif %}
+
+    {# TODO: Remove this before we ship the plugin #}
+    {% if errors is defined %}
+        {{ d(errors) }}
     {% endif %}
 
     {{ forms.textField({
@@ -14,7 +21,7 @@
         id: 'name',
         name: 'name',
         value: name ?? export.name,
-        errors: (errors is defined and attribute(errors, 'name')) ? attribute(errors, 'name'): false,
+        errors: (errors is defined and attribute(errors, 'name') is defined) ? attribute(errors, 'name'): false,
         required: true
     }) }}
 
@@ -53,12 +60,13 @@
         {% set group = settings.group %}
         {% set subGroup = settings.subGroup ?? '' %}
     {% else %}
-        {% set subGroup = '' %}
         {% set group = '' %}
+        {% set subGroup = '' %}
     {% endif %}
 
     {% if elementType is defined %}
         {% set elementOptions = craft.exporter.getElementTypeSettings(elementType) %}
+        {% set subGroup = elementOptions.subGroup %}
         {% if elementOptions.group is defined %}
             {% set groupOptions = elementOptions.group %}
             <div class="flex-fields">

@@ -129,7 +129,7 @@ class ExportElement extends Element
     {
         return [
             'step1' => ['name', 'group'],
-            'step2' => [],
+            'default' => [],
         ];
     }
 
@@ -138,16 +138,16 @@ class ExportElement extends Element
      * @param true $clearErrors
      * @inheritDoc
      */
-    public function validate($attributeNames = null, $clearErrors = true): void
+    public function validate($attributeNames = null, $clearErrors = true): bool
     {
-        parent::validate();
         if($this->scenario == 'step1') {
             $settings = $this->getSettings();
             if(!$settings['group']) {
                 $this->addError("group", "Group cannot be blank");
             }
-        }
 
+        }
+        return parent::validate();
     }
 
 

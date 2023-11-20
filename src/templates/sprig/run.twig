@@ -111,7 +111,7 @@
                         aria-labelledby="group-label">
                     {#                    <option value="" selected>---</option> #}
                     {% for type in availableTypes %}
-                        <option value="{{ type.value }}" {% if settings.fileType == type.value %}selected{% endif %}>{{ type.label }}</option>
+                        <option value="{{ type.value }}" {% if settings.fileType is defined and settings.fileType == type.value %}selected{% endif %}>{{ type.label }}</option>
                     {% endfor %}
                 </select>
             </div>

@@ -39,8 +39,13 @@ class ElementController extends Controller
         $export->settings = Json::encode(array_merge($export->getSettings(), $body['settings']));
         $export->runSettings = Json::encode(array_merge($export->getRunSettings(), $body['runSettings']));
 
-        if (!$export->validate()) {
-            dd($export->getErrors());
+        $export->validate();
+        if ($export->getErrors()) {
+            Craft::$app->getUrlManager()->setRouteParams([
+                "export" => $export,
+                "errors" => $export->getErrors()
+            ]);
+            return null;
         }
 
         Craft::$app->getElements()->saveElement($export);
@@ -122,7 +127,9 @@ class ElementController extends Controller
 
 
         $export->setScenario('step1');
-        if (!$export->validate()) {
+
+        $export->validate();
+        if ($export->getErrors()) {
             Craft::$app->getUrlManager()->setRouteParams([
                 "export" => $export,
                 "errors" => $export->getErrors()
@@ -131,6 +138,7 @@ class ElementController extends Controller
         }
 
         Craft::$app->getElements()->saveElement($export);
+
         $url = UrlHelper::cpUrl("exporter/{$export->id}/2");
         return Craft::$app->getResponse()->getHeaders()->set('HX-Redirect', $url);
     }
@@ -150,8 +158,13 @@ class ElementController extends Controller
         $fields = array_filter($body['fields']);
         $export->fields = Json::encode($fields);
 
-        if (!$export->validate()) {
-            dd($export->getErrors());
+        $export->validate();
+        if ($export->getErrors()) {
+            Craft::$app->getUrlManager()->setRouteParams([
+                "export" => $export,
+                "errors" => $export->getErrors()
+            ]);
+            return null;
         }
 
         Craft::$app->getElements()->saveElement($export);
@@ -171,8 +184,13 @@ class ElementController extends Controller
 
         $export->settings = Json::encode(array_merge($export->getSettings(), $body['settings']));
 
-        if (!$export->validate()) {
-            dd($export->getErrors());
+        $export->validate();
+        if ($export->getErrors()) {
+            Craft::$app->getUrlManager()->setRouteParams([
+                "export" => $export,
+                "errors" => $export->getErrors()
+            ]);
+            return null;
         }
 
         Craft::$app->getElements()->saveElement($export);
