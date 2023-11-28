@@ -12,7 +12,7 @@
         {{ hiddenInput('elementId', export.id) }}
     {% endif %}
     {% set attributes = export.getAttributes() %}
-    {% set fields = export.getFields() %}
+    {% set fields = export.getFields() ?? [] %}
 
     <style>
         .default-fields .field, .custom-fields .field {
@@ -49,20 +49,24 @@
         {% set availableFields = export.getSupportedFields(export.getElementQuery().one()) %}
         {% for field in availableFields %}
             {% set parser = craft.exporter.getFieldParser(field) %}
+            {% set fieldSettings = false %}
+            {% if fields|length and attribute(fields, field.handle) %}
+                {% set fieldSettings = attribute(fields, field.handle) %}
+            {% endif %}
             <div id="{{ field.handle }}-input-field" class="field checkboxfield"
                  data-attribute="{{ field.handle }}-input">
                 <div class="input ltr">
                     <input type="hidden" name="fields[{{ field.handle }}][handle]" value="">
                     <input s-on:click="htmx.toggleClass('#{{ field.handle }}-option', 'hidden')" type="checkbox"
                            id="{{ field.handle }}-input" class="checkbox" name="fields[{{ field.handle }}][handle]"
-                           value="{{ field.handle }}" checked="">
+                           value="{{ field.handle }}" {% if fieldSettings and fieldSettings.handle|length %}checked=""{% endif %}>
                     <label for="{{ field.handle }}-input">
                         {{ field.name }}
                     </label>
                 </div>
             </div>
             {% if parser and parser.getOptionType()|length %}
-                <div id="{{ field.handle }}-option">
+                <div id="{{ field.handle }}-option" {% if fieldSettings and fieldSettings.handle|length %}{% else%} class="hidden" {% endif %}>
                     {% switch parser.getOptionType() %}
                     {% case 'select' %}
                         <div class="field">
