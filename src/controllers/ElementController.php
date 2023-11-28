@@ -57,6 +57,10 @@ class ElementController extends Controller
             ),
             __METHOD__
         );
+
+        $date = new \DateTime();
+        $fileName = "export_{$date->format("d-m-Y-H-i-s")}";
+
         Craft::$app->getQueue()
             ->ttr(Exporter::$plugin->getSettings()->ttr)
             ->priority(Exporter::$plugin->getSettings()->priority)
@@ -66,7 +70,33 @@ class ElementController extends Controller
                 'fields' => $export->getFields(),
                 'attributes' => $export->getAttributes(),
                 'runSettings' => $export->getRunSettings(),
+                'fileName' => $fileName
             ]));
+
+        $url = UrlHelper::cpUrl("exporter/{$export->id}/watch", ['fileName' => $fileName]);
+        return Craft::$app->getResponse()->getHeaders()->set('HX-Redirect', $url);
+    }
+
+    public function actionGetDownload()
+    {
+        $export = ExportElement::findOne(['id' => $this->request->getRequiredBodyParam('exportId')]);
+        $settings = $export->getSettings();
+        $fileName = $this->request->getRequiredBodyParam('fileName');
+
+        $file = file_get_contents(Craft::$app->getPath()->getTempPath() . "/{$fileName}.{$settings['fileType']}");
+        return  $file;
+    }
+
+    public function actionWatch($elementId = null)
+    {
+        $element = null;
+        if ($elementId) {
+            $element = ExportElement::find()->id($elementId)->one();
+        }
+
+        return $this->renderTemplate('exporter/_export/_running', [
+            'export' => $element,
+        ], View::TEMPLATE_MODE_CP);
     }
 
     /**

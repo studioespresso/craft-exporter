@@ -1,0 +1,25 @@
+{% set export = exportId ? craft.exports.id(exportId).one() : create('studioespresso\\exporter\\elements\\ExportElement') %}
+
+{# Refreshes the component every 5 seconds #}
+{% set timezone = timezone ?? 'Europe/Brussels' %}
+
+<div sprig s-trigger="every 1s" class="pulse">
+    The time is {{ now|time('long', timezone=timezone) }}
+
+    {# Check if we have a job in the queue for this export and track its progress? #}
+    {% set isRunning = craft.exporter.listenForJob(export) %}
+    {% if isRunning %}
+        Your export running, stay tuned. Depending on the size of your export, this could take a while.
+    {% else %}
+        <div>
+            Done! Click the button below to download your export!
+            <form method="post">
+                {{ csrfInput() }}
+                {{ actionInput('exporter/element/get-download') }}
+                {{ hiddenInput('exportId', export.id) }}
+                {{ hiddenInput('fileName', craft.app.request.getQueryParam('fileName')) }}
+                <button type="submit">{{ 'Download file' }}</button>
+            </form>
+        </div>
+    {% endif %}
+</div>

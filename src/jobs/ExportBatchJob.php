@@ -29,6 +29,8 @@ class ExportBatchJob extends BaseBatchedJob
 
     public $data = [];
 
+    public string $fileName = '';
+
     protected function defaultDescription(): string
     {
         return Craft::t('app', 'Running  {name}', [
@@ -108,17 +110,17 @@ class ExportBatchJob extends BaseBatchedJob
             switch ($settings['fileType']) {
                 case 'xlsx':
                     $xlsx = new \studioespresso\exporter\services\formats\Xlsx();
-                    $file = $xlsx->create($this->export, $this->data);
+                    $file = $xlsx->create($this->export, $this->data, $this->fileName);
                     break;
                 case 'csv':
                     $csv = new \studioespresso\exporter\services\formats\Csv();
-                    $file = $csv->create($this->export, $this->data);
+                    $file = $csv->create($this->export, $this->data, $this->fileName);
                     break;
             }
             if ($file) {
                 // Once the file has been generated, deliver the file according to the selected method
                 if (Exporter::getInstance()->mail->send($this->export, $file)) {
-                    unlink($file);
+                   // unlink($file);
                 }
             }
         }

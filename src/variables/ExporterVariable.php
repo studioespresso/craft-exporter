@@ -3,7 +3,10 @@
 namespace studioespresso\exporter\variables;
 
 use craft\base\Field;
+use craft\db\Query;
+use studioespresso\exporter\elements\ExportElement;
 use studioespresso\exporter\Exporter;
+use studioespresso\exporter\jobs\ExportBatchJob;
 
 /**
  * The class name isn't important, but we've used something that describes
@@ -14,6 +17,19 @@ use studioespresso\exporter\Exporter;
  */
 class ExporterVariable
 {
+    public function listenForJob(ExportElement $export)
+    {
+        $class = ExportBatchJob::class;
+
+        $query = new Query();
+        $query->from("{{%queue}}")
+        ->select('*')
+        ->where(['like', 'job', "%{$class}%", false])
+        ->andWhere(['like', 'job', "%{$export->id}%", false]);
+        
+        return $query->one();
+    }
+
     public function getElementTypeSettings($element): array
     {
         return Exporter::getInstance()->elements->getElementTypeSettings($element);

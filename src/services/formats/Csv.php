@@ -9,7 +9,7 @@ use studioespresso\exporter\elements\ExportElement;
 
 class Csv extends Component
 {
-    public function create(ExportElement $export, array $data): string
+    public function create(ExportElement $export, array $data, $fileName): string
     {
         $counts = array_map('count', $data);
         $key = array_flip($counts)[max($counts)];
@@ -46,7 +46,7 @@ class Csv extends Component
         $writer->setSheetIndex(0);
 
         $date = new \DateTime();
-        $path = Craft::$app->getPath()->getTempPath() . "/export_{$date->format("d-m-Y-H-i-s")}.csv";
+        $path = Craft::$app->getPath()->getTempPath() . "/{$fileName}.csv";
         $writer->save($path);
         return $path;
     }

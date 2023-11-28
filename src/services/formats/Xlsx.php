@@ -9,7 +9,7 @@ use studioespresso\exporter\elements\ExportElement;
 
 class Xlsx extends Component
 {
-    public function create(ExportElement $export, array $data): string
+    public function create(ExportElement $export, array $data, $fileName): string
     {
         $counts = array_map('count', $data);
         $key = array_flip($counts)[max($counts)];
@@ -40,7 +40,7 @@ class Xlsx extends Component
         $sheet->fromArray($data);
         $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
         $date = new \DateTime();
-        $path = Craft::$app->getPath()->getTempPath() . "/export_{$date->format("d-m-Y-H-i-s")}.xlsx";
+        $path = Craft::$app->getPath()->getTempPath() . "/{$fileName}.xlsx";
         $writer->save($path);
         return $path;
     }

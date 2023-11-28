@@ -59,9 +59,17 @@ class ExportQueryService extends Component
         $data = [];
         $layout = $element->getFieldLayout();
         foreach ($export->getFields() as $field) {
-            $parser = Exporter::getInstance()->fields->isFieldSupported($layout->getFieldByHandle($field['handle']));
+
+
+            if(!$field['handle']) {
+                continue;
+            }
+
+            $craftField = $layout->getFieldByHandle($field['handle']);
+            $parser = Exporter::getInstance()->fields->isFieldSupported($craftField);
+
             if (!$parser) {
-                $data[$field] = "";
+                $data[$field['handle']] = "";
                 continue;
             }
             $object = Craft::createObject($parser);
@@ -69,10 +77,9 @@ class ExportQueryService extends Component
             if (!isset($field['handle'])) {
                 throw new FieldNotFoundException();
             }
-            d($object->getValue($element, $field));
+
             $data[$field['handle']] = $object->getValue($element, $field);
         }
-
         return $data;
     }
 }

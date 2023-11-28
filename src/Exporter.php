@@ -154,6 +154,7 @@ class Exporter extends Plugin
                 $event->rules['exporter/create'] = 'exporter/element/edit';
                 $event->rules['exporter/<elementId:\\d+>/<step:\\d+>'] = 'exporter/element/edit';
                 $event->rules['exporter/<elementId:\\d+>/run'] = 'exporter/element/run';
+                $event->rules['exporter/<elementId:\\d+>/watch'] = 'exporter/element/watch';
             }
         );
     }

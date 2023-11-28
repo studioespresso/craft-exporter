@@ -1,0 +1,17 @@
+{% extends "_layouts/cp" %}
+{% import "_includes/forms" as forms %}
+
+{% set title = "Export is running" %}
+{% set crumbs = [
+    { label: "Exporter", url: url('exporter') },
+] %}
+
+{% block actionButton %}
+{% endblock %}
+
+{% block content %}
+    {{  sprig('exporter/sprig/queue', {
+        'exportId': export ? export.id : null,
+        's-trigger': 'load',
+    }) }}
+{% endblock %}
