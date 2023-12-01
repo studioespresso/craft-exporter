@@ -4,17 +4,22 @@ namespace studioespresso\exporter\helpers;
 
 use craft\base\Event;
 use studioespresso\exporter\events\RegisterExportableElementTypes;
+use studioespresso\exporter\Exporter;
+use studioespresso\exporter\models\ExportableElementTypeModel;
 
 class ElementTypeHelper
 {
     public const EVENT_REGISTER_EXPORTABLE_ELEMENT_TYPES = 'registerExportableElementTypes';
 
-
+    /** @var ExportableElementTypeModel[] SUPPORTED_ELEMENT_TYPES */
     public const SUPPORTED_ELEMENT_TYPES = [];
 
 
     private static ?array $_supportedElementTypes = null;
 
+    /**
+     * @return ExportableElementTypeModel[] array
+     */
     public function getAvailableElementTypes(): array
     {
         if (self::$_supportedElementTypes !== null) {
@@ -42,8 +47,13 @@ class ElementTypeHelper
         }
 
         $types = [];
-        foreach ($this->getAvailableElementTypes() as $class => $data) {
-            $types[$class] = $data['label'];
+        foreach ($this->getAvailableElementTypes() as $model) {
+            if(!$model->validate()) {
+                \Craft::error("ExportableElementTypeModel is not configured correctly", Exporter::class);
+                continue;
+            }
+
+            $types[$model->elementType] = $model->elementLabel;
         }
 
         return $types;

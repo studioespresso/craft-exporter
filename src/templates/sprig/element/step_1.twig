@@ -66,9 +66,9 @@
 
     {% if elementType is defined %}
         {% set elementOptions = craft.exporter.getElementTypeSettings(elementType) %}
-        {% set subGroup = elementOptions.subGroup %}
+        {% set subGroup = elementOptions.getSubGroup() %}
         {% if elementOptions.group is defined %}
-            {% set groupOptions = elementOptions.group %}
+            {% set groupOptions = elementOptions.getGroup() %}
             <div class="flex-fields">
                 <div class="field width-50" id="elementType-entry-subfields">
                     <div class="heading">
@@ -106,7 +106,7 @@
                     {% endif %}
                 </div>
                 {% if elementOptions.subGroup is defined and subGroup|length and (settings and settings.group is defined) %}
-                    {% set subGroupSettings = elementOptions.subGroup %}
+                    {% set subGroupSettings = elementOptions.getSubGroup() %}
                     <div class="field width-50" id="elementType-entry-subfields">
                         <div class="heading">
                             <label id="section-label" for="section">{{ subGroupSettings.label|t('exporter') }}<span

@@ -7,6 +7,7 @@ use craft\db\Query;
 use studioespresso\exporter\elements\ExportElement;
 use studioespresso\exporter\Exporter;
 use studioespresso\exporter\jobs\ExportBatchJob;
+use studioespresso\exporter\models\ExportableElementTypeModel;
 
 /**
  * The class name isn't important, but we've used something that describes
@@ -30,7 +31,7 @@ class ExporterVariable
         return $query->one();
     }
 
-    public function getElementTypeSettings($element): array
+    public function getElementTypeSettings($element): ExportableElementTypeModel
     {
         return Exporter::getInstance()->elements->getElementTypeSettings($element);
     }
