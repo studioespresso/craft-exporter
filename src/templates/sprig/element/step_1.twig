@@ -69,6 +69,7 @@
         {% set subGroup = elementOptions.getSubGroup() %}
         {% if elementOptions.group is defined %}
             {% set groupOptions = elementOptions.getGroup() %}
+            {{ d(groupOptions) }}
             <div class="flex-fields">
                 <div class="field width-50" id="elementType-entry-subfields">
                     <div class="heading">

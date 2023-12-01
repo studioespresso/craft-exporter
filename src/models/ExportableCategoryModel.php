@@ -2,12 +2,7 @@
 
 namespace studioespresso\exporter\models;
 
-use craft\base\Element;
-use craft\base\ElementInterface;
-use craft\base\Model;
 use craft\elements\Category;
-use craft\elements\Entry;
-use craft\services\Sections;
 
 class ExportableCategoryModel extends ExportableElementTypeModel
 {

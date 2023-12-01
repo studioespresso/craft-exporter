@@ -14,7 +14,6 @@ use craft\events\RegisterUrlRulesEvent;
 use craft\events\RegisterUserPermissionsEvent;
 use craft\services\Elements;
 use craft\services\Gc;
-use craft\services\Sections;
 use craft\services\UserPermissions;
 use craft\web\twig\variables\CraftVariable;
 use craft\web\UrlManager;
@@ -26,23 +25,21 @@ use studioespresso\exporter\fields\PlainTextParser;
 use studioespresso\exporter\helpers\ElementTypeHelper;
 use studioespresso\exporter\helpers\FieldTypeHelper;
 use studioespresso\exporter\models\ExportableCategoryModel;
-use studioespresso\exporter\models\ExportableElementTypeModel;
 use studioespresso\exporter\models\ExportableEntryModel;
 use studioespresso\exporter\models\ExportableFormieSubmissionModel;
+use studioespresso\exporter\models\ExportableFreeformSubmissionModel;
 use studioespresso\exporter\models\Settings;
 use studioespresso\exporter\records\ExportRecord;
 use studioespresso\exporter\services\ExportQueryService;
 use studioespresso\exporter\services\MailService;
 use studioespresso\exporter\variables\CraftVariableBehavior;
 use studioespresso\exporter\variables\ExporterVariable;
-use verbb\formie\elements\Submission;
 use verbb\formie\fields\formfields\Agree;
 use verbb\formie\fields\formfields\Email;
 use verbb\formie\fields\formfields\MultiLineText;
 use verbb\formie\fields\formfields\Number;
 use verbb\formie\fields\formfields\Phone;
 use verbb\formie\fields\formfields\SingleLineText;
-use verbb\formie\Formie;
 use verbb\formie\integrations\feedme\fields\Name;
 use yii\base\Event;
 use yii\console\Application as ConsoleApplication;
@@ -91,7 +88,9 @@ class Exporter extends Plugin
             $this->registerUserPermissions();
             $this->registerSupportedElementTypes();
             $this->registerFieldParsers();
+            // Register plugin support
             $this->registerFormie();
+            $this->registerFreeform();
         });
     }
 
@@ -205,22 +204,6 @@ class Exporter extends Plugin
             });
     }
 
-    private function registerFormie()
-    {
-        // Register support for Formie if the plugin is installed and Enabled
-        if (Craft::$app->getPlugins()->isPluginEnabled('formie')) {
-            Event::on(
-                ElementTypeHelper::class,
-                ElementTypeHelper::EVENT_REGISTER_EXPORTABLE_ELEMENT_TYPES,
-                function (RegisterExportableElementTypes $event) {
-                    $model = new ExportableFormieSubmissionModel();
-                    $event->elementTypes = array_merge($event->elementTypes, [
-                      Submission::class => $model
-                    ]);
-                });
-        }
-    }
-
     private function attachEventHandlers(): void
     {
         Event::on(
@@ -276,4 +259,37 @@ class Exporter extends Plugin
             ];
         });
     }
+
+    private function registerFormie()
+    {
+        // Register support for Formie if the plugin is installed and Enabled
+        if (Craft::$app->getPlugins()->isPluginEnabled('formie')) {
+            Event::on(
+                ElementTypeHelper::class,
+                ElementTypeHelper::EVENT_REGISTER_EXPORTABLE_ELEMENT_TYPES,
+                function (RegisterExportableElementTypes $event) {
+                    $model = new ExportableFormieSubmissionModel();
+                    $event->elementTypes = array_merge($event->elementTypes, [
+                        \verbb\formie\elements\Submission::class => $model
+                    ]);
+                });
+        }
+    }
+
+    private function registerFreeform()
+    {
+        // Register support for Formie if the plugin is installed and Enabled
+        if (Craft::$app->getPlugins()->isPluginEnabled('freeform')) {
+            Event::on(
+                ElementTypeHelper::class,
+                ElementTypeHelper::EVENT_REGISTER_EXPORTABLE_ELEMENT_TYPES,
+                function (RegisterExportableElementTypes $event) {
+                    $model = new ExportableFreeformSubmissionModel();
+                    $event->elementTypes = array_merge($event->elementTypes, [
+                        \Solspace\Freeform\Elements\Submission::class => $model
+                    ]);
+                });
+        }
+    }
+
 }

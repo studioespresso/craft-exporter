@@ -2,22 +2,23 @@
 
 namespace studioespresso\exporter\models;
 
-use verbb\formie\elements\Submission;
+use Solspace\Freeform\Elements\Submission;
+use Solspace\Freeform\Freeform;
 use verbb\formie\Formie;
 
-class ExportableFormieSubmissionModel extends ExportableElementTypeModel
+class ExportableFreeformSubmissionModel extends ExportableElementTypeModel
 {
     public $elementType = Submission::class;
 
-    public string $elementLabel = "Formie Submissions";
+    public string $elementLabel = "Freeform Submissions";
 
     public function getGroup(): array
     {
         return [
             "label" => "Form",
             "parameter" => "formId",
-            "items" => Formie::getInstance()->getForms()->getAllForms(), // @phpstan-ignore-line
-            "nameProperty" => "title",
+            "items" => Freeform::getInstance()->forms->getAllForms(), // @phpstan-ignore-line
+            "nameProperty" => "name",
         ];
     }
 

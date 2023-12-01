@@ -2,9 +2,6 @@
 
 namespace studioespresso\exporter\models;
 
-use craft\base\Element;
-use craft\base\ElementInterface;
-use craft\base\Model;
 use craft\elements\Entry;
 use craft\services\Sections;
 
