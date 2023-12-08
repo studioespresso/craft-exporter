@@ -7,11 +7,16 @@ use craft\base\Field;
 use craft\base\FieldInterface;
 use craft\fields\Assets;
 use craft\fields\Categories;
+use craft\fields\Color;
 use craft\fields\Date;
+use craft\fields\Email;
 use craft\fields\Entries;
 use craft\fields\Lightswitch;
 use craft\fields\Number;
 use craft\fields\PlainText;
+use craft\fields\RadioButtons;
+use craft\fields\Tags;
+use craft\fields\Url;
 use studioespresso\exporter\events\RegisterExportableFieldTypes;
 use studioespresso\exporter\fields\BaseFieldParser;
 use studioespresso\exporter\fields\DateTimeParser;
@@ -27,11 +32,16 @@ class FieldTypeHelper
             PlainText::class,
             Number::class,
             Lightswitch::class,
+            Email::class,
+            Color::class,
+            Url::class,
+            RadioButtons::class,
         ],
         RelationFieldParser::class => [
             Entries::class,
             Assets::class,
             Categories::class,
+            Tags::class,
         ],
         DateTimeParser::class => [
             Date::class,
