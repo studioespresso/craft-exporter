@@ -90,7 +90,6 @@ class Exporter extends Plugin
             $this->registerFieldParsers();
             // Register plugin support
             $this->registerFormie();
-            $this->registerFreeform();
         });
     }
 
@@ -275,21 +274,4 @@ class Exporter extends Plugin
                 });
         }
     }
-
-    private function registerFreeform()
-    {
-        // Register support for Formie if the plugin is installed and Enabled
-        if (Craft::$app->getPlugins()->isPluginEnabled('freeform')) {
-            Event::on(
-                ElementTypeHelper::class,
-                ElementTypeHelper::EVENT_REGISTER_EXPORTABLE_ELEMENT_TYPES,
-                function (RegisterExportableElementTypes $event) {
-                    $model = new ExportableFreeformSubmissionModel();
-                    $event->elementTypes = array_merge($event->elementTypes, [
-                        \Solspace\Freeform\Elements\Submission::class => $model
-                    ]);
-                });
-        }
-    }
-
 }
