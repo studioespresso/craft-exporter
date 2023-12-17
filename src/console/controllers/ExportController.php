@@ -44,7 +44,7 @@ class ExportController extends Controller
         $fields = $export->getHeadings();
         $data[] = array_merge($attributes, $fields);
 
-        foreach ($query->id(14263)->limit(1)->all() as $element) {
+        foreach ($query->limit(1)->all() as $element) {
             d($element->id);
             $values = $element->toArray(array_keys($export->getAttributes()));
             // Convert values to strings
