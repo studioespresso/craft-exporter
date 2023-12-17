@@ -27,7 +27,7 @@
 
     {% if export.id %}
         {% set settings = export.getSettings() %}
-        {% set elementType = export.elementType %}
+        {% set elementType =  elementType ?? export.elementType %}
         {% set showSiteOptions = true %}
     {% else %}
         {% if elementType is not defined %}
@@ -63,13 +63,10 @@
         {% set group = '' %}
         {% set subGroup = '' %}
     {% endif %}
-
     {% if elementType is defined %}
         {% set elementOptions = craft.exporter.getElementTypeSettings(elementType) %}
-        {% set subGroup = elementOptions.getSubGroup() %}
         {% if elementOptions.group is defined %}
             {% set groupOptions = elementOptions.getGroup() %}
-            {{ d(groupOptions) }}
             <div class="flex-fields">
                 <div class="field width-50" id="elementType-entry-subfields">
                     <div class="heading">
@@ -106,7 +103,7 @@
                         <div class="error">{{ "No groups found to export"|t('exporter') }}</div>
                     {% endif %}
                 </div>
-                {% if elementOptions.subGroup is defined and subGroup|length and (settings and settings.group is defined) %}
+                {% if elementOptions.subGroup is defined and (settings and settings.group is defined) %}
                     {% set subGroupSettings = elementOptions.getSubGroup() %}
                     <div class="field width-50" id="elementType-entry-subfields">
                         <div class="heading">

@@ -4,6 +4,7 @@ namespace studioespresso\exporter\variables;
 
 use craft\base\Field;
 use craft\db\Query;
+use ReflectionClass;
 use studioespresso\exporter\elements\ExportElement;
 use studioespresso\exporter\Exporter;
 use studioespresso\exporter\jobs\ExportBatchJob;
@@ -21,14 +22,17 @@ class ExporterVariable
     public function listenForJob(ExportElement $export)
     {
         $class = ExportBatchJob::class;
+        $reflect = new ReflectionClass($class);
+        $reflect->getShortName();
+
 
         $query = new Query();
         $query->from("{{%queue}}")
         ->select('*')
-        ->where(['like', 'job', "%{$class}%", false])
+        ->where(['like', 'job', "%{$reflect->getShortName()}%", false])
         ->andWhere(['like', 'job', "%{$export->id}%", false]);
-        
-        return $query->one();
+
+        return $query->one() ?? false;
     }
 
     public function getElementTypeSettings($element): ExportableElementTypeModel

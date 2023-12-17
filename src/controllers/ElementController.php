@@ -84,7 +84,17 @@ class ElementController extends Controller
         $fileName = $this->request->getRequiredBodyParam('fileName');
 
         $file = file_get_contents(Craft::$app->getPath()->getTempPath() . "/{$fileName}.{$settings['fileType']}");
-        return  $file;
+        if (file_exists($file)) {
+            header('Content-Description: File Transfer');
+            header('Content-Type: application/octet-stream');
+            header('Content-Disposition: attachment; filename="' . basename($file) . '"');
+            header('Expires: 0');
+            header('Cache-Control: must-revalidate');
+            header('Pragma: public');
+            header('Content-Length: ' . filesize($file));
+            readfile($file);
+            exit;
+        }
     }
 
     public function actionWatch($elementId = null)

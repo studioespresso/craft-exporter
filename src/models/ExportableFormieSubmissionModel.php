@@ -25,5 +25,4 @@ class ExportableFormieSubmissionModel extends ExportableElementTypeModel
     {
        return false;
     }
-
 }

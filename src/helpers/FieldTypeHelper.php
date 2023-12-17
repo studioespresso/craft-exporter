@@ -7,36 +7,36 @@ use craft\base\Field;
 use craft\base\FieldInterface;
 use craft\fields\Assets;
 use craft\fields\Categories;
+use craft\fields\Checkboxes;
 use craft\fields\Color;
 use craft\fields\Date;
+use craft\fields\Dropdown;
 use craft\fields\Email;
 use craft\fields\Entries;
 use craft\fields\Lightswitch;
+use craft\fields\Money;
+use craft\fields\MultiSelect;
 use craft\fields\Number;
 use craft\fields\PlainText;
 use craft\fields\RadioButtons;
 use craft\fields\Tags;
+use craft\fields\Time;
 use craft\fields\Url;
 use studioespresso\exporter\events\RegisterExportableFieldTypes;
 use studioespresso\exporter\fields\BaseFieldParser;
 use studioespresso\exporter\fields\DateTimeParser;
+use studioespresso\exporter\fields\LightswitchParser;
+use studioespresso\exporter\fields\MultiOptionsFieldParser;
+use studioespresso\exporter\fields\OptionsFieldParser;
 use studioespresso\exporter\fields\PlainTextParser;
 use studioespresso\exporter\fields\RelationFieldParser;
+use studioespresso\exporter\fields\TimeParser;
 
 class FieldTypeHelper
 {
     public const EVENT_REGISTER_EXPORTABLE_FIELD_TYPES = 'registerExportableFieldTypes';
 
     public const SUPPORTED_FIELD_TYPES = [
-        PlainTextParser::class => [
-            PlainText::class,
-            Number::class,
-            Lightswitch::class,
-            Email::class,
-            Color::class,
-            Url::class,
-            RadioButtons::class,
-        ],
         RelationFieldParser::class => [
             Entries::class,
             Assets::class,
@@ -45,6 +45,26 @@ class FieldTypeHelper
         ],
         DateTimeParser::class => [
             Date::class,
+        ],
+        TimeParser::class => [
+            Time::class,
+        ],
+        OptionsFieldParser::class => [
+            Dropdown::class,
+            RadioButtons::class,
+        ],
+        MultiOptionsFieldParser::class => [
+            MultiSelect::class,
+            Checkboxes::class,
+        ],
+        PlainTextParser::class => [
+            PlainText::class,
+            Number::class,
+            Email::class,
+            Color::class,
+            Url::class,
+            Money::class,
+            Lightswitch::class,
         ],
     ];
 

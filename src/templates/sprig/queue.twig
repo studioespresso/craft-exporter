@@ -3,13 +3,15 @@
 {# Refreshes the component every 5 seconds #}
 {% set timezone = timezone ?? 'Europe/Brussels' %}
 
-<div sprig s-trigger="every 1s" class="pulse">
-    The time is {{ now|time('long', timezone=timezone) }}
+<div sprig s-trigger="every 3s" class="pulse">
+    The time is {{ now|time('short', timezone=timezone) }}
 
     {# Check if we have a job in the queue for this export and track its progress? #}
     {% set isRunning = craft.exporter.listenForJob(export) %}
     {% if isRunning %}
-        Your export running, stay tuned. Depending on the size of your export, this could take a while.
+        <p>
+            Your export running, stay tuned. Depending on the size of your export, this could take a while.
+        </p>
     {% else %}
         <div>
             Done! Click the button below to download your export!
@@ -18,7 +20,7 @@
                 {{ actionInput('exporter/element/get-download') }}
                 {{ hiddenInput('exportId', export.id) }}
                 {{ hiddenInput('fileName', craft.app.request.getQueryParam('fileName')) }}
-                <button type="submit">{{ 'Download file' }}</button>
+                <button type="submit" class="btn submit">{{ 'Download file' }}</button>
             </form>
         </div>
     {% endif %}

@@ -24,6 +24,7 @@ class RelationFieldParser extends BaseFieldParser
         return [
             'title' => Craft::t('app', 'Title'),
             'id' => Craft::t('app', 'ID'),
+            'url' => Craft::t('app', 'URL'),
         ];
     }
 
