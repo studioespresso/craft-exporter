@@ -26,6 +26,7 @@ use studioespresso\exporter\events\RegisterExportableFieldTypes;
 use studioespresso\exporter\fields\BaseFieldParser;
 use studioespresso\exporter\fields\DateTimeParser;
 use studioespresso\exporter\fields\LightswitchParser;
+use studioespresso\exporter\fields\MoneyFieldParser;
 use studioespresso\exporter\fields\MultiOptionsFieldParser;
 use studioespresso\exporter\fields\OptionsFieldParser;
 use studioespresso\exporter\fields\PlainTextParser;
@@ -57,13 +58,15 @@ class FieldTypeHelper
             MultiSelect::class,
             Checkboxes::class,
         ],
+        MoneyFieldParser::class => [
+            Money::class,
+        ],
         PlainTextParser::class => [
             PlainText::class,
             Number::class,
             Email::class,
             Color::class,
             Url::class,
-            Money::class,
             Lightswitch::class,
         ],
     ];
