@@ -4,7 +4,6 @@ namespace studioespresso\exporter\models;
 
 use Solspace\Freeform\Elements\Submission;
 use Solspace\Freeform\Freeform;
-use verbb\formie\Formie;
 
 class ExportableFreeformSubmissionModel extends ExportableElementTypeModel
 {
@@ -24,7 +23,6 @@ class ExportableFreeformSubmissionModel extends ExportableElementTypeModel
 
     public function getSubGroup(): bool|array
     {
-       return false;
+        return false;
     }
-
 }

@@ -43,7 +43,7 @@ class ElementController extends Controller
         if ($export->getErrors()) {
             Craft::$app->getUrlManager()->setRouteParams([
                 "export" => $export,
-                "errors" => $export->getErrors()
+                "errors" => $export->getErrors(),
             ]);
             return null;
         }
@@ -70,7 +70,7 @@ class ElementController extends Controller
                 'fields' => $export->getFields(),
                 'attributes' => $export->getAttributes(),
                 'runSettings' => $export->getRunSettings(),
-                'fileName' => $fileName
+                'fileName' => $fileName,
             ]));
 
         $url = UrlHelper::cpUrl("exporter/{$export->id}/watch", ['fileName' => $fileName]);
@@ -172,7 +172,7 @@ class ElementController extends Controller
         if ($export->getErrors()) {
             Craft::$app->getUrlManager()->setRouteParams([
                 "export" => $export,
-                "errors" => $export->getErrors()
+                "errors" => $export->getErrors(),
             ]);
             return null;
         }
@@ -202,7 +202,7 @@ class ElementController extends Controller
         if ($export->getErrors()) {
             Craft::$app->getUrlManager()->setRouteParams([
                 "export" => $export,
-                "errors" => $export->getErrors()
+                "errors" => $export->getErrors(),
             ]);
             return null;
         }
@@ -228,7 +228,7 @@ class ElementController extends Controller
         if ($export->getErrors()) {
             Craft::$app->getUrlManager()->setRouteParams([
                 "export" => $export,
-                "errors" => $export->getErrors()
+                "errors" => $export->getErrors(),
             ]);
             return null;
         }

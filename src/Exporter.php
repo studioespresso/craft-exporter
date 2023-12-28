@@ -27,7 +27,6 @@ use studioespresso\exporter\helpers\FieldTypeHelper;
 use studioespresso\exporter\models\ExportableCategoryModel;
 use studioespresso\exporter\models\ExportableEntryModel;
 use studioespresso\exporter\models\ExportableFormieSubmissionModel;
-use studioespresso\exporter\models\ExportableFreeformSubmissionModel;
 use studioespresso\exporter\models\Settings;
 use studioespresso\exporter\records\ExportRecord;
 use studioespresso\exporter\services\ExportQueryService;
@@ -80,7 +79,7 @@ class Exporter extends Plugin
         }
 
         // Defer most setup tasks until Craft is fully initialized
-        Craft::$app->onInit(function () {
+        Craft::$app->onInit(function() {
             Sprig::bootstrap();
             $this->registerElementTypes();
             $this->attachEventHandlers();
@@ -142,7 +141,7 @@ class Exporter extends Plugin
     private function registerElementTypes(): void
     {
         Event::on(Elements::class, Elements::EVENT_REGISTER_ELEMENT_TYPES,
-            function (RegisterComponentTypesEvent $event) {
+            function(RegisterComponentTypesEvent $event) {
                 $event->types[] = ExportElement::class;
             });
     }
@@ -152,7 +151,7 @@ class Exporter extends Plugin
         Event::on(
             UrlManager::class,
             UrlManager::EVENT_REGISTER_CP_URL_RULES,
-            function (RegisterUrlRulesEvent $event) {
+            function(RegisterUrlRulesEvent $event) {
                 $event->rules['exporter'] = ['template' => 'exporter/_index'];
                 $event->rules['exporter/create'] = 'exporter/element/edit';
                 $event->rules['exporter/<elementId:\\d+>/<step:\\d+>'] = 'exporter/element/edit';
@@ -167,7 +166,7 @@ class Exporter extends Plugin
         Event::on(
             ElementTypeHelper::class,
             ElementTypeHelper::EVENT_REGISTER_EXPORTABLE_ELEMENT_TYPES,
-            function (RegisterExportableElementTypes $event) {
+            function(RegisterExportableElementTypes $event) {
                 $entryModel = new ExportableEntryModel();
                 $categoryModel = new ExportableCategoryModel();
                 $event->elementTypes = array_merge($event->elementTypes, [
@@ -182,7 +181,7 @@ class Exporter extends Plugin
         Event::on(
             FieldTypeHelper::class,
             FieldTypeHelper::EVENT_REGISTER_EXPORTABLE_FIELD_TYPES,
-            function (RegisterExportableFieldTypes $event) {
+            function(RegisterExportableFieldTypes $event) {
                 if (Craft::$app->getPlugins()->isPluginEnabled('ckeditor')) {
                     $event->fieldTypes[PlainTextParser::class][] = \craft\ckeditor\Field::class; // @phpstan-ignore-line
                 }
@@ -208,7 +207,7 @@ class Exporter extends Plugin
         Event::on(
             Gc::class,
             Gc::EVENT_RUN,
-            function (Event $event) {
+            function(Event $event) {
                 // Delete `elements` table rows without peers in our custom products table
                 Craft::$app->getGc()->deletePartialElements(
                     ExportElement::class,
@@ -228,7 +227,7 @@ class Exporter extends Plugin
         Event::on(
             CraftVariable::class,
             CraftVariable::EVENT_DEFINE_BEHAVIORS,
-            function (DefineBehaviorsEvent $e) {
+            function(DefineBehaviorsEvent $e) {
                 $e->sender->attachBehaviors([
                     CraftVariableBehavior::class,
                 ]);
@@ -238,7 +237,7 @@ class Exporter extends Plugin
         Event::on(
             CraftVariable::class,
             CraftVariable::EVENT_INIT,
-            function (Event $event) {
+            function(Event $event) {
                 /** @var CraftVariable $variable */
                 $variable = $event->sender;
                 $variable->set('exporter', ExporterVariable::class);
@@ -248,7 +247,7 @@ class Exporter extends Plugin
 
     private function registerUserPermissions()
     {
-        Event::on(UserPermissions::class, UserPermissions::EVENT_REGISTER_PERMISSIONS, function (RegisterUserPermissionsEvent $event) {
+        Event::on(UserPermissions::class, UserPermissions::EVENT_REGISTER_PERMISSIONS, function(RegisterUserPermissionsEvent $event) {
             $event->permissions[] = [
                 'heading' => Craft::t('exporter', 'Exporter'),
                 'permissions' => [
@@ -266,10 +265,10 @@ class Exporter extends Plugin
             Event::on(
                 ElementTypeHelper::class,
                 ElementTypeHelper::EVENT_REGISTER_EXPORTABLE_ELEMENT_TYPES,
-                function (RegisterExportableElementTypes $event) {
+                function(RegisterExportableElementTypes $event) {
                     $model = new ExportableFormieSubmissionModel();
                     $event->elementTypes = array_merge($event->elementTypes, [
-                        \verbb\formie\elements\Submission::class => $model
+                        \verbb\formie\elements\Submission::class => $model,
                     ]);
                 });
         }

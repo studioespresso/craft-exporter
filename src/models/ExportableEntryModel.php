@@ -31,5 +31,4 @@ class ExportableEntryModel extends ExportableElementTypeModel
             'function' => 'getEntryTypesBySectionId',
         ];
     }
-
 }

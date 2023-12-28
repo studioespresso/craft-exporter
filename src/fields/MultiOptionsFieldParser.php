@@ -2,9 +2,6 @@
 
 namespace studioespresso\exporter\fields;
 
-use Craft;
-
-
 class MultiOptionsFieldParser extends OptionsFieldParser
 {
     public function getValue($element, $field)
@@ -12,8 +9,8 @@ class MultiOptionsFieldParser extends OptionsFieldParser
         $selected = [];
         $property = $field['property'] ?? 'value';
 
-        foreach($element->getFieldValue($field['handle'])->getOptions() as $option) {
-            if($option->selected) {
+        foreach ($element->getFieldValue($field['handle'])->getOptions() as $option) {
+            if ($option->selected) {
                 $selected[] = $option->$property;
             }
         }

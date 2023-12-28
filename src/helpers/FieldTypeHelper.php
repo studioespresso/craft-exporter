@@ -25,7 +25,6 @@ use craft\fields\Url;
 use studioespresso\exporter\events\RegisterExportableFieldTypes;
 use studioespresso\exporter\fields\BaseFieldParser;
 use studioespresso\exporter\fields\DateTimeParser;
-use studioespresso\exporter\fields\LightswitchParser;
 use studioespresso\exporter\fields\MoneyFieldParser;
 use studioespresso\exporter\fields\MultiOptionsFieldParser;
 use studioespresso\exporter\fields\OptionsFieldParser;

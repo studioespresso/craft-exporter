@@ -22,7 +22,6 @@ class ExportableCategoryModel extends ExportableElementTypeModel
 
     public function getSubGroup(): bool|array
     {
-       return false;
+        return false;
     }
-
 }

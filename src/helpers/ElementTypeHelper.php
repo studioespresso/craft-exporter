@@ -48,7 +48,7 @@ class ElementTypeHelper
 
         $types = [];
         foreach ($this->getAvailableElementTypes() as $model) {
-            if(!$model->validate()) {
+            if (!$model->validate()) {
                 \Craft::error("ExportableElementTypeModel is not configured correctly", Exporter::class);
                 continue;
             }

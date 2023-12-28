@@ -140,12 +140,11 @@ class ExportElement extends Element
      */
     public function validate($attributeNames = null, $clearErrors = true): bool
     {
-        if($this->scenario == 'step1') {
+        if ($this->scenario == 'step1') {
             $settings = $this->getSettings();
-            if(!$settings['group']) {
+            if (!$settings['group']) {
                 $this->addError("group", "Group cannot be blank");
             }
-
         }
         return parent::validate();
     }

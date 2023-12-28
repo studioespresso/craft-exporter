@@ -4,7 +4,6 @@ namespace studioespresso\exporter\fields;
 
 use Craft;
 
-
 class OptionsFieldParser extends BaseFieldParser
 {
     public function getValue($element, $field)
@@ -17,7 +16,7 @@ class OptionsFieldParser extends BaseFieldParser
     {
         return [
             'label' => 'Label',
-            'value' => 'Value'
+            'value' => 'Value',
         ];
     }
 
@@ -29,7 +28,6 @@ class OptionsFieldParser extends BaseFieldParser
     public function getOptionLabel(): string|bool
     {
         return Craft::t('exporter', 'Select field property');
-
     }
 
     public function getOptionDescription(): string|bool

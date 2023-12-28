@@ -120,7 +120,7 @@ class ExportBatchJob extends BaseBatchedJob
             if ($file) {
                 // Once the file has been generated, deliver the file according to the selected method
                 if (Exporter::getInstance()->mail->send($this->export, $file)) {
-                   // unlink($file);
+                    // unlink($file);
                 }
             }
         }
