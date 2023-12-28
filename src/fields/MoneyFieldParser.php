@@ -7,7 +7,9 @@ class MoneyFieldParser extends BaseFieldParser
     public function getValue($element, $field)
     {
         $field = $element->getFieldValue($field['handle']);
-        return $field->getAmount();
+        if($field) {
+            return $field->getAmount();
+        }
     }
 
     public function getOptions(): array
