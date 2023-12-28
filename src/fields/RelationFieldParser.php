@@ -9,14 +9,17 @@ class RelationFieldParser extends BaseFieldParser
 {
     public function getValue(Element $element, array $field)
     {
+        /** @var Element|null $element */
+
         $relation = $element->getFieldValue($field['handle'])->one();
         $property = $field['property'];
 
         if ($relation) {
-            return $relation->$property;
+            if (isset($relation->$property)) {
+                return $relation->$property;
+            }
+            return $relation->id;
         }
-
-        return $relation->id;
     }
 
     public function getOptions(): array

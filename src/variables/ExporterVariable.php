@@ -23,8 +23,6 @@ class ExporterVariable
     {
         $class = ExportBatchJob::class;
         $reflect = new ReflectionClass($class);
-        $reflect->getShortName();
-
 
         $query = new Query();
         $query->from("{{%queue}}")

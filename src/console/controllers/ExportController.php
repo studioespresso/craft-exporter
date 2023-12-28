@@ -53,7 +53,7 @@ class ExportController extends Controller
 
             // Fetch the custom field content, already prepped
             $fieldValues = $export->parseFieldValues($element);
-            var_dump($row); exit;
+            // var_dump($row); exit;
             $data[] = array_merge($row, $fieldValues);
         }
 
