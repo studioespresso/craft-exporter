@@ -14,6 +14,10 @@ class MultiOptionsFieldParser extends OptionsFieldParser
                 $selected[] = $option->$property;
             }
         }
-        return $selected;
+        if ($selected) {
+            return implode(', ', $selected);
+        }
+
+        return null;
     }
 }
