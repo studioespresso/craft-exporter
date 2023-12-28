@@ -120,6 +120,14 @@ class ExportElement extends Element
     /**
      * @inheritDoc
      */
+    public function canDuplicate(User $user): bool
+    {
+        return true;
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function canDelete(User $user): bool
     {
         return Craft::$app->getUser()->getIdentity()->can('exporter-deleteExports');
@@ -140,6 +148,7 @@ class ExportElement extends Element
      */
     public function validate($attributeNames = null, $clearErrors = true): bool
     {
+
         if ($this->scenario == 'step1') {
             $settings = $this->getSettings();
             if (!$settings['group']) {
@@ -147,6 +156,7 @@ class ExportElement extends Element
             }
         }
         return parent::validate();
+
     }
 
 
@@ -154,7 +164,7 @@ class ExportElement extends Element
     {
         $elementSettings = Exporter::getInstance()->elements->getElementTypeSettings($this->elementType);
         $settings = $this->getSettings();
-        $group = array_filter($elementSettings['group']['items'], function($group) use ($settings) {
+        $group = array_filter($elementSettings['group']['items'], function ($group) use ($settings) {
             if ($group->id == $settings['group']) {
                 return true;
             }
@@ -179,11 +189,6 @@ class ExportElement extends Element
         ];
     }
 
-    public static function find(): ElementQueryInterface
-    {
-        return new ExportElementQuery(static::class);
-    }
-
     protected static function defineSources(string $context = null): array
     {
         return [
@@ -193,6 +198,11 @@ class ExportElement extends Element
                 'criteria' => [],
             ],
         ];
+    }
+
+    public static function find(): ElementQueryInterface
+    {
+        return new ExportElementQuery(static::class);
     }
 
     public function getUiLabel(): string
@@ -228,7 +238,7 @@ class ExportElement extends Element
         $supportedFields = Exporter::getInstance()->fields->getAvailableFieldTypes();
         $elementFields = $element->fieldLayout->getCustomFields();
 
-        return array_filter($elementFields, function($field) {
+        return array_filter($elementFields, function ($field) {
             // TODO How to handle unsupported fields here?
             return true;
 
@@ -318,7 +328,7 @@ class ExportElement extends Element
     {
         if (!$this->propagating) {
             Db::delete(ExportRecord::tableName(), [
-                    'id' => $this->id, ]
+                    'id' => $this->id,]
             );
         }
         parent::afterDelete();
