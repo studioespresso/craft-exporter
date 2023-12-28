@@ -45,7 +45,6 @@ class ExportController extends Controller
         $data[] = array_merge($attributes, $fields);
 
         foreach ($query->limit(1)->all() as $element) {
-            d($element->id);
             $values = $element->toArray(array_keys($export->getAttributes()));
             // Convert values to strings
             $row = array_map(function($item) {
@@ -54,7 +53,7 @@ class ExportController extends Controller
 
             // Fetch the custom field content, already prepped
             $fieldValues = $export->parseFieldValues($element);
-            dd($fieldValues);
+            var_dump($row); exit;
             $data[] = array_merge($row, $fieldValues);
         }
 

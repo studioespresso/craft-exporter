@@ -73,7 +73,7 @@ class ExportQueryService extends Component
             $object = Craft::createObject($parser);
 
             if (!isset($field['handle'])) {
-                throw new FieldNotFoundException();
+                throw new FieldNotFoundException($craftField->uid, "Field not found");
             }
 
             $data[$field['handle']] = $object->getValue($element, $field);

@@ -7,6 +7,7 @@ use Solspace\Freeform\Freeform;
 
 class ExportableFreeformSubmissionModel extends ExportableElementTypeModel
 {
+    /** @phpstan-ignore-next-line */
     public $elementType = Submission::class;
 
     public string $elementLabel = "Freeform Submissions";

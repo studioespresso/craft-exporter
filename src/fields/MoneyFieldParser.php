@@ -22,11 +22,11 @@ class MoneyFieldParser extends BaseFieldParser
 
     protected function getOptionLabel(): string|bool
     {
-        // TODO: Implement getOptionLabel() method.
+        return false;
     }
 
     protected function getOptionDescription(): string|bool
     {
-        // TODO: Implement getOptionDescription() method.
+        return false;
     }
 }

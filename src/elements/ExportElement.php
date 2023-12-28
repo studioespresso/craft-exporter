@@ -228,9 +228,10 @@ class ExportElement extends Element
         $supportedFields = Exporter::getInstance()->fields->getAvailableFieldTypes();
         $elementFields = $element->fieldLayout->getCustomFields();
 
-        return array_filter($elementFields, function($field) use ($supportedFields) {
+        return array_filter($elementFields, function($field) {
+            // TODO How to handle unsupported fields here?
             return true;
-//            return in_array(get_class($field), $supportedFields);
+
         });
     }
 

@@ -7,6 +7,7 @@ use verbb\formie\Formie;
 
 class ExportableFormieSubmissionModel extends ExportableElementTypeModel
 {
+    /** @phpstan-ignore-next-line */
     public $elementType = Submission::class;
 
     public string $elementLabel = "Formie Submissions";
