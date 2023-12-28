@@ -1,11 +1,15 @@
 module.exports = {
-    title: 'Element Exporter',
+    title: 'Exporter',
     description: 'Documentation for Element Exporter, a Craft CMS plugins',
     base: '/craft-exporter',
     lang: 'en-US',
     head: [
         ['meta', {content: 'https://github.com/studioespresso', property: 'og:see_also',}],
-        ['script', { src: 'https://stats.studioespresso.co/js/script.js', 'data-domain': 'studioespresso.github.io/craft-exporter', defer:''}]
+        ['script', {
+            src: 'https://stats.studioespresso.co/js/script.js',
+            'data-domain': 'studioespresso.github.io/craft-exporter',
+            defer: ''
+        }]
     ],
     themeConfig: {
         socialLinks: [
@@ -23,10 +27,14 @@ module.exports = {
         },
         lastUpdatedText: 'Last Updated',
         sidebar: [
+            {text: 'Plugin overview', link: '/'},
+            {text: 'Usage', link: '/usage'},
+            {text: 'Settings', link: '/settings'},
             {
-                text: 'Topics',
+                text: 'Extending',
                 items: [
-                    {text: 'Element Exporter', link: '/'},
+                    {text: 'Register element', link: '/custom-element'},
+                    {text: 'Register field parser', link: '/custom-field-parser'},
                 ],
             }
         ],
