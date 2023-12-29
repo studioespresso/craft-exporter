@@ -105,7 +105,8 @@
                 </div>
                 {% if elementOptions.subGroup is defined and (settings and settings.group is defined) %}
                     {% set subGroupSettings = elementOptions.getSubGroup() %}
-                    <div class="field width-50" id="elementType-entry-subfields">
+                    {% if subGroupSettings %}
+                        <div class="field width-50" id="elementType-entry-subfields">
                         <div class="heading">
                             <label id="section-label" for="section">{{ subGroupSettings.label|t('exporter') }}<span
                                         class="visually-hidden">Required</span><span class="required"
@@ -129,7 +130,7 @@
                             </div>
                         </div>
                     </div>
-
+                    {% endif %}
                 {% endif %}
             </div>
         {% endif %}
