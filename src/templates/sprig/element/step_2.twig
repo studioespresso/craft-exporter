@@ -14,96 +14,105 @@
     {% set attributes = export.getAttributes() %}
     {% set fields = export.getFields() ?? [] %}
 
-    <style>
-        .default-fields .field, .custom-fields .field {
-            margin: 12px 0;
-        }
-    </style>
+    {% set element = export.getElementQuery().one() %}
 
-    <div class="default-fields">
-        <h2>{{ "Which default fields do you want to include in this export?"|t('exporter') }}</h2>
-        {{ forms.checkboxField({
-            label: 'ID'|t('exporter'),
-            name: "attributes[id]",
-            value: 'id',
-            checked: attributes['id'] ?? false
-        }) }}
-        {{ forms.checkboxField({
-            label: 'Title'|t('exporter'),
-            id: 'default-title',
-            name: "attributes[title]",
-            value: 'title',
-            checked: attributes['title'] ?? false
-        }) }}
-        {{ forms.checkboxField({
-            label: 'Date created'|t('exporter'),
-            name: "attributes[dateCreated]",
-            value: 'dateCreated',
-            checked: attributes['dateCreated'] ?? false
-        }) }}
-    </div>
-    <hr>
+    {% if not element %}
+        {{ "No elements can be found for your selection. Please create an element first or check your settings in step 1."|t('exporter') }}
+    {% else %}
 
-    <div class="custom-fields">
-        <h2>{{ "Which custom fields do you want to include in this export?"|t('exporter') }}</h2>
-        {% set availableFields = export.getSupportedFields(export.getElementQuery().one()) %}
-        {% for field in availableFields %}
-            {% set parser = craft.exporter.getFieldParser(field) %}
-            {% set fieldSettings = false %}
-            {% if fields|length and attribute(fields, field.handle) %}
-                {% set fieldSettings = attribute(fields, field.handle) %}
-            {% endif %}
-            <div id="{{ field.handle }}-input-field" class="field checkboxfield"
-                 data-attribute="{{ field.handle }}-input">
-                <div class="input ltr">
-                    <input type="hidden" name="fields[{{ field.handle }}][handle]" value="">
-                    <input s-on:click="htmx.toggleClass('#{{ field.handle }}-option', 'hidden')" type="checkbox"
-                           id="{{ field.handle }}-input" class="checkbox" name="fields[{{ field.handle }}][handle]"
-                           value="{{ field.handle }}" {% if fieldSettings and fieldSettings.handle|length %}checked=""{% endif %}>
-                    <label for="{{ field.handle }}-input">
-                        {{ field.name }}
-                    </label>
+
+        <style>
+            .default-fields .field, .custom-fields .field {
+                margin: 12px 0;
+            }
+        </style>
+
+        <div class="default-fields">
+            <h2>{{ "Which default fields do you want to include in this export?"|t('exporter') }}</h2>
+            {{ forms.checkboxField({
+                label: 'ID'|t('exporter'),
+                name: "attributes[id]",
+                value: 'id',
+                checked: attributes['id'] ?? false
+            }) }}
+            {{ forms.checkboxField({
+                label: 'Title'|t('exporter'),
+                id: 'default-title',
+                name: "attributes[title]",
+                value: 'title',
+                checked: attributes['title'] ?? false
+            }) }}
+            {{ forms.checkboxField({
+                label: 'Date created'|t('exporter'),
+                name: "attributes[dateCreated]",
+                value: 'dateCreated',
+                checked: attributes['dateCreated'] ?? false
+            }) }}
+        </div>
+        <hr>
+
+        <div class="custom-fields">
+            <h2>{{ "Which custom fields do you want to include in this export?"|t('exporter') }}</h2>
+            {% set availableFields = export.getSupportedFields(element) %}
+            {% for field in availableFields %}
+                {% set parser = craft.exporter.getFieldParser(field) %}
+                {% set fieldSettings = false %}
+                {% if fields|length and attribute(fields, field.handle) %}
+                    {% set fieldSettings = attribute(fields, field.handle) %}
+                {% endif %}
+                <div id="{{ field.handle }}-input-field" class="field checkboxfield"
+                     data-attribute="{{ field.handle }}-input">
+                    <div class="input ltr">
+                        <input type="hidden" name="fields[{{ field.handle }}][handle]" value="">
+                        <input s-on:click="htmx.toggleClass('#{{ field.handle }}-option', 'hidden')" type="checkbox"
+                               id="{{ field.handle }}-input" class="checkbox" name="fields[{{ field.handle }}][handle]"
+                               value="{{ field.handle }}"
+                               {% if fieldSettings and fieldSettings.handle|length %}checked=""{% endif %}>
+                        <label for="{{ field.handle }}-input">
+                            {{ field.name }}
+                        </label>
+                    </div>
                 </div>
-            </div>
-            {% if parser and parser.getOptionType()|length %}
-                <div id="{{ field.handle }}-option" {% if fieldSettings and fieldSettings.handle|length %}{% else%} class="hidden" {% endif %}>
-                    {% switch parser.getOptionType() %}
-                    {% case 'select' %}
-                        <div class="field">
-                            <div class="heading">
-                                <label id="{{ field.handle }}-options"
-                                       for="{{ field.handle }}-options">{{ parser.getOptionLabel()|length ? parser.getOptionLabel() : "Select an option" }}
-                                    <span class="visually-hidden">Required</span><span class="required"
-                                                                                       aria-hidden="true"></span>
-                                </label>
-                            </div>
-                            {% if parser.getOptionDescription() %}
-                                <div id="elementType-instructions" class="instructions">
-                                    <p>{{ parser.getOptionDescription() }}</p>
+                {% if parser and parser.getOptionType()|length %}
+                    <div id="{{ field.handle }}-option" {% if fieldSettings and fieldSettings.handle|length %}{% else %} class="hidden" {% endif %}>
+                        {% switch parser.getOptionType() %}
+                        {% case 'select' %}
+                            <div class="field">
+                                <div class="heading">
+                                    <label id="{{ field.handle }}-options"
+                                           for="{{ field.handle }}-options">{{ parser.getOptionLabel()|length ? parser.getOptionLabel() : "Select an option" }}
+                                        <span class="visually-hidden">Required</span><span class="required"
+                                                                                           aria-hidden="true"></span>
+                                    </label>
                                 </div>
-                            {% endif %}
-                            <div class="input ltr">
-                                <div class="select">
-                                    {# TODO: aria labels for this? #}
-                                    <select name="fields[{{ field.handle }}][property]" id="{{ field.handle }}-options">
-                                        {% for key, label in parser.getOptions() %}
-                                            <option value="{{ key }}">{{ label }}</option>
-                                        {% endfor %}
-                                    </select>
-                                    {# TODO: Add custom option? #}
+                                {% if parser.getOptionDescription() %}
+                                    <div id="elementType-instructions" class="instructions">
+                                        <p>{{ parser.getOptionDescription() }}</p>
+                                    </div>
+                                {% endif %}
+                                <div class="input ltr">
+                                    <div class="select">
+                                        {# TODO: aria labels for this? #}
+                                        <select name="fields[{{ field.handle }}][property]"
+                                                id="{{ field.handle }}-options">
+                                            {% for key, label in parser.getOptions() %}
+                                                <option value="{{ key }}">{{ label }}</option>
+                                            {% endfor %}
+                                        </select>
+                                        {# TODO: Add custom option? #}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    {% endswitch %}
-                </div>
-            {% endif %}
-        {% endfor %}
-    </div>
+                        {% endswitch %}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
 
 
-    <div class="field">
-        {{ hiddenInput('nextStep', '3') }}
-        <button type="submit" class="btn submit">{{ "Next" }}</button>
-    </div>
-
+        <div class="field">
+            {{ hiddenInput('nextStep', '3') }}
+            <button type="submit" class="btn submit">{{ "Next" }}</button>
+        </div>
+    {% endif %}
 </form>
