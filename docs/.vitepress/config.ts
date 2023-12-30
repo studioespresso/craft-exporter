@@ -29,6 +29,7 @@ module.exports = {
         sidebar: [
             {text: 'Plugin overview', link: '/'},
             {text: 'Usage', link: '/usage'},
+            {text: 'Fields & formats', link: '/fields'},
             {text: 'Settings', link: '/settings'},
             {
                 text: 'Extending',
