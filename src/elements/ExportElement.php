@@ -11,6 +11,7 @@ use craft\helpers\Db;
 use craft\helpers\Json;
 use studioespresso\exporter\elements\db\ExportElementQuery;
 use studioespresso\exporter\Exporter;
+use studioespresso\exporter\helpers\FieldTypeHelper;
 use studioespresso\exporter\records\ExportRecord;
 
 class ExportElement extends Element
@@ -235,13 +236,11 @@ class ExportElement extends Element
 
     public function getSupportedFields(Element $element): array
     {
-        $supportedFields = Exporter::getInstance()->fields->getAvailableFieldTypes();
+        //$supportedFields = Exporter::getInstance()->fields->getAvailableFieldTypes();
         $elementFields = $element->fieldLayout->getCustomFields();
 
         return array_filter($elementFields, function ($field) {
-            // TODO How to handle unsupported fields here?
             return true;
-
         });
     }
 
