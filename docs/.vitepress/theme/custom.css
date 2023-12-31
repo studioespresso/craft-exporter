@@ -1,6 +1,17 @@
 :root {
-    --c-brand: #111928;
-    --c-brand-light: #faca30;
+    --vp-c-bg: rgb(251, 245, 240);
+    --vp-c-bg-alt: rgb(235, 232, 230);
+    --vp-c-bg-elv: #ffffff;
+    --vp-c-bg-soft: #f6f6f7;
+    --vp-c-brand-1: #134e4a;
+}
+
+.dark {
+    --vp-c-bg: #1b1b1f;
+    --vp-c-bg-alt: #161618;
+    --vp-c-bg-elv: #202127;
+    --vp-c-bg-soft: #202127;
+    --vp-c-brand-1: #fff;
 }
 
 .custom-block.tip {

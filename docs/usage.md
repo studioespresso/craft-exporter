@@ -25,5 +25,8 @@ If the element can be localized, you also have to select the site from which you
 ### Step 2: Field selection
 On the next step, you'll select which attributes &  fields you want to be included in the export.
 
+The fields listed on the 
+
+<img src="/img/exporter_step_2_fields.png" alt="Step 2 of the export creation flow">
 
 ### Step 3: Delivery settings
