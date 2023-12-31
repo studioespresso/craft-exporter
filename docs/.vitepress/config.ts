@@ -11,6 +11,10 @@ module.exports = {
             defer: ''
         }]
     ],
+    image: {
+        // image lazy loading is disabled by default
+        lazyLoading: true
+    },
     themeConfig: {
         socialLinks: [
             {icon: 'github', link: 'https://github.com/studioespresso'},
