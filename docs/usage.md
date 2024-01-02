@@ -10,12 +10,12 @@ Element exporter can be set up in a number of ways,
 
 
 ## Step 1: Element selection
-On the first step, you start by selecting the type of Element you want to export. If the element is question has groups (and possibly subgroups), you have to select on of these as well.
+On the first step, you start by selecting the type of Element you want to export. If the element in question has groups (and possibly subgroups), you have to select on of these as well.
 
 These element types and groups are supported out of the box:
-- Entry (grouped by Secions and Entry Types) <Badge type="info" text="4.0.0" />
+- Entry (grouped by Sections and Entry Types) <Badge type="info" text="4.0.0" />
 - Categories (grouped by Category groups) <Badge type="info" text="4.0.0" />
-- Formie submissions (groups by Form) <Badge type="info" text="4.0.0" />
+- Formie submissions (grouped by Form) <Badge type="info" text="4.0.0" />
 
 <img src="/img/exporter_step_1_no_selection.png" alt="Step 1 of the new export flow">
 
