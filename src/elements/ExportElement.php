@@ -28,6 +28,10 @@ class ExportElement extends Element
 
     public $runSettings;
 
+    public const STEP_1 = "step1";
+
+    public const STEP_2 = "step2";
+
     /**
      * @inheritdoc
      */
@@ -137,7 +141,8 @@ class ExportElement extends Element
     public function scenarios()
     {
         return [
-            'step1' => ['name', 'group'],
+            self::STEP_1 => ['name', 'group'],
+            self::STEP_2 => [],
             'default' => [],
         ];
     }
@@ -150,14 +155,30 @@ class ExportElement extends Element
     public function validate($attributeNames = null, $clearErrors = true): bool
     {
 
-        if ($this->scenario == 'step1') {
+        if ($this->scenario === self::STEP_1) {
             $settings = $this->getSettings();
             if (!$settings['group']) {
-                $this->addError("group", "Group cannot be blank");
+                $this->addError("group", Craft::t('exporter', 'Group cannot be blank'));
             }
         }
-        return parent::validate();
+        if ($this->scenario === self::STEP_2) {
+            $fields = $this->getSelectedFields();
+            if(!$fields) {
+                $this->addError('fields', Craft::t('exporter', 'Please select at least one field to export'));
+            }
+        }
 
+        return parent::validate();
+    }
+
+    public function getSelectedFields(): array
+    {
+        return array_filter($this->getFields(), function ($field) {
+            if($field['handle']) {
+                return true;
+            }
+            return false;
+        });
     }
 
 
@@ -258,6 +279,8 @@ class ExportElement extends Element
     {
         return Json::decode($this->fields);
     }
+
+
 
     public function getRunSettings(): null|array
     {

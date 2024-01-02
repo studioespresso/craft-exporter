@@ -167,7 +167,7 @@ class ElementController extends Controller
         $export->settings = Json::encode(array_merge($export->getSettings(), $body['settings']));
 
 
-        $export->setScenario('step1');
+        $export->setScenario(ExportElement::STEP_1);
 
         $export->validate();
         if ($export->getErrors()) {
@@ -200,7 +200,16 @@ class ElementController extends Controller
         $fields = array_filter($body['fields']);
         $export->fields = Json::encode($fields);
 
+        $export->setScenario(ExportElement::STEP_2);
+
+
         $export->validate();
+        $selectedFields = $export->getSelectedFields();
+
+        if(!$selectedFields) {
+            $export->addError('fields', Craft::t('exporter', 'Please select at least one field to export'));
+        }
+
         if ($export->getErrors()) {
             /** @phpstan-ignore-next-line */
             Craft::$app->getUrlManager()->setRouteParams([

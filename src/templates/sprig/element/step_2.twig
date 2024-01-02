@@ -53,6 +53,12 @@
 
         <div class="custom-fields">
             <h2>{{ "Which custom fields do you want to include in this export?"|t('exporter') }}</h2>
+            {% if errors is defined %}
+                {% if errors.fields is defined %}
+                    <div class="error">{{ errors.fields|first }}</div>
+                {% endif %}
+            {% endif %}
+            <input type="hidden" name="fields">
             {% set allFields = export.getSupportedFields(element) %}
             {% set showNotSupportedNotice = false %}
             {% for field in allFields %}
