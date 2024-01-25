@@ -72,7 +72,6 @@ class ExportBatchJob extends BaseBatchedJob
      */
     protected function processItem(mixed $item): void
     {
-        Craft::debug(json_encode($this->attributes), "JAN");
         $attributes = array_values($this->attributes);
         $fields = array_values($this->fields);
 //        $data[] = array_merge($attributes, $fields);

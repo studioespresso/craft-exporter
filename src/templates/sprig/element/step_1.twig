@@ -98,7 +98,7 @@
                         <div class="error">{{ "No groups found to export"|t('exporter') }}</div>
                     {% endif %}
                 </div>
-                {% if elementOptions.subGroup is defined and (settings and settings.group is defined) %}
+                {% if elementOptions.subGroup is defined and (settings is defined and settings.group is defined) %}
                     {% set subGroupSettings = elementOptions.getSubGroup() %}
                     {% if subGroupSettings %}
                         <div class="field width-50" id="elementType-entry-subfields">
