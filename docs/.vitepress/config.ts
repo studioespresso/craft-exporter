@@ -5,11 +5,14 @@ module.exports = {
     lang: 'en-US',
     head: [
         ['meta', {content: 'https://github.com/studioespresso', property: 'og:see_also',}],
-        ['script', {
-            src: 'https://stats.studioespresso.co/js/script.js',
-            'data-domain': 'studioespresso.github.io/craft-exporter',
-            defer: ''
-        }]
+        [
+            'script',
+            {
+                defer: '',
+                'data-domain': 'studioespresso.github.io',
+                src: 'https://stats.studioespresso.co/js/script.tagged-events.outbound-links.js'
+            }
+        ],
     ],
     image: {
         // image lazy loading is disabled by default
@@ -33,7 +36,7 @@ module.exports = {
         sidebar: [
             {text: 'Plugin overview', link: '/'},
             {text: 'Usage', link: '/usage'},
-            {text: 'Fields & formats', link: '/fields'},
+            {text: 'Elements, fields & formats', link: '/fields'},
             {text: 'Settings', link: '/settings'},
             {
                 text: 'Extending',
