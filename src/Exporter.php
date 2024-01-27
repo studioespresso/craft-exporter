@@ -182,14 +182,18 @@ class Exporter extends Plugin
             FieldTypeHelper::class,
             FieldTypeHelper::EVENT_REGISTER_EXPORTABLE_FIELD_TYPES,
             function(RegisterExportableFieldTypes $event) {
+                $parsers = $event->fieldTypes;
+
                 if (Craft::$app->getPlugins()->isPluginEnabled('ckeditor')) {
-                    $event->fieldTypes[PlainTextParser::class][] = \craft\ckeditor\Field::class; // @phpstan-ignore-line
+                    $parsers[PlainTextParser::class][] = \craft\ckeditor\Field::class; // @phpstan-ignore-line
                 }
+
                 if (Craft::$app->getPlugins()->isPluginEnabled('redactor')) {
-                    $event->fieldTypes[PlainTextParser::class][] = \craft\redactor\Field::class; // @phpstan-ignore-line
+                    $parsers[PlainTextParser::class][] = \craft\redactor\Field::class; // @phpstan-ignore-line
                 }
+
                 if (Craft::$app->getPlugins()->isPluginEnabled('formie')) {
-                    $event->fieldTypes[PlainTextParser::class] = array_merge($event->fieldTypes[PlainTextParser::class], [
+                    $parsers[PlainTextParser::class] = array_merge($parsers[PlainTextParser::class], [
                         Name::class, // @phpstan-ignore-line
                         Email::class, // @phpstan-ignore-line
                         SingleLineText::class, // @phpstan-ignore-line
@@ -199,6 +203,7 @@ class Exporter extends Plugin
                         Number::class, // @phpstan-ignore-line
                     ]);
                 }
+                $event->fieldTypes = $parsers;
             });
     }
 
