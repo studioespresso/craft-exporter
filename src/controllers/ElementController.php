@@ -206,7 +206,7 @@ class ElementController extends Controller
         $export->validate();
         $selectedFields = $export->getSelectedFields();
 
-        if(!$selectedFields) {
+        if (!$selectedFields) {
             $export->addError('fields', Craft::t('exporter', 'Please select at least one field to export'));
         }
 

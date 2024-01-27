@@ -11,7 +11,6 @@ use craft\helpers\Db;
 use craft\helpers\Json;
 use studioespresso\exporter\elements\db\ExportElementQuery;
 use studioespresso\exporter\Exporter;
-use studioespresso\exporter\helpers\FieldTypeHelper;
 use studioespresso\exporter\records\ExportRecord;
 
 class ExportElement extends Element
@@ -154,7 +153,6 @@ class ExportElement extends Element
      */
     public function validate($attributeNames = null, $clearErrors = true): bool
     {
-
         if ($this->scenario === self::STEP_1) {
             $settings = $this->getSettings();
             if (!$settings['group']) {
@@ -163,7 +161,7 @@ class ExportElement extends Element
         }
         if ($this->scenario === self::STEP_2) {
             $fields = $this->getSelectedFields();
-            if(!$fields) {
+            if (!$fields) {
                 $this->addError('fields', Craft::t('exporter', 'Please select at least one field to export'));
             }
         }
@@ -173,8 +171,8 @@ class ExportElement extends Element
 
     public function getSelectedFields(): array
     {
-        return array_filter($this->getFields(), function ($field) {
-            if($field['handle']) {
+        return array_filter($this->getFields(), function($field) {
+            if ($field['handle']) {
                 return true;
             }
             return false;
@@ -186,7 +184,7 @@ class ExportElement extends Element
     {
         $elementSettings = Exporter::getInstance()->elements->getElementTypeSettings($this->elementType);
         $settings = $this->getSettings();
-        $group = array_filter($elementSettings['group']['items'], function ($group) use ($settings) {
+        $group = array_filter($elementSettings['group']['items'], function($group) use ($settings) {
             if ($group->id == $settings['group']) {
                 return true;
             }
@@ -260,7 +258,7 @@ class ExportElement extends Element
         //$supportedFields = Exporter::getInstance()->fields->getAvailableFieldTypes();
         $elementFields = $element->fieldLayout->getCustomFields();
 
-        return array_filter($elementFields, function ($field) {
+        return array_filter($elementFields, function($field) {
             return true;
         });
     }
@@ -350,7 +348,7 @@ class ExportElement extends Element
     {
         if (!$this->propagating) {
             Db::delete(ExportRecord::tableName(), [
-                    'id' => $this->id,]
+                    'id' => $this->id, ]
             );
         }
         parent::afterDelete();

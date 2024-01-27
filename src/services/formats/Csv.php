@@ -30,7 +30,7 @@ class Csv extends Component
 
         try {
             ob_end_clean();
-        /** @phpstan-ignore-next-line */
+            /** @phpstan-ignore-next-line */
         } catch (\Throwable $e) {
             Craft::error($e->getMessage());
         }
