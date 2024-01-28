@@ -19,7 +19,8 @@ class ExportQueryService extends Component
         $settings = $export->getSettings();
         $elementOptions = Exporter::getInstance()->elements->getElementTypeSettings($element);
         /** @var Element $element */
-        $query = Craft::createObject($element)->find()->siteId($settings['sites']);
+
+        $query = Craft::createObject($element)->find()->siteId($settings['sites'] ?? '*');
 
         if (isset($elementOptions['group'])) {
             $group = $elementOptions['group']['parameter'];

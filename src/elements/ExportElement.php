@@ -110,7 +110,11 @@ class ExportElement extends Element
      */
     public function canView(User $user): bool
     {
-        return true;
+        $element = $this->getElementQuery()->one();
+        if ($element->canView(Craft::$app->getUser()->getIdentity())) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -171,7 +175,7 @@ class ExportElement extends Element
 
     public function getSelectedFields(): array
     {
-        return array_filter($this->getFields(), function($field) {
+        return array_filter($this->getFields(), function ($field) {
             if ($field['handle']) {
                 return true;
             }
@@ -184,7 +188,7 @@ class ExportElement extends Element
     {
         $elementSettings = Exporter::getInstance()->elements->getElementTypeSettings($this->elementType);
         $settings = $this->getSettings();
-        $group = array_filter($elementSettings['group']['items'], function($group) use ($settings) {
+        $group = array_filter($elementSettings['group']['items'], function ($group) use ($settings) {
             if ($group->id == $settings['group']) {
                 return true;
             }
@@ -258,7 +262,7 @@ class ExportElement extends Element
         //$supportedFields = Exporter::getInstance()->fields->getAvailableFieldTypes();
         $elementFields = $element->fieldLayout->getCustomFields();
 
-        return array_filter($elementFields, function($field) {
+        return array_filter($elementFields, function ($field) {
             return true;
         });
     }
@@ -277,7 +281,6 @@ class ExportElement extends Element
     {
         return Json::decode($this->fields);
     }
-
 
 
     public function getRunSettings(): null|array
@@ -348,7 +351,7 @@ class ExportElement extends Element
     {
         if (!$this->propagating) {
             Db::delete(ExportRecord::tableName(), [
-                    'id' => $this->id, ]
+                    'id' => $this->id,]
             );
         }
         parent::afterDelete();

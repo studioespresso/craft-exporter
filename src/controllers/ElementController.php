@@ -29,9 +29,8 @@ class ElementController extends Controller
 
     public function actionIndex()
     {
-        $exports = ExportElement::find()->all();
         return $this->renderTemplate('exporter/_index', [
-            'exports' => $exports,
+            'exports' => Exporter::getInstance()->element->getEditableExports(Craft::$app->getUser()->getIdentity()),
         ]);
     }
 
@@ -253,7 +252,7 @@ class ElementController extends Controller
             ]);
             return null;
         }
-        
+
         Craft::$app->getElements()->saveElement($export);
 
         $url = UrlHelper::cpUrl("exporter/{$export->id}/4");

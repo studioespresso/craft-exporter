@@ -29,6 +29,7 @@ use studioespresso\exporter\models\ExportableEntryModel;
 use studioespresso\exporter\models\ExportableFormieSubmissionModel;
 use studioespresso\exporter\models\Settings;
 use studioespresso\exporter\records\ExportRecord;
+use studioespresso\exporter\services\ElementService;
 use studioespresso\exporter\services\ExportQueryService;
 use studioespresso\exporter\services\MailService;
 use studioespresso\exporter\variables\CraftVariableBehavior;
@@ -54,6 +55,7 @@ use yii\console\Application as ConsoleApplication;
  * @property-read ElementTypeHelper $elements
  * @property-read FieldTypeHelper $fields
  * @property-read MailService $mail
+ * @property-read ElementService $element
  **/
 class Exporter extends Plugin
 {
@@ -100,6 +102,7 @@ class Exporter extends Plugin
                 'fields' => ['class' => FieldTypeHelper::class],
                 'query' => ['class' => ExportQueryService::class],
                 'mail' => ['class' => MailService::class],
+                'element' => ['class' => ElementService::class]
             ],
         ];
     }
