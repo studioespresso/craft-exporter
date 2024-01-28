@@ -27,6 +27,14 @@ class ElementController extends Controller
         parent::init();
     }
 
+    public function actionIndex()
+    {
+        $exports = ExportElement::find()->all();
+        return $this->renderTemplate('exporter/_index', [
+            'exports' => $exports,
+        ]);
+    }
+
     public function actionRunExport()
     {
         $body = $this->request->getBodyParams();
@@ -250,5 +258,14 @@ class ElementController extends Controller
 
         $url = UrlHelper::cpUrl("exporter/{$export->id}/4");
         return Craft::$app->getResponse()->getHeaders()->set('HX-Redirect', $url);
+    }
+
+    public function actionDelete()
+    {
+        $id = $this->request->getRequiredBodyParam('id');
+        $export = ExportElement::findOne(['id' => $id]);
+        if (Craft::$app->getElements()->deleteElement($export)) {
+            return $this->asJson(['success' => true]);
+        }
     }
 }

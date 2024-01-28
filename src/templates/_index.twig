@@ -1,12 +1,48 @@
-{% extends '_layouts/elementindex' %}
+{% extends '_layouts/cp' %}
 
-{% set elementType = 'studioespresso\\exporter\\elements\\ExportElement' %}
-{% set canHaveDrafts = true %}
+
+{% set canHaveDrafts = false %}
 {% set title = 'Exports'|t('exporter') %}
+{% do view.registerAssetBundle('craft\\web\\assets\\admintable\\AdminTableAsset') -%}
 
 {% do view.registerTranslations('exporter', [
     'New export'
 ]) %}
+
+{% block content %}
+
+    <div id="exporter-vue-admin-table"></div>
+
+{% endblock %}
+
+{% set tableData = [] %}
+{% for export in exports %}
+    {% set tableData = tableData|merge([{
+        id: export.id,
+        title: export.name,
+        url: export.getCpEditUrl()
+    }]) %}
+{% endfor %}
+{% set actions = [] %}
+{% set columns = [
+    { name: '__slot:title', title: "Name" },
+    { name: 'elementType', title: "Element Type" },
+] %}
+
+
+{% js %}
+    new Craft.VueAdminTable({
+        container: '#exporter-vue-admin-table',
+        columns: {{ columns|json_encode|raw }},
+        tableData: {{ tableData|json_encode|raw }},
+        deleteAction: {{ currentUser.can('exporter-deleteExports') ? '\'exporter/element/delete\'' : 0 }},
+        emptyMessage: 'No exports available',
+        checkboxes:  0,
+        search: false,
+        allowMultipleSelections: false,
+    });
+{% endjs %}
+
 
 {% block actionButton %}
     {% if currentUser.can('exporter-createExports') %}
