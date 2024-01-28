@@ -10,23 +10,25 @@
 ]) %}
 
 {% block content %}
-
     <div id="exporter-vue-admin-table"></div>
-
 {% endblock %}
+
 
 {% set tableData = [] %}
 {% for export in exports %}
     {% set tableData = tableData|merge([{
         id: export.id,
         title: export.name,
-        url: export.getCpEditUrl()
+        url: export.getCpEditUrl(),
+        elementType: export.elementType,
+        dateCreated: craft.app.formatter.asDatetime(export.dateCreated)
     }]) %}
 {% endfor %}
 {% set actions = [] %}
 {% set columns = [
     { name: '__slot:title', title: "Name" },
     { name: 'elementType', title: "Element Type" },
+    { name: 'dateCreated', title: "dateCreated", sortField: 'dateCreated'},
 ] %}
 
 
