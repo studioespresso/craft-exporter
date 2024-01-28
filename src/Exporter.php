@@ -102,7 +102,7 @@ class Exporter extends Plugin
                 'fields' => ['class' => FieldTypeHelper::class],
                 'query' => ['class' => ExportQueryService::class],
                 'mail' => ['class' => MailService::class],
-                'element' => ['class' => ElementService::class]
+                'element' => ['class' => ElementService::class],
             ],
         ];
     }
