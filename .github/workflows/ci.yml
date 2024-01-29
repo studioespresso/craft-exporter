@@ -13,7 +13,7 @@ concurrency:
 jobs:
   ci:
     name: ci
-    uses: studioespresso/.github/.github/workflows/ci.yml@v4
+    uses: studioespresso/.github/.github/workflows/ci.yml@main
     with:
       craft_version: '4'
       jobs: '["ecs"]'
