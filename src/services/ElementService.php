@@ -11,12 +11,11 @@ class ElementService extends Component
     public function getEditableExports(User $user): ?array
     {
         $allExports = ExportElement::find()->all();
-        $exports = array_filter($allExports, function($export) use ($user) {
+        return array_filter($allExports, function ($export) use ($user) {
             if ($export->canView($user)) {
                 return true;
             }
             return false;
         });
-        return $exports;
     }
 }
