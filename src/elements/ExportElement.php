@@ -31,6 +31,8 @@ class ExportElement extends Element
 
     public const STEP_2 = "step2";
 
+    public const FINAL = "final";
+
     /**
      * @inheritdoc
      */
@@ -146,6 +148,7 @@ class ExportElement extends Element
         return [
             self::STEP_1 => ['name', 'group'],
             self::STEP_2 => [],
+            self::FINAL => [],
             'default' => [],
         ];
     }
@@ -167,6 +170,13 @@ class ExportElement extends Element
             $fields = $this->getSelectedFields();
             if (!$fields) {
                 $this->addError('fields', Craft::t('exporter', 'Please select at least one field to export'));
+            }
+        }
+
+        if($this->scenario === self::FINAL) {
+            $settings = $this->getSettings();
+            if (!$settings['email']) {
+                $this->addError("email", Craft::t('exporter', 'Email cannot be blank'));
             }
         }
 
