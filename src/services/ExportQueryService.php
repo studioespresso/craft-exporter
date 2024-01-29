@@ -63,7 +63,6 @@ class ExportQueryService extends Component
         $layout = $element->getFieldLayout();
         foreach ($export->getFields() as $field) {
             try {
-
                 if (!$field['handle']) {
                     continue;
                 }
