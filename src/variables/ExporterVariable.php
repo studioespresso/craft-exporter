@@ -7,6 +7,7 @@ use craft\db\Query;
 use ReflectionClass;
 use studioespresso\exporter\elements\ExportElement;
 use studioespresso\exporter\Exporter;
+use studioespresso\exporter\fields\BaseFieldParser;
 use studioespresso\exporter\jobs\ExportBatchJob;
 use studioespresso\exporter\models\ExportableElementTypeModel;
 
@@ -26,9 +27,9 @@ class ExporterVariable
 
         $query = new Query();
         $query->from("{{%queue}}")
-        ->select('*')
-        ->where(['like', 'job', "%{$reflect->getShortName()}%", false])
-        ->andWhere(['like', 'job', "%{$export->id}%", false]);
+            ->select('*')
+            ->where(['like', 'job', "%{$reflect->getShortName()}%", false])
+            ->andWhere(['like', 'job', "%{$export->id}%", false]);
 
         return $query->one() ?? false;
     }
@@ -45,19 +46,8 @@ class ExporterVariable
         return $object->$function($id);
     }
 
-    public function getFieldParser(Field $field)
+    public function getFieldParser(Field $field): BaseFieldParser|bool
     {
-        $parser = Exporter::getInstance()->fields->getParser($field);
-        return $parser;
-
-//        if (!$parser) {
-//            return false;
-//        }
-//
-//        return [
-//            'parser' => get_class($parser),
-//            'optionType' => $parser->getOptionType(),
-//            'options' => $parser->getOptions(),
-//        ];
+        return Exporter::getInstance()->fields->getParser($field);
     }
 }

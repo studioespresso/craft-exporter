@@ -10,6 +10,8 @@ use craft\errors\FieldNotFoundException;
 use craft\helpers\DateTimeHelper;
 use studioespresso\exporter\elements\ExportElement;
 use studioespresso\exporter\Exporter;
+use studioespresso\exporter\fields\PlainTextParser;
+use yii\base\Exception;
 
 class ExportQueryService extends Component
 {
@@ -60,24 +62,29 @@ class ExportQueryService extends Component
         $data = [];
         $layout = $element->getFieldLayout();
         foreach ($export->getFields() as $field) {
-            if (!$field['handle']) {
+            try {
+
+                if (!$field['handle']) {
+                    continue;
+                }
+
+                $craftField = $layout->getFieldByHandle($field['handle']);
+                $parser = Exporter::getInstance()->fields->isFieldSupported($craftField);
+
+                if (!$parser) {
+                    $parser = PlainTextParser::class;
+                }
+                $object = Craft::createObject($parser);
+
+                if (!isset($field['handle'])) {
+                    throw new FieldNotFoundException($craftField->uid, "Field not found");
+                }
+
+                $data[$field['handle']] = $object->getValue($element, $field);
+            } catch (Exception $e) {
+                Craft::error($e->getMessage(), Exporter::class);
                 continue;
             }
-
-            $craftField = $layout->getFieldByHandle($field['handle']);
-            $parser = Exporter::getInstance()->fields->isFieldSupported($craftField);
-
-            if (!$parser) {
-                $data[$field['handle']] = "";
-                continue;
-            }
-            $object = Craft::createObject($parser);
-
-            if (!isset($field['handle'])) {
-                throw new FieldNotFoundException($craftField->uid, "Field not found");
-            }
-
-            $data[$field['handle']] = $object->getValue($element, $field);
         }
         return $data;
     }
