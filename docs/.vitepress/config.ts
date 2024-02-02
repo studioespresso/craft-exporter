@@ -41,7 +41,7 @@ module.exports = {
             {
                 text: 'Extending',
                 items: [
-                    {text: 'Register element', link: '/custom-element'},
+                    {text: 'Register element', link: '/custom-elements'},
                     {text: 'Register field parser', link: '/custom-field-parser'},
                 ],
             }

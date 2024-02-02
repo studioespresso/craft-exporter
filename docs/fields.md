@@ -12,7 +12,7 @@ Versions of the plugin in which support is added are listed, as well as versions
 ## Craft entries & categories
 - Entries
 - Categories
-
+[custom-elements.md](custom-elements.md)
 For these elements, can you export the following field types:
 &
 |         Field type          |                                      Value options                                      |          Added in version           |

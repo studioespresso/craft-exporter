@@ -173,7 +173,7 @@ class ExportElement extends Element
             }
         }
 
-        if($this->scenario === self::FINAL) {
+        if ($this->scenario === self::FINAL) {
             $settings = $this->getSettings();
             if (!$settings['email']) {
                 $this->addError("email", Craft::t('exporter', 'Email cannot be blank'));

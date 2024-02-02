@@ -8,7 +8,6 @@ abstract class ExportableElementTypeModel extends Model
 {
     /**
      * References the class of the Element Type
-     * @phpstan-ignore-next-line
      * @var string
      */
     public $elementType;

@@ -6,10 +6,8 @@ use craft\elements\Category;
 
 class ExportableCategoryModel extends ExportableElementTypeModel
 {
-
     /**
      * References the class of the Element Type
-     * @phpstan-ignore-next-line
      * @var string
      */
     public $elementType = Category::class;

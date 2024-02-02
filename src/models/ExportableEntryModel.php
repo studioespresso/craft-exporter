@@ -9,7 +9,6 @@ class ExportableEntryModel extends ExportableElementTypeModel
 {
     /**
      * References the class of the Element Type
-     * @phpstan-ignore-next-line
      * @var string
      */
     public $elementType = Entry::class;
@@ -28,8 +27,8 @@ class ExportableEntryModel extends ExportableElementTypeModel
     {
         return [
             "parameter" => "sectionId",
-            "label" => "Section",
-            "instructions" => "Choose a group from which you want to start your export",
+            "label" => \Craft::t('exporter', 'Section'),
+            "instructions" => \Craft::t('exporter', 'Choose a group from which you want to start your export'),
             "items" => \Craft::$app->getSections()->getEditableSections(),
         ];
     }
@@ -38,11 +37,11 @@ class ExportableEntryModel extends ExportableElementTypeModel
      * If the element's groups have an additional sub-group, define those here
      * @return bool|array
      */
-    public function getSubGroup(): array
+    public function getSubGroup(): array|bool
     {
         return [
-            'label' => "Entry type",
-            "instructions" => "Choose which entry-type you want to export",
+            'label' => \Craft::t('exporter', 'Entry type'),
+            "instructions" => \Craft::t('exporter', 'Choose which entry-type you want to export'),
             'parameter' => 'id',
             'class' => Sections::class,
             'function' => 'getEntryTypesBySectionId',
