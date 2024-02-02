@@ -42,7 +42,7 @@ module.exports = {
                 text: 'Extending',
                 items: [
                     {text: 'Register element', link: '/custom-elements'},
-                    {text: 'Register field parser', link: '/custom-field-parser'},
+                    {text: 'Register field support', link: '/custom-fields'},
                 ],
             }
         ],

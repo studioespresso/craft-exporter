@@ -77,7 +77,6 @@ use studioespresso\exporter\events\RegisterExportableElementTypes;
     function(RegisterExportableElementTypes $event) {
         $model = new ExportableFormieSubmissionModel();
         $event->elementTypes = array_merge($event->elementTypes, [
-            /** @phpstan-ignore-next-line */
             \verbb\formie\elements\Submission::class => $model,
         ]);
     }
