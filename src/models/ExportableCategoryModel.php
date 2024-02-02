@@ -18,13 +18,17 @@ class ExportableCategoryModel extends ExportableElementTypeModel
      */
     public string $elementLabel = "Categories";
 
+    /**
+     * This function defines the element's attributes you want to make exportable
+     * @return array
+     */
     public function getElementAttributes(): bool|array
     {
         return [
             'id' => 'ID',
             'title' => 'Title',
             'url' => 'URL',
-            'slug' => 'Slug'
+            'slug' => 'Slug',
         ];
     }
     /**

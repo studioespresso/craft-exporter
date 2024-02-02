@@ -20,13 +20,18 @@ class ExportableEntryModel extends ExportableElementTypeModel
     public string $elementLabel = "Entries";
 
 
+    /**
+     * This function defines the element's attributes you want to make exportable
+     * @return array
+     */
     public function getElementAttributes(): bool|array
     {
         return [
             'id' => 'ID',
             'title' => 'Title',
             'url' => 'URL',
-            'slug' => 'Slug'
+            'slug' => 'Slug',
+            'dateCreated' => 'Date created',
         ];
     }
 

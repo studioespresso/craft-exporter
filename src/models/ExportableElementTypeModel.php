@@ -18,6 +18,10 @@ abstract class ExportableElementTypeModel extends Model
      */
     public string $elementLabel = "";
 
+    /**
+     * This function defines the element's attributes you want to make exportable
+     * @return array
+     */
     abstract public function getElementAttributes(): bool|array;
 
     /**

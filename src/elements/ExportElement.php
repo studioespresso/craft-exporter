@@ -13,7 +13,6 @@ use studioespresso\exporter\elements\db\ExportElementQuery;
 use studioespresso\exporter\Exporter;
 use studioespresso\exporter\helpers\ElementTypeHelper;
 use studioespresso\exporter\records\ExportRecord;
-use studioespresso\molliepayments\services\Export;
 
 class ExportElement extends Element
 {
@@ -187,7 +186,7 @@ class ExportElement extends Element
 
     public function getSelectedFields(): array
     {
-        return array_filter($this->getFields(), function ($field) {
+        return array_filter($this->getFields(), function($field) {
             if ($field['handle']) {
                 return true;
             }
@@ -200,7 +199,7 @@ class ExportElement extends Element
     {
         $elementSettings = Exporter::getInstance()->elements->getElementTypeSettings($this->elementType);
         $settings = $this->getSettings();
-        $group = array_filter($elementSettings['group']['items'], function ($group) use ($settings) {
+        $group = array_filter($elementSettings['group']['items'], function($group) use ($settings) {
             if ($group->id == $settings['group']) {
                 return true;
             }
@@ -281,7 +280,7 @@ class ExportElement extends Element
         //$supportedFields = Exporter::getInstance()->fields->getAvailableFieldTypes();
         $elementFields = $element->fieldLayout->getCustomFields();
 
-        return array_filter($elementFields, function ($field) {
+        return array_filter($elementFields, function($field) {
             return true;
         });
     }
@@ -370,7 +369,7 @@ class ExportElement extends Element
     {
         if (!$this->propagating) {
             Db::delete(ExportRecord::tableName(), [
-                    'id' => $this->id,]
+                    'id' => $this->id, ]
             );
         }
         parent::afterDelete();

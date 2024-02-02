@@ -21,6 +21,18 @@ class ExportableFreeformSubmissionModel extends ExportableElementTypeModel
     public string $elementLabel = "Freeform Submissions";
 
     /**
+     * This function defines the element's attributes you want to make exportable
+     * @return array
+     */
+    public function getElementAttributes(): bool|array
+    {
+        return [
+            'id' => 'ID',
+            'title' => 'Title',
+        ];
+    }
+
+    /**
      * This function defines the groups in which the element can be groups. Like sections for entries, forms for submissions , etc
      * @return array
      */

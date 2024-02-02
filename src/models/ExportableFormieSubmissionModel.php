@@ -20,7 +20,10 @@ class ExportableFormieSubmissionModel extends ExportableElementTypeModel
      */
     public string $elementLabel = "Formie Submissions";
 
-
+    /**
+     * This function defines the element's attributes you want to make exportable
+     * @return array
+     */
     public function getElementAttributes(): bool|array
     {
         return [
