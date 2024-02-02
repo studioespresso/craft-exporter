@@ -20,6 +20,14 @@ class ExportableFormieSubmissionModel extends ExportableElementTypeModel
      */
     public string $elementLabel = "Formie Submissions";
 
+
+    public function getElementAttributes(): bool|array
+    {
+        return [
+            'id' => 'ID',
+            'title' => 'Title',
+        ];
+    }
     /**
      * This function defines the groups in which the element can be groups. Like sections for entries, forms for submissions , etc
      * @return array

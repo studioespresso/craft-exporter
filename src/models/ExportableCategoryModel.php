@@ -18,6 +18,15 @@ class ExportableCategoryModel extends ExportableElementTypeModel
      */
     public string $elementLabel = "Categories";
 
+    public function getElementAttributes(): bool|array
+    {
+        return [
+            'id' => 'ID',
+            'title' => 'Title',
+            'url' => 'URL',
+            'slug' => 'Slug'
+        ];
+    }
     /**
      * This function defines the groups in which the element can be groups. Like sections for entries, forms for submissions , etc
      * @return array

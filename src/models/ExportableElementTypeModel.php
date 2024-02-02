@@ -18,6 +18,8 @@ abstract class ExportableElementTypeModel extends Model
      */
     public string $elementLabel = "";
 
+    abstract public function getElementAttributes(): bool|array;
+
     /**
      * This function defines the groups in which the element can be groups. Like sections for entries, forms for submissions , etc
      * @return array

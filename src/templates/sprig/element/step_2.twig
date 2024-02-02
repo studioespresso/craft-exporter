@@ -20,34 +20,24 @@
         {{ "No elements can be found for your selection. Please create an element first or check your settings in step 1."|t('exporter') }}
     {% else %}
 
-
         <style>
             .default-fields .field, .custom-fields .field {
                 margin: 12px 0;
             }
         </style>
 
+        {% set elementAttributes = export.getExportableAttributes() %}
+
         <div class="default-fields">
             <h2>{{ "Which default fields do you want to include in this export?"|t('exporter') }}</h2>
-            {{ forms.checkboxField({
-                label: 'ID'|t('exporter'),
-                name: "attributes[id]",
-                value: 'id',
-                checked: attributes['id'] ?? false
-            }) }}
-            {{ forms.checkboxField({
-                label: 'Title'|t('exporter'),
-                id: 'default-title',
-                name: "attributes[title]",
-                value: 'title',
-                checked: attributes['title'] ?? false
-            }) }}
-            {{ forms.checkboxField({
-                label: 'Date created'|t('exporter'),
-                name: "attributes[dateCreated]",
-                value: 'dateCreated',
-                checked: attributes['dateCreated'] ?? false
-            }) }}
+            {% for attr, label in elementAttributes %}
+                {{ forms.checkboxField({
+                    label: label|t('exporter'),
+                    name: "attributes["~attr~"]",
+                    value: attr,
+                    checked: attributes[attr] ?? false
+                }) }}
+            {% endfor %}
         </div>
         <hr>
 

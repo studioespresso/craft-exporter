@@ -38,10 +38,11 @@
 
     <div class="field" tabindex="-1">
         <div class="heading">
-            <label id="elementType-label" for="elementType">Element Type<span
+            <label id="elementType-label" for="elementType">{{ 'Element Type'|t('exporter') }}<span
                         class="visually-hidden">Required</span><span class="required" aria-hidden="true"></span></label>
         </div>
-        <div id="elementType-instructions" class="instructions"><p>Choose which type of element you want to export.</p>
+        <div id="elementType-instructions" class="instructions">
+            <p>{{ 'Choose which type of element you want to export.'|t('exporter') }}</p>
         </div>
         <div class="input ltr">
             <div class="select">
@@ -66,7 +67,7 @@
                 <div class="field width-50" id="elementType-entry-subfields">
                     <div class="heading">
                         <label id="group-label" for="group">{{ groupOptions.label|t('exporter') }}<span
-                                    class="visually-hidden">Required</span>
+                                    class="visually-hidden">{{ 'Required'|t('exporter') }}</span>
                             <span class="required" aria-hidden="true"></span>
                         </label>
                     </div>
@@ -104,7 +105,7 @@
                         <div class="field width-50" id="elementType-entry-subfields">
                             <div class="heading">
                                 <label id="section-label" for="section">{{ subGroupSettings.label|t('exporter') }}<span
-                                            class="visually-hidden">Required</span><span class="required"
+                                            class="visually-hidden">{{ 'Required'|t('exporter') }}</span><span class="required"
                                                                                          aria-hidden="true"></span></label>
                             </div>
                             {% if subGroupSettings.instructions is defined %}
