@@ -47,6 +47,9 @@ The element type's class you want to export
 ### ``elementLabel``
 How you want the element type to be labeled when creating a new export
 
+### ``getElementAttributes()``
+This function should return an array of ``property => label`` for default element attributes you want to make exportable. 
+
 ### ``getGroup()``
 In this function we defined how the elements are grouped or divided. 
 This function should return an array with the following items:
