@@ -46,11 +46,8 @@ class ElementController extends Controller
         $export->settings = Json::encode(array_merge($export->getSettings(), $body['settings']));
         $export->runSettings = Json::encode(array_merge($export->getRunSettings(), $body['runSettings']));
 
-
         $export->setScenario(ExportElement::FINAL);
-
         $export->validate();
-        // TODO: Validate that we have an emailaddress here.
 
         if ($export->getErrors()) {
             /** @phpstan-ignore-next-line */

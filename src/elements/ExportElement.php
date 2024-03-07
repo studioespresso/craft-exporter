@@ -165,19 +165,21 @@ class ExportElement extends Element
             $settings = $this->getSettings();
             if (!$settings['group']) {
                 $this->addError("group", Craft::t('exporter', 'Group cannot be blank'));
+                return false;
             }
         }
         if ($this->scenario === self::STEP_2) {
             $fields = $this->getSelectedFields();
             if (!$fields) {
                 $this->addError('fields', Craft::t('exporter', 'Please select at least one field to export'));
+                return false;
             }
         }
-
         if ($this->scenario === self::FINAL) {
             $settings = $this->getSettings();
             if (!$settings['email']) {
                 $this->addError("email", Craft::t('exporter', 'Email cannot be blank'));
+                return false;
             }
         }
 
