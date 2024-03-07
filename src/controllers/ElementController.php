@@ -50,7 +50,6 @@ class ElementController extends Controller
         $export->validate();
 
         if ($export->getErrors()) {
-            /** @phpstan-ignore-next-line */
             Craft::$app->getUrlManager()->setRouteParams([
                 "export" => $export,
                 "errors" => $export->getErrors(),
@@ -180,7 +179,6 @@ class ElementController extends Controller
 
         $export->validate();
         if ($export->getErrors()) {
-            /** @phpstan-ignore-next-line */
             Craft::$app->getUrlManager()->setRouteParams([
                 "export" => $export,
                 "errors" => $export->getErrors(),
@@ -220,7 +218,6 @@ class ElementController extends Controller
         }
 
         if ($export->getErrors()) {
-            /** @phpstan-ignore-next-line */
             Craft::$app->getUrlManager()->setRouteParams([
                 "export" => $export,
                 "errors" => $export->getErrors(),
@@ -247,7 +244,6 @@ class ElementController extends Controller
 
         $export->validate();
         if ($export->getErrors()) {
-            /** @phpstan-ignore-next-line */
             Craft::$app->getUrlManager()->setRouteParams([
                 "export" => $export,
                 "errors" => $export->getErrors(),
