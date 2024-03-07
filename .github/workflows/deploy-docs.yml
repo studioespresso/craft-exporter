@@ -3,16 +3,16 @@ name: Deploy vitepress
 on:
   push:
     branches:
-      - master
       - develop
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 20.3.0
           cache: yarn
       - run: yarn install --frozen-lockfile
 
