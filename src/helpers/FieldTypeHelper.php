@@ -43,7 +43,7 @@ class FieldTypeHelper
         TimeParser::class => [],
         OptionsFieldParser::class => [],
         MultiOptionsFieldParser::class => [],
-        MoneyFieldParser::class => []
+        MoneyFieldParser::class => [],
     ];
 
     public const SUPPORTED_FIELD_TYPES = [
@@ -113,7 +113,7 @@ class FieldTypeHelper
 
     public function isFieldSupported(FieldInterface $field)
     {
-        $item = array_filter(self::$_supportedFieldTypes, function ($fields) use ($field) {
+        $item = array_filter(self::$_supportedFieldTypes, function($fields) use ($field) {
             foreach ($fields as $f) {
                 if ($f === get_class($field)) {
                     return true;
