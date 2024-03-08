@@ -3,6 +3,10 @@ Element Exporter aims to make exporting data from your Craft CMS website easy, r
 
 <a href="https://codeclimate.com/github/studioespresso/craft-exporter/maintainability"><img src="https://api.codeclimate.com/v1/badges/7faeac3a285488fd1235/maintainability" /></a>
 
+
+![Screenshot](docs/images/banner.png)
+
+
 ## Requirements
 This plugin requires Craft CMS 4.5.0 or later.
 
