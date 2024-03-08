@@ -21,7 +21,10 @@ use putyourlightson\sprig\Sprig;
 use studioespresso\exporter\elements\ExportElement;
 use studioespresso\exporter\events\RegisterExportableElementTypes;
 use studioespresso\exporter\events\RegisterExportableFieldTypes;
+use studioespresso\exporter\fields\DateTimeParser;
+use studioespresso\exporter\fields\OptionsFieldParser;
 use studioespresso\exporter\fields\PlainTextParser;
+use studioespresso\exporter\fields\RelationFieldParser;
 use studioespresso\exporter\helpers\ElementTypeHelper;
 use studioespresso\exporter\helpers\FieldTypeHelper;
 use studioespresso\exporter\models\ExportableCategoryModel;
@@ -34,12 +37,6 @@ use studioespresso\exporter\services\ExportQueryService;
 use studioespresso\exporter\services\MailService;
 use studioespresso\exporter\variables\CraftVariableBehavior;
 use studioespresso\exporter\variables\ExporterVariable;
-use verbb\formie\fields\formfields\Agree;
-use verbb\formie\fields\formfields\Email;
-use verbb\formie\fields\formfields\MultiLineText;
-use verbb\formie\fields\formfields\Number;
-use verbb\formie\fields\formfields\Phone;
-use verbb\formie\fields\formfields\SingleLineText;
 use yii\base\Event;
 use yii\console\Application as ConsoleApplication;
 
@@ -284,17 +281,30 @@ class Exporter extends Plugin
                 FieldTypeHelper::EVENT_REGISTER_EXPORTABLE_FIELD_TYPES,
                 function(RegisterExportableFieldTypes $event) {
                     $parsers = $event->fieldTypes;
-                    /** @var array $plainText */
-                    $plainText = $parsers[PlainTextParser::class];
-                    $parsers[PlainTextParser::class] = array_merge($plainText, [
-                        Email::class, // @phpstan-ignore-line
-                        SingleLineText::class, // @phpstan-ignore-line
-                        MultiLineText::class, // @phpstan-ignore-line
-                        Phone::class, // @phpstan-ignore-line
-                        Agree::class, // @phpstan-ignore-line
-                        Number::class, // @phpstan-ignore-line
+
+                    $event->fieldTypes[PlainTextParser::class] = array_merge($parsers[PlainTextParser::class], [
+                        \verbb\formie\fields\formfields\Email::class, // @phpstan-ignore-line
+                        \verbb\formie\fields\formfields\SingleLineText::class, // @phpstan-ignore-line
+                        \verbb\formie\fields\formfields\MultiLineText::class, // @phpstan-ignore-line
+                        \verbb\formie\fields\formfields\Phone::class, // @phpstan-ignore-line
+                        \verbb\formie\fields\formfields\Agree::class, // @phpstan-ignore-line
+                        \verbb\formie\fields\formfields\Number::class, // @phpstan-ignore-line
                     ]);
-                    $event->fieldTypes = $parsers;
+
+                    $event->fieldTypes[DateTimeParser::class] = array_merge($parsers[DateTimeParser::class], [
+                        \verbb\formie\fields\formfields\Date::class, // @phpstan-ignore-line
+                    ]);
+
+                    $event->fieldTypes[OptionsFieldParser::class] = array_merge($parsers[OptionsFieldParser::class], [
+                        \verbb\formie\fields\formfields\Radio::class, // @phpstan-ignore-line
+                        \verbb\formie\fields\formfields\Dropdown::class, // @phpstan-ignore-line
+                        \verbb\formie\fields\formfields\Checkboxes::class, // @phpstan-ignore-line
+                    ]);
+
+                    $event->fieldTypes[RelationFieldParser::class] = array_merge($parsers[RelationFieldParser::class], [
+                        \verbb\formie\fields\formfields\Entries::class, // @phpstan-ignore-line
+                        \verbb\formie\fields\formfields\Categories::class, // @phpstan-ignore-line
+                    ]);
                 });
         }
     }
