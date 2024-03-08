@@ -36,6 +36,16 @@ class FieldTypeHelper
 {
     public const EVENT_REGISTER_EXPORTABLE_FIELD_TYPES = 'registerExportableFieldTypes';
 
+    public const SUPPORTED_PARSERS = [
+        PlainTextParser::class => [],
+        RelationFieldParser::class => [],
+        DateTimeParser::class => [],
+        TimeParser::class => [],
+        OptionsFieldParser::class => [],
+        MultiOptionsFieldParser::class => [],
+        MoneyFieldParser::class => []
+    ];
+
     public const SUPPORTED_FIELD_TYPES = [
         RelationFieldParser::class => [
             Entries::class,
@@ -88,14 +98,14 @@ class FieldTypeHelper
         }
 
         $event = new RegisterExportableFieldTypes([
-            'fieldTypes' => self::SUPPORTED_FIELD_TYPES,
+            'fieldTypes' => self::SUPPORTED_PARSERS,
         ]);
 
         Event::trigger(self::class, self::EVENT_REGISTER_EXPORTABLE_FIELD_TYPES, $event);
 
-        self::$_supportedFieldTypes = array_merge(
+        self::$_supportedFieldTypes = array_merge_recursive(
+            $event->fieldTypes,
             self::SUPPORTED_FIELD_TYPES,
-            $event->fieldTypes
         );
 
         return self::$_supportedFieldTypes;
@@ -103,7 +113,7 @@ class FieldTypeHelper
 
     public function isFieldSupported(FieldInterface $field)
     {
-        $item = array_filter(self::$_supportedFieldTypes, function($fields) use ($field) {
+        $item = array_filter(self::$_supportedFieldTypes, function ($fields) use ($field) {
             foreach ($fields as $f) {
                 if ($f === get_class($field)) {
                     return true;

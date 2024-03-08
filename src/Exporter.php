@@ -300,6 +300,7 @@ class Exporter extends Plugin
                         \verbb\formie\fields\formfields\Radio::class, // @phpstan-ignore-line
                         \verbb\formie\fields\formfields\Dropdown::class, // @phpstan-ignore-line
                     ]);
+
                     $event->fieldTypes[MultiOptionsFieldParser::class] = array_merge($parsers[MultiOptionsFieldParser::class], [
                         \verbb\formie\fields\formfields\Checkboxes::class, // @phpstan-ignore-line
                     ]);
