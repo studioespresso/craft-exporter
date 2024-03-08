@@ -48,6 +48,7 @@ module.exports = {
         ],
         nav: [
             {text: 'Store', link: 'https://plugins.craftcms.com/element-exporter'},
+            {text: 'GitHub', link: 'https://github.com/studioespresso/craft-exporter'},
             {text: 'Issues', link: 'https://github.com/studioespresso/craft-exporter/issues'},
         ],
     },

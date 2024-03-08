@@ -7,6 +7,9 @@ description: Documentation for Element Exporter, a plugin for Craft CMS.
 # Element exporter for Craft CMS
 Element Exporter aims to make exporting data from your Craft CMS website easy, repeatable and includes event to allow for custom data parsing and custom element support. 
 
+![Banner](./images/banner.png)
+
+
 ## Requirements
 This plugin requires Craft CMS 4.5.0 or later.
 
