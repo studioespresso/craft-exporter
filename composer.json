@@ -17,7 +17,7 @@
         "email": "info@studioespresso.co",
         "issues": "https://github.com/studioespresso/craft-exporter/issues?state=open",
         "source": "https://github.com/studioespresso/craft-exporter",
-        "docs": "https://github.com/studioespresso/craft-exporter",
+        "docs": "https://studioespresso.github.io/craft-exporter/",
         "rss": "https://github.com/studioespresso/craft-exporter/releases.atom"
     },
     "require": {
@@ -38,7 +38,7 @@
         "handle": "exporter",
         "name": "Element Exporter",
         "developer": "Studio Espresso",
-        "documentationUrl": "https://github.com/studioespresso/craft-exporter",
+        "documentationUrl": "https://studioespresso.github.io/craft-exporter/",
         "class": "studioespresso\\exporter\\Exporter"
     },
     "scripts": {
