@@ -21,7 +21,7 @@
         "rss": "https://github.com/studioespresso/craft-exporter/releases.atom"
     },
     "require": {
-        "craftcms/cms": "^4.5.0",
+        "craftcms/cms": "^4.5.11",
         "putyourlightson/craft-sprig-core": "^2.0",
         "phpoffice/phpspreadsheet": "1.29.0"
     },
