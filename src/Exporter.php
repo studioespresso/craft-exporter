@@ -22,6 +22,7 @@ use studioespresso\exporter\elements\ExportElement;
 use studioespresso\exporter\events\RegisterExportableElementTypes;
 use studioespresso\exporter\events\RegisterExportableFieldTypes;
 use studioespresso\exporter\fields\DateTimeParser;
+use studioespresso\exporter\fields\MultiOptionsFieldParser;
 use studioespresso\exporter\fields\OptionsFieldParser;
 use studioespresso\exporter\fields\PlainTextParser;
 use studioespresso\exporter\fields\RelationFieldParser;
@@ -298,6 +299,8 @@ class Exporter extends Plugin
                     $event->fieldTypes[OptionsFieldParser::class] = array_merge($parsers[OptionsFieldParser::class], [
                         \verbb\formie\fields\formfields\Radio::class, // @phpstan-ignore-line
                         \verbb\formie\fields\formfields\Dropdown::class, // @phpstan-ignore-line
+                    ]);
+                    $event->fieldTypes[MultiOptionsFieldParser::class] = array_merge($parsers[MultiOptionsFieldParser::class], [
                         \verbb\formie\fields\formfields\Checkboxes::class, // @phpstan-ignore-line
                     ]);
 
