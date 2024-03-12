@@ -3,6 +3,7 @@
     "description": "Export all things",
     "type": "craft-plugin",
     "license": "proprietary",
+    "version": "4.0.0",
     "authors": [
         {
             "name": "Studio Espresso",
