@@ -45,7 +45,7 @@ class ExportableEntryModel extends ExportableElementTypeModel
             "parameter" => "sectionId",
             "label" => \Craft::t('exporter', 'Section'),
             "instructions" => \Craft::t('exporter', 'Choose a group from which you want to start your export'),
-            "items" => \Craft::$app->getSections()->getEditableSections(),
+            "items" => \Craft::$app->getEntries()->getEditableSections(),
         ];
     }
 
