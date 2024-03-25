@@ -48,7 +48,7 @@ You can choose one of the following options, all of those based on the criteria 
 
 ### File formats
 The plugin supports these file formats:
-- JSON <Badge type="info" text="4.0.0" />
+- XLSX <Badge type="info" text="4.0.0" />
 - CSV <Badge type="info" text="4.0.0" />
 
 ::: info Missing format?

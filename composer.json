@@ -18,12 +18,17 @@
         "email": "info@studioespresso.co",
         "issues": "https://github.com/studioespresso/craft-exporter/issues?state=open",
         "source": "https://github.com/studioespresso/craft-exporter",
-        "docs": "https://studioespresso.github.io/craft-exporter/",
+        "docs": "https://github.com/studioespresso/craft-exporter",
         "rss": "https://github.com/studioespresso/craft-exporter/releases.atom"
     },
     "require": {
+<<<<<<< HEAD
         "craftcms/cms": "^5.0.0-beta.1",
         "putyourlightson/craft-sprig-core": "^3.0.0-beta.1",
+=======
+        "craftcms/cms": "^4.5.11",
+        "putyourlightson/craft-sprig-core": "^2.0",
+>>>>>>> develop
         "phpoffice/phpspreadsheet": "1.29.0"
     },
     "require-dev": {
@@ -39,7 +44,7 @@
         "handle": "exporter",
         "name": "Element Exporter",
         "developer": "Studio Espresso",
-        "documentationUrl": "https://studioespresso.github.io/craft-exporter/",
+        "documentationUrl": "https://github.com/studioespresso/craft-exporter",
         "class": "studioespresso\\exporter\\Exporter"
     },
     "scripts": {

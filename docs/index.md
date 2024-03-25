@@ -30,4 +30,14 @@ composer require studioespresso/craft-exporter
 ./craft install/plugin exporter
 ```
 
+## Roadmap
+
+The following additions & improvements are being considered:
+- Freeform support
+- Export elements related to another element
+- Add the option to compress the export before it gets attached to the email
+- Add the option to download the file directly when the export is done.
+
+[Get in touch](https://github.com/studioespresso/craft-exporter/discussions/categories/ideas) if there's anything elso you'd like to see added!
+
 Brought to you by [Studio Espresso](https://studioespresso.co/)

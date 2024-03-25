@@ -20,11 +20,17 @@ use craft\web\UrlManager;
 use putyourlightson\sprig\Sprig;
 use studioespresso\exporter\elements\ExportElement;
 use studioespresso\exporter\events\RegisterExportableElementTypes;
+use studioespresso\exporter\events\RegisterExportableFieldTypes;
+use studioespresso\exporter\fields\DateTimeParser;
+use studioespresso\exporter\fields\MultiOptionsFieldParser;
+use studioespresso\exporter\fields\OptionsFieldParser;
+use studioespresso\exporter\fields\PlainTextParser;
+use studioespresso\exporter\fields\RelationFieldParser;
 use studioespresso\exporter\helpers\ElementTypeHelper;
 use studioespresso\exporter\helpers\FieldTypeHelper;
-use studioespresso\exporter\helpers\PluginHelper;
 use studioespresso\exporter\models\ExportableCategoryModel;
 use studioespresso\exporter\models\ExportableEntryModel;
+use studioespresso\exporter\models\ExportableFormieSubmissionModel;
 use studioespresso\exporter\models\Settings;
 use studioespresso\exporter\records\ExportRecord;
 use studioespresso\exporter\services\ElementService;
@@ -46,7 +52,6 @@ use yii\console\Application as ConsoleApplication;
  * @property-read ExportQueryService $query
  * @property-read ElementTypeHelper $elements
  * @property-read FieldTypeHelper $fields
- * @property-read PluginHelper $plugins
  * @property-read MailService $mail
  * @property-read ElementService $element
  **/
@@ -93,7 +98,6 @@ class Exporter extends Plugin
             'components' => [
                 'elements' => ['class' => ElementTypeHelper::class],
                 'fields' => ['class' => FieldTypeHelper::class],
-                'plugins' => ['class', PluginHelper::class],
                 'query' => ['class' => ExportQueryService::class],
                 'mail' => ['class' => MailService::class],
                 'element' => ['class' => ElementService::class],
@@ -232,14 +236,28 @@ class Exporter extends Plugin
     private function registerRedactor()
     {
         if (Craft::$app->getPlugins()->isPluginEnabled('redactor')) {
-            $this->plugins->registerRedactor();
+            Event::on(
+                FieldTypeHelper::class,
+                FieldTypeHelper::EVENT_REGISTER_EXPORTABLE_FIELD_TYPES,
+                function(RegisterExportableFieldTypes $event) {
+                    $parsers = $event->fieldTypes;
+                    $parsers[PlainTextParser::class][] = \craft\redactor\Field::class; // @phpstan-ignore-line
+                    $event->fieldTypes = $parsers;
+                });
         }
     }
 
     private function registerCkEditor()
     {
         if (Craft::$app->getPlugins()->isPluginEnabled('ckeditor')) {
-            $this->plugins->registerCKEditor();
+            Event::on(
+                FieldTypeHelper::class,
+                FieldTypeHelper::EVENT_REGISTER_EXPORTABLE_FIELD_TYPES,
+                function(RegisterExportableFieldTypes $event) {
+                    $parsers = $event->fieldTypes;
+                    $parsers[PlainTextParser::class][] = \craft\ckeditor\Field::class; // @phpstan-ignore-line
+                    $event->fieldTypes = $parsers;
+                });
         }
     }
 
@@ -248,7 +266,50 @@ class Exporter extends Plugin
     {
         // Register support for Formie if the plugin is installed and Enabled
         if (Craft::$app->getPlugins()->isPluginEnabled('formie')) {
-            $this->plugins->registerFormie();
+            Event::on(
+                ElementTypeHelper::class,
+                ElementTypeHelper::EVENT_REGISTER_EXPORTABLE_ELEMENT_TYPES,
+                function(RegisterExportableElementTypes $event) {
+                    $model = new ExportableFormieSubmissionModel();
+                    $event->elementTypes = array_merge($event->elementTypes, [
+                        /** @phpstan-ignore-next-line */
+                        \verbb\formie\elements\Submission::class => $model,
+                    ]);
+                });
+
+            Event::on(
+                FieldTypeHelper::class,
+                FieldTypeHelper::EVENT_REGISTER_EXPORTABLE_FIELD_TYPES,
+                function(RegisterExportableFieldTypes $event) {
+                    $parsers = $event->fieldTypes;
+
+                    $event->fieldTypes[PlainTextParser::class] = array_merge($parsers[PlainTextParser::class], [
+                        \verbb\formie\fields\formfields\Email::class, // @phpstan-ignore-line
+                        \verbb\formie\fields\formfields\SingleLineText::class, // @phpstan-ignore-line
+                        \verbb\formie\fields\formfields\MultiLineText::class, // @phpstan-ignore-line
+                        \verbb\formie\fields\formfields\Phone::class, // @phpstan-ignore-line
+                        \verbb\formie\fields\formfields\Agree::class, // @phpstan-ignore-line
+                        \verbb\formie\fields\formfields\Number::class, // @phpstan-ignore-line
+                    ]);
+
+                    $event->fieldTypes[DateTimeParser::class] = array_merge($parsers[DateTimeParser::class], [
+                        \verbb\formie\fields\formfields\Date::class, // @phpstan-ignore-line
+                    ]);
+
+                    $event->fieldTypes[OptionsFieldParser::class] = array_merge($parsers[OptionsFieldParser::class], [
+                        \verbb\formie\fields\formfields\Radio::class, // @phpstan-ignore-line
+                        \verbb\formie\fields\formfields\Dropdown::class, // @phpstan-ignore-line
+                    ]);
+
+                    $event->fieldTypes[MultiOptionsFieldParser::class] = array_merge($parsers[MultiOptionsFieldParser::class], [
+                        \verbb\formie\fields\formfields\Checkboxes::class, // @phpstan-ignore-line
+                    ]);
+
+                    $event->fieldTypes[RelationFieldParser::class] = array_merge($parsers[RelationFieldParser::class], [
+                        \verbb\formie\fields\formfields\Entries::class, // @phpstan-ignore-line
+                        \verbb\formie\fields\formfields\Categories::class, // @phpstan-ignore-line
+                    ]);
+                });
         }
     }
 }
