@@ -69,7 +69,7 @@
                 {% else %}
                     {# We have a parser, so the field is supported #}
                     {% set fieldSettings = false %}
-                    {% if fields|length and attribute(fields, field.handle) %}
+                    {% if fields|length and attribute(fields, field.handle) is defined %}
                         {% set fieldSettings = attribute(fields, field.handle) %}
                     {% endif %}
                     <div id="{{ field.handle }}-input-field" class="field checkboxfield"
