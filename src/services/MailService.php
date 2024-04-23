@@ -32,7 +32,7 @@ class MailService extends Component
         }
 
         $message = new Message();
-        
+
         $name = $exportSettings['fileName'] ?? "Export";
         $fileName = "{$name}.{$exportSettings['fileType']}";
         $message->attach($path, ['fileName' => $fileName, 'contentType' => "application/{$exportSettings['fileType']}"]);
