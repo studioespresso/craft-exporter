@@ -107,7 +107,6 @@ class FieldTypeHelper
             $event->fieldTypes,
             self::SUPPORTED_FIELD_TYPES,
         );
-
         return self::$_supportedFieldTypes;
     }
 

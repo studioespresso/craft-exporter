@@ -124,6 +124,19 @@
     </div>
     <hr>
     <h2>{{ "Export delivery"|t('exporter') }}</h2>
+
+    {{ forms.textField({
+        first: true,
+        label: "Filename"|t('exporter'),
+        instructions: "The filename that should be used for the export."|t('exporter'),
+        id: 'email',
+        name: 'settings[fileName]',
+        value: settings.fileName ?? export.name|lower|replace(' ', '-'),
+        errors: (errors is defined and errors.email ) ? errors.email : null,
+        required: true
+    }) }}
+
+
     {{ hiddenInput('settings[deliveryType]', 'email') }}
     {{ forms.textField({
         first: true,

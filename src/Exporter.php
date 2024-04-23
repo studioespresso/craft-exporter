@@ -22,6 +22,7 @@ use studioespresso\exporter\elements\ExportElement;
 use studioespresso\exporter\events\RegisterExportableElementTypes;
 use studioespresso\exporter\events\RegisterExportableFieldTypes;
 use studioespresso\exporter\fields\DateTimeParser;
+use studioespresso\exporter\fields\FormieNameParser;
 use studioespresso\exporter\fields\MultiOptionsFieldParser;
 use studioespresso\exporter\fields\OptionsFieldParser;
 use studioespresso\exporter\fields\PlainTextParser;
@@ -309,6 +310,10 @@ class Exporter extends Plugin
                         \verbb\formie\fields\formfields\Entries::class, // @phpstan-ignore-line
                         \verbb\formie\fields\formfields\Categories::class, // @phpstan-ignore-line
                     ]);
+
+                    $event->fieldTypes = array_merge($event->fieldTypes, [FormieNameParser::class => [
+                        \verbb\formie\fields\formfields\Name::class, // @phpstan-ignore-line
+                    ]]);
                 });
         }
     }

@@ -114,9 +114,17 @@ class ExportElement extends Element
     public function canView(User $user): bool
     {
         $element = $this->getElementQuery()->one();
-        if ($element->canView(Craft::$app->getUser()->getIdentity())) {
+        if ($element && $element->canView(Craft::$app->getUser()->getIdentity())) {
             return true;
         }
+
+        if (!$element) {
+            $element = $this->mockElement();
+            if ($element && $element->canView(Craft::$app->getUser()->getIdentity())) {
+                return true;
+            }
+        }
+
         return false;
     }
 
@@ -268,6 +276,11 @@ class ExportElement extends Element
     public function getElementQuery(): ElementQuery
     {
         return Exporter::$plugin->query->buildQuery($this);
+    }
+
+    public function mockElement(): Element|null
+    {
+        return Exporter::$plugin->query->mockElement($this);
     }
 
     public function getExportableAttributes(): array

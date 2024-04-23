@@ -57,6 +57,24 @@ class ExportQueryService extends Component
         return $query;
     }
 
+    public function mockElement(ExportElement $export): Element|null
+    {
+        try {
+            $elementType = $export->elementType;
+            $settings = $export->getSettings();
+            $elementOptions = Exporter::getInstance()->elements->getElementTypeSettings($elementType);
+
+            $element = Craft::createObject($elementType);
+            if (isset($elementOptions['group'])) {
+                $group = $elementOptions['group']['parameter'];
+                $element->$group = $settings['group'];
+            }
+            return $element;
+        } catch (\Throwable $e) {
+            return null;
+        }
+    }
+
     public function getFields(ExportElement $export, Element $element): array
     {
         $data = [];
