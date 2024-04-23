@@ -117,8 +117,12 @@ class ExportElement extends Element
         if ($element && $element->canView(Craft::$app->getUser()->getIdentity())) {
             return true;
         }
+
         if (!$element) {
-            return true;
+            $element = $this->mockElement();
+            if ($element && $element->canView(Craft::$app->getUser()->getIdentity())) {
+                return true;
+            }
         }
 
         return false;
@@ -192,7 +196,7 @@ class ExportElement extends Element
 
     public function getSelectedFields(): array
     {
-        return array_filter($this->getFields(), function ($field) {
+        return array_filter($this->getFields(), function($field) {
             if ($field['handle']) {
                 return true;
             }
@@ -205,7 +209,7 @@ class ExportElement extends Element
     {
         $elementSettings = Exporter::getInstance()->elements->getElementTypeSettings($this->elementType);
         $settings = $this->getSettings();
-        $group = array_filter($elementSettings['group']['items'], function ($group) use ($settings) {
+        $group = array_filter($elementSettings['group']['items'], function($group) use ($settings) {
             if ($group->id == $settings['group']) {
                 return true;
             }
@@ -274,6 +278,11 @@ class ExportElement extends Element
         return Exporter::$plugin->query->buildQuery($this);
     }
 
+    public function mockElement(): Element|null
+    {
+        return Exporter::$plugin->query->mockElement($this);
+    }
+
     public function getExportableAttributes(): array
     {
         $helper = new ElementTypeHelper();
@@ -286,7 +295,7 @@ class ExportElement extends Element
         //$supportedFields = Exporter::getInstance()->fields->getAvailableFieldTypes();
         $elementFields = $element->fieldLayout->getCustomFields();
 
-        return array_filter($elementFields, function ($field) {
+        return array_filter($elementFields, function($field) {
             return true;
         });
     }
@@ -375,7 +384,7 @@ class ExportElement extends Element
     {
         if (!$this->propagating) {
             Db::delete(ExportRecord::tableName(), [
-                    'id' => $this->id,]
+                    'id' => $this->id, ]
             );
         }
         parent::afterDelete();
