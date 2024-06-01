@@ -7,11 +7,6 @@
         {{ hiddenInput('elementId', export.id) }}
     {% endif %}
 
-    {# TODO: Remove this before we ship the plugin #}
-    {% if errors is defined %}
-        {{ d(errors) }}
-    {% endif %}
-
     <style>
         .run-settings .field, .custom-fields .field {
             margin: 12px 0;
