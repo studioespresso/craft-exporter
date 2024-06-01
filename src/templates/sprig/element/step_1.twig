@@ -9,11 +9,6 @@
         {{ hiddenInput('elementId', export.id) }}
     {% endif %}
 
-    {# TODO: Remove this before we ship the plugin #}
-    {% if errors is defined %}
-        {{ d(errors) }}
-    {% endif %}
-
     {{ forms.textField({
         first: true,
         label: "Name"|t('exporter'),

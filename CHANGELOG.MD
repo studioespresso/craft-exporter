@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 4.1.1 - 2024-06-01
+### Fixed
+- Removed debugging dump that caused a crash when creating a new export ([#14](https://github.com/studioespresso/craft-exporter/issues/14))
+
 ## 4.1.0 - 2024-04-23
 ### Added
 - Added an option to specify the filename as which the export will be generated ([#6](https://github.com/studioespresso/craft-exporter/issues/6))
