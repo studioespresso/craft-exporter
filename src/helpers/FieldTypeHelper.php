@@ -31,6 +31,7 @@ use studioespresso\exporter\fields\OptionsFieldParser;
 use studioespresso\exporter\fields\PlainTextParser;
 use studioespresso\exporter\fields\RelationFieldParser;
 use studioespresso\exporter\fields\TimeParser;
+use verbb\formie\fields\formfields\Heading;
 
 class FieldTypeHelper
 {
@@ -78,6 +79,10 @@ class FieldTypeHelper
             Url::class,
             Lightswitch::class,
         ],
+    ];
+
+    public const IGNORED_TYPES = [
+        Heading::class, // @phpstan-ignore-line
     ];
 
 
@@ -130,5 +135,10 @@ class FieldTypeHelper
             return \Craft::createObject($this->isFieldSupported($field));
         }
         return false;
+    }
+
+    public function getIgnoredFieldTypes(): array
+    {
+        return self::IGNORED_TYPES;
     }
 }
