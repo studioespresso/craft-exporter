@@ -55,17 +55,21 @@
                 {% set parser = craft.exporter.getFieldParser(field) %}
                 {% if not parser %}
                     {# Parser not found #}
-                    {% set showNotSupportedNotice = true %}
-                    <div id="{{ field.handle }}-input-field" class="field checkboxfield"
-                         data-attribute="{{ field.handle }}-input">
-                        <div class="input ltr">
-                            <input type="checkbox" disabled id="{{ field.handle }}-input" class="checkbox">
-                            <label for="{{ field.handle }}-input">
-                                <span style="text-decoration: line-through;">{{ field.name }}</span>
-                                ({{ "Field not supported"|t('exporters') }})
-                            </label>
+                    {% if craft.exporter.getClass(field) in craft.exporter.getIgnoredFieldTypes() %}
+
+                    {% else %}
+                        {% set showNotSupportedNotice = true %}
+                        <div id="{{ field.handle }}-input-field" class="field checkboxfield"
+                             data-attribute="{{ field.handle }}-input">
+                            <div class="input ltr">
+                                <input type="checkbox" disabled id="{{ field.handle }}-input" class="checkbox">
+                                <label for="{{ field.handle }}-input">
+                                    <span style="text-decoration: line-through;">{{ field.name }}</span>
+                                    ({{ "Field not supported"|t('exporters') }})
+                                </label>
+                            </div>
                         </div>
-                    </div>
+                    {% endif %}
                 {% else %}
                     {# We have a parser, so the field is supported #}
                     {% set fieldSettings = false %}

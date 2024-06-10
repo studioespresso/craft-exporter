@@ -50,4 +50,14 @@ class ExporterVariable
     {
         return Exporter::getInstance()->fields->getParser($field);
     }
+
+    public function getIgnoredFieldTypes(): array
+    {
+        return Exporter::getInstance()->fields->getIgnoredFieldTypes();
+    }
+
+    public function getClass($object)
+    {
+        return get_class($object);
+    }
 }
