@@ -60,11 +60,17 @@ class ExportQueryService extends Component
     public function mockElement(ExportElement $export): Element|null
     {
         try {
+            $query = Exporter::$plugin->query->buildQuery($export);
+            if ($query->one()) {
+                return $query->one();
+            }
+
             $elementType = $export->elementType;
             $settings = $export->getSettings();
             $elementOptions = Exporter::getInstance()->elements->getElementTypeSettings($elementType);
 
             $element = Craft::createObject($elementType);
+
             if (isset($elementOptions['group'])) {
                 $group = $elementOptions['group']['parameter'];
                 $element->$group = $settings['group'];
