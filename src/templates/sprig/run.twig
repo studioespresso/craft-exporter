@@ -134,13 +134,22 @@
 
     {{ hiddenInput('settings[deliveryType]', 'email') }}
     {{ forms.textField({
-        first: true,
         label: "Email address?"|t('exporter'),
         instructions: "Your export will be delivered by e-mail. Who should receive that e-mail?<br> To enter more than one address, seperate the with a comma."|t('exporter'),
         id: 'email',
         name: 'settings[email]',
         value: settings.email ?? '',
         errors: (errors is defined and errors.email ) ? errors.email : null,
+        required: true
+    }) }}
+
+    {{ forms.textField({
+        label: "Email subject"|t('exporter'),
+        instructions: "The subject that should be used for the email that contains your export"|t('exporter'),
+        id: 'emailSubject',
+        name: 'settings[emailSubject]',
+        value: settings.emailSubject ?? 'Your export',
+        errors: (errors is defined and errors.emailSubject ) ? errors.emailSubject : null,
         required: true
     }) }}
     <div class="field">

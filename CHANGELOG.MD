@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 4.2.0 - Unreleased
+### Added
+- Added support for exporting Users by user group
+- Added a field to customize the email subject per export
+
 ## 4.1.2 - 2024-06-10
 ### Fixed
 - Don't show "unsupported field" warning for Formie's "Heading" field
