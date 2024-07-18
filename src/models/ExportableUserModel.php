@@ -20,6 +20,8 @@ class ExportableUserModel extends ExportableElementTypeModel
      */
     public string $elementLabel = "Users";
 
+    public bool $shouldBeLocalised = false;
+
 
     /**
      * This function defines the element's attributes you want to make exportable

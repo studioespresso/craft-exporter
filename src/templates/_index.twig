@@ -34,15 +34,15 @@
 
 {% js %}
     new Craft.VueAdminTable({
-        search: true,
-        container: '#exporter-vue-admin-table',
-        columns: {{ columns|json_encode|raw }},
-        tableData: {{ tableData|json_encode|raw }},
-        deleteAction: {{ currentUser.can('exporter-deleteExports') ? '\'exporter/element/delete\'' : 0 }},
-        emptyMessage: 'No exports available',
-        checkboxes:  false,
-        allowMultipleSelections: false,
-        search: true,
+    container: '#exporter-vue-admin-table',
+    columns: {{ columns|json_encode|raw }},
+    tableData: {{ tableData|json_encode|raw }},
+    deleteAction: {{ currentUser.can('exporter-deleteExports') ? '\'exporter/element/delete\'' : 0 }},
+    emptyMessage: 'No exports available',
+    checkboxes:  false,
+    allowMultipleSelections: false,
+    search: true,
+    searchPlaceholder: 'Search exporter by name'
     });
 {% endjs %}
 

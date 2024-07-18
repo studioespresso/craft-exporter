@@ -18,6 +18,8 @@ class ExportableCategoryModel extends ExportableElementTypeModel
      */
     public string $elementLabel = "Categories";
 
+    public bool $shouldBeLocalised = true;
+
     /**
      * This function defines the element's attributes you want to make exportable
      * @return array

@@ -19,6 +19,7 @@ class ExportableEntryModel extends ExportableElementTypeModel
      */
     public string $elementLabel = "Entries";
 
+    public bool $shouldBeLocalised = true;
 
     /**
      * This function defines the element's attributes you want to make exportable
