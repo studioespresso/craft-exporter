@@ -190,13 +190,6 @@ class Exporter extends Plugin
                     ExportRecord::tableName(),
                     'id',
                 );
-
-                // Delete `elements` table rows without corresponding `content` table rows for the custom element
-                Craft::$app->getGc()->deletePartialElements(
-                    ExportElement::class,
-                    Table::CONTENT,
-                    'elementId',
-                );
             }
         );
 
