@@ -14,7 +14,7 @@
     {% set attributes = export.getAttributes() %}
     {% set fields = export.getFields() ?? [] %}
 
-    {% set element = export.getElementQuery().one() %}
+    {% set element = export.mockElement() %}
 
     {% if not element %}
         {{ "No elements can be found for your selection. Please create an element first or check your settings in step 1."|t('exporter') }}
@@ -55,21 +55,25 @@
                 {% set parser = craft.exporter.getFieldParser(field) %}
                 {% if not parser %}
                     {# Parser not found #}
-                    {% set showNotSupportedNotice = true %}
-                    <div id="{{ field.handle }}-input-field" class="field checkboxfield"
-                         data-attribute="{{ field.handle }}-input">
-                        <div class="input ltr">
-                            <input type="checkbox" disabled id="{{ field.handle }}-input" class="checkbox">
-                            <label for="{{ field.handle }}-input">
-                                <span style="text-decoration: line-through;">{{ field.name }}</span>
-                                ({{ "Field not supported"|t('exporters') }})
-                            </label>
+                    {% if craft.exporter.getClass(field) in craft.exporter.getIgnoredFieldTypes() %}
+
+                    {% else %}
+                        {% set showNotSupportedNotice = true %}
+                        <div id="{{ field.handle }}-input-field" class="field checkboxfield"
+                             data-attribute="{{ field.handle }}-input">
+                            <div class="input ltr">
+                                <input type="checkbox" disabled id="{{ field.handle }}-input" class="checkbox">
+                                <label for="{{ field.handle }}-input">
+                                    <span style="text-decoration: line-through;">{{ field.name }}</span>
+                                    ({{ "Field not supported"|t('exporters') }})
+                                </label>
+                            </div>
                         </div>
-                    </div>
+                    {% endif %}
                 {% else %}
                     {# We have a parser, so the field is supported #}
                     {% set fieldSettings = false %}
-                    {% if fields|length and attribute(fields, field.handle) %}
+                    {% if fields|length and attribute(fields, field.handle) is defined %}
                         {% set fieldSettings = attribute(fields, field.handle) %}
                     {% endif %}
                     <div id="{{ field.handle }}-input-field" class="field checkboxfield"

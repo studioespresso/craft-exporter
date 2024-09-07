@@ -9,11 +9,6 @@
         {{ hiddenInput('elementId', export.id) }}
     {% endif %}
 
-    {# TODO: Remove this before we ship the plugin #}
-    {% if errors is defined %}
-        {{ d(errors) }}
-    {% endif %}
-
     {{ forms.textField({
         first: true,
         label: "Name"|t('exporter'),
@@ -105,8 +100,9 @@
                         <div class="field width-50" id="elementType-entry-subfields">
                             <div class="heading">
                                 <label id="section-label" for="section">{{ subGroupSettings.label|t('exporter') }}<span
-                                            class="visually-hidden">{{ 'Required'|t('exporter') }}</span><span class="required"
-                                                                                         aria-hidden="true"></span></label>
+                                            class="visually-hidden">{{ 'Required'|t('exporter') }}</span><span
+                                            class="required"
+                                            aria-hidden="true"></span></label>
                             </div>
                             {% if subGroupSettings.instructions is defined %}
                                 <div id="section-instructions" class="instructions">
@@ -132,10 +128,15 @@
         {% endif %}
     {% endif %}
 
-
+    {% set isReady =  false %}
     {% if settings is defined and settings.group is defined and settings.subGroup is defined %}
-        {% set showSiteOptions = true %}
+        {% set isReady = true %}
     {% endif %}
+
+    {% if isReady %}
+        {% set showSiteOptions = not elementOptions.shouldBeLocalised ? elementOptions.shouldBeLocalised : true %}
+    {% endif %}
+
     {% if showSiteOptions %}
 
         <div class="field">

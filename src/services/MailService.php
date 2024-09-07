@@ -33,9 +33,10 @@ class MailService extends Component
 
         $message = new Message();
 
-        $fileName = "Export.{$exportSettings['fileType']}";
+        $name = $exportSettings['fileName'] ?? "Export";
+        $fileName = "{$name}.{$exportSettings['fileType']}";
         $message->attach($path, ['fileName' => $fileName, 'contentType' => "application/{$exportSettings['fileType']}"]);
-        $message->setSubject("Your export");
+        $message->setSubject($exportSettings['emailSubject'] ?? 'Your export');
         $message->setTo($exportSettings['email']);
         $message->setHtmlBody($html);
 

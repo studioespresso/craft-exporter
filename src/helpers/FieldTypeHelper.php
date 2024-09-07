@@ -31,6 +31,7 @@ use studioespresso\exporter\fields\OptionsFieldParser;
 use studioespresso\exporter\fields\PlainTextParser;
 use studioespresso\exporter\fields\RelationFieldParser;
 use studioespresso\exporter\fields\TimeParser;
+use verbb\formie\fields\formfields\Heading;
 
 class FieldTypeHelper
 {
@@ -80,6 +81,10 @@ class FieldTypeHelper
         ],
     ];
 
+    public const IGNORED_TYPES = [
+        Heading::class, // @phpstan-ignore-line
+    ];
+
 
     private static ?array $_supportedFieldTypes = null;
 
@@ -107,7 +112,6 @@ class FieldTypeHelper
             $event->fieldTypes,
             self::SUPPORTED_FIELD_TYPES,
         );
-
         return self::$_supportedFieldTypes;
     }
 
@@ -131,5 +135,10 @@ class FieldTypeHelper
             return \Craft::createObject($this->isFieldSupported($field));
         }
         return false;
+    }
+
+    public function getIgnoredFieldTypes(): array
+    {
+        return self::IGNORED_TYPES;
     }
 }

@@ -8,6 +8,7 @@ use craft\base\Plugin;
 use craft\db\Table;
 use craft\elements\Category;
 use craft\elements\Entry;
+use craft\elements\User;
 use craft\events\DefineBehaviorsEvent;
 use craft\events\RegisterComponentTypesEvent;
 use craft\events\RegisterUrlRulesEvent;
@@ -22,6 +23,7 @@ use studioespresso\exporter\elements\ExportElement;
 use studioespresso\exporter\events\RegisterExportableElementTypes;
 use studioespresso\exporter\events\RegisterExportableFieldTypes;
 use studioespresso\exporter\fields\DateTimeParser;
+use studioespresso\exporter\fields\FormieNameParser;
 use studioespresso\exporter\fields\MultiOptionsFieldParser;
 use studioespresso\exporter\fields\OptionsFieldParser;
 use studioespresso\exporter\fields\PlainTextParser;
@@ -31,6 +33,7 @@ use studioespresso\exporter\helpers\FieldTypeHelper;
 use studioespresso\exporter\models\ExportableCategoryModel;
 use studioespresso\exporter\models\ExportableEntryModel;
 use studioespresso\exporter\models\ExportableFormieSubmissionModel;
+use studioespresso\exporter\models\ExportableUserModel;
 use studioespresso\exporter\models\Settings;
 use studioespresso\exporter\records\ExportRecord;
 use studioespresso\exporter\services\ElementService;
@@ -170,9 +173,11 @@ class Exporter extends Plugin
             function(RegisterExportableElementTypes $event) {
                 $entryModel = new ExportableEntryModel();
                 $categoryModel = new ExportableCategoryModel();
+                $userModel = new ExportableUserModel();
                 $event->elementTypes = array_merge($event->elementTypes, [
                     Entry::class => $entryModel,
                     Category::class => $categoryModel,
+                    User::class => $userModel,
                 ]);
             });
     }
@@ -188,13 +193,6 @@ class Exporter extends Plugin
                     ExportElement::class,
                     ExportRecord::tableName(),
                     'id',
-                );
-
-                // Delete `elements` table rows without corresponding `content` table rows for the custom element
-                Craft::$app->getGc()->deletePartialElements(
-                    ExportElement::class,
-                    Table::CONTENT,
-                    'elementId',
                 );
             }
         );
@@ -309,6 +307,10 @@ class Exporter extends Plugin
                         \verbb\formie\fields\formfields\Entries::class, // @phpstan-ignore-line
                         \verbb\formie\fields\formfields\Categories::class, // @phpstan-ignore-line
                     ]);
+
+                    $event->fieldTypes = array_merge($event->fieldTypes, [FormieNameParser::class => [
+                        \verbb\formie\fields\formfields\Name::class, // @phpstan-ignore-line
+                    ]]);
                 });
         }
     }

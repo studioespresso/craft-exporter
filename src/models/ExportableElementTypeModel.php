@@ -35,4 +35,5 @@ abstract class ExportableElementTypeModel extends Model
      * @return bool|array
      */
     abstract public function getSubGroup(): bool|array;
+
 }
