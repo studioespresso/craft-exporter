@@ -3,7 +3,7 @@
 namespace studioespresso\exporter\models;
 
 use craft\elements\Entry;
-use craft\services\Sections;
+use craft\services\Elements;
 
 class ExportableEntryModel extends ExportableElementTypeModel
 {
@@ -60,7 +60,7 @@ class ExportableEntryModel extends ExportableElementTypeModel
             'label' => \Craft::t('exporter', 'Entry type'),
             "instructions" => \Craft::t('exporter', 'Choose which entry-type you want to export'),
             'parameter' => 'id',
-            'class' => Sections::class,
+            'class' => Elements::class,
             'function' => 'getEntryTypesBySectionId',
         ];
     }
