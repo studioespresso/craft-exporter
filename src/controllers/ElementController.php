@@ -204,7 +204,12 @@ class ElementController extends Controller
         $attributes = array_filter($body['attributes']);
         $export->attributes = Json::encode($attributes);
 
-        $fields = array_filter($body['fields']);
+        if(!is_array($body['fields'])) {
+            $export->addError('fields', Craft::t('exporter', 'Please select at least one field to export'));
+            return $this->returnWithErrors($export);
+        }
+
+        $fields = array_filter($body['fields'] ?? []);
         $export->fields = Json::encode($fields);
 
         $export->setScenario(ExportElement::STEP_2);
@@ -218,11 +223,7 @@ class ElementController extends Controller
         }
 
         if ($export->getErrors()) {
-            Craft::$app->getUrlManager()->setRouteParams([
-                "export" => $export,
-                "errors" => $export->getErrors(),
-            ]);
-            return null;
+            return $this->returnWithErrors($export);
         }
 
         Craft::$app->getElements()->saveElement($export);
@@ -244,11 +245,7 @@ class ElementController extends Controller
 
         $export->validate();
         if ($export->getErrors()) {
-            Craft::$app->getUrlManager()->setRouteParams([
-                "export" => $export,
-                "errors" => $export->getErrors(),
-            ]);
-            return null;
+            return $this->returnWithErrors($export);
         }
 
         Craft::$app->getElements()->saveElement($export);
@@ -264,5 +261,13 @@ class ElementController extends Controller
         if (Craft::$app->getElements()->deleteElement($export)) {
             return $this->asJson(['success' => true]);
         }
+    }
+
+    private function returnWithErrors(ExportElement $export) {
+        Craft::$app->getUrlManager()->setRouteParams([
+            "export" => $export,
+            "errors" => $export->getErrors(),
+        ]);
+        return null;
     }
 }
