@@ -204,7 +204,7 @@ class ElementController extends Controller
         $attributes = array_filter($body['attributes']);
         $export->attributes = Json::encode($attributes);
 
-        if(!is_array($body['fields'])) {
+        if (!is_array($body['fields'])) {
             $export->addError('fields', Craft::t('exporter', 'Please select at least one field to export'));
             return $this->returnWithErrors($export);
         }
@@ -263,7 +263,8 @@ class ElementController extends Controller
         }
     }
 
-    private function returnWithErrors(ExportElement $export) {
+    private function returnWithErrors(ExportElement $export)
+    {
         Craft::$app->getUrlManager()->setRouteParams([
             "export" => $export,
             "errors" => $export->getErrors(),

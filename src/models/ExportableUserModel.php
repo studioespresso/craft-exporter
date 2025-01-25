@@ -2,7 +2,6 @@
 
 namespace studioespresso\exporter\models;
 
-use craft\elements\Entry;
 use craft\elements\User;
 use craft\services\Sections;
 
@@ -62,7 +61,7 @@ class ExportableUserModel extends ExportableElementTypeModel
 
     private function getAuthorizedGroups()
     {
-        if(\Craft::$app->getRequest()->isConsoleRequest) {
+        if (\Craft::$app->getRequest()->isConsoleRequest) {
             $currentUser = User::findOne(['admin' => 1]);
         } else {
             $currentUser = \Craft::$app->getUser()->getIdentity();
@@ -71,13 +70,12 @@ class ExportableUserModel extends ExportableElementTypeModel
 
         // If the current user is an admin, they can export all groups
         if ($currentUser->admin) {
-            return collect($groups)->map(function ($group) {
+            return collect($groups)->map(function($group) {
                 return ['id' => $group->id, 'name' => $group->name];
             })->toArray();
         }
 
         $canEditUsers = \Craft::$app->getUserPermissions()->doesUserHavePermission($currentUser->id, 'editUsers') || $currentUser->admin;
         dd($canEditUsers);
-
     }
 }

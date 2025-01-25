@@ -3,7 +3,6 @@
 namespace studioespresso\exporter\models;
 
 use craft\elements\Entry;
-use craft\services\Elements;
 use craft\services\Entries;
 
 class ExportableEntryModel extends ExportableElementTypeModel
