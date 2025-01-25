@@ -324,7 +324,11 @@ class ExportElement extends Element
     public function getHeadings(): array
     {
         $headings = [];
-        foreach ($this->getFields() as $field) {
+        $selectedHeadings = collect($this->getFields())->filter(function($field) {
+            return $field['handle'] ? true : false;
+        })->toArray();
+
+        foreach ($selectedHeadings as $field) {
             if (is_array($field)) {
                 $headings[] = $field['handle'];
             } else {
