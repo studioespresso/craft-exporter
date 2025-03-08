@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 4.2.0 - 2025-03-08
+### Added
+- Added support for exporting Users by user group
+- Added a field to customize the email subject per export
+### Fixed
+- Fixed an issue with empty column headers
+
 ## 4.1.3 - 2024-08-19 [CRITICAL]
 ### Fixed
 - Fixed an bug where exports would be deteled when the system ran Garbage Collection. You'll have to update to this version and recreate your exports.

@@ -8,6 +8,7 @@ use craft\base\Plugin;
 use craft\db\Table;
 use craft\elements\Category;
 use craft\elements\Entry;
+use craft\elements\User;
 use craft\events\DefineBehaviorsEvent;
 use craft\events\RegisterComponentTypesEvent;
 use craft\events\RegisterUrlRulesEvent;
@@ -32,6 +33,7 @@ use studioespresso\exporter\helpers\FieldTypeHelper;
 use studioespresso\exporter\models\ExportableCategoryModel;
 use studioespresso\exporter\models\ExportableEntryModel;
 use studioespresso\exporter\models\ExportableFormieSubmissionModel;
+use studioespresso\exporter\models\ExportableUserModel;
 use studioespresso\exporter\models\Settings;
 use studioespresso\exporter\records\ExportRecord;
 use studioespresso\exporter\services\ElementService;
@@ -171,9 +173,11 @@ class Exporter extends Plugin
             function(RegisterExportableElementTypes $event) {
                 $entryModel = new ExportableEntryModel();
                 $categoryModel = new ExportableCategoryModel();
+                $userModel = new ExportableUserModel();
                 $event->elementTypes = array_merge($event->elementTypes, [
                     Entry::class => $entryModel,
                     Category::class => $categoryModel,
+                    User::class => $userModel,
                 ]);
             });
     }
