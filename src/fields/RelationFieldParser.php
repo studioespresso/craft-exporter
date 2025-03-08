@@ -11,15 +11,28 @@ class RelationFieldParser extends BaseFieldParser
     {
         /** @var Element|null $element */
 
-        $relation = $element->getFieldValue($field['handle'])->one();
+        $relations = $element->getFieldValue($field['handle'])->all();
         $property = $field['property'];
 
-        if ($relation) {
+        $result = [];
+        foreach ($relations as $relation) {
+
             if (isset($relation->$property)) {
-                return $relation->$property;
+                $result[] = $relation->$property;
+            } else {
+                $result[] = $relation->id;
             }
-            return $relation->id;
         }
+
+        if(empty($result)) {
+            return '';
+        }
+
+        if(count($result) === 1) {
+            return $result[0];
+        }
+
+        return implode(',', $result);
     }
 
     public function getOptions(): array

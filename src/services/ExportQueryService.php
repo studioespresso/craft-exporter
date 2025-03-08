@@ -49,7 +49,9 @@ class ExportQueryService extends Component
                     ]);
                     break;
                 case 'limit':
-                    $query->limit($runSettings['dateEnd']);
+                    if (isset($runSettings['limit'])) {
+                        $query->limit($runSettings['limit']);
+                    }
                     break;
             }
         }
