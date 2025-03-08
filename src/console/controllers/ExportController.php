@@ -40,9 +40,9 @@ class ExportController extends Controller
     {
         $export = ExportElement::find()->id($id)->one();
         /** @var UserQuery $query */
-
-
-        var_dump($query->all()); exit;
+        $query = Exporter::$plugin->query->buildQuery($export);
+        var_dump($query->all());
+        exit;
 
         $attributes = array_values($export->getAttributes());
         $fields = $export->getHeadings();

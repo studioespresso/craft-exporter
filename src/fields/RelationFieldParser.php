@@ -16,7 +16,6 @@ class RelationFieldParser extends BaseFieldParser
 
         $result = [];
         foreach ($relations as $relation) {
-
             if (isset($relation->$property)) {
                 $result[] = $relation->$property;
             } else {
@@ -24,11 +23,11 @@ class RelationFieldParser extends BaseFieldParser
             }
         }
 
-        if(empty($result)) {
+        if (empty($result)) {
             return '';
         }
 
-        if(count($result) === 1) {
+        if (count($result) === 1) {
             return $result[0];
         }
 
