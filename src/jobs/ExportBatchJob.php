@@ -62,7 +62,7 @@ class ExportBatchJob extends BaseBatchedJob
         // Set headers for data before we start.
         $attributes = array_values($this->attributes);
         $fields = $this->export->getHeadings();
-        $this->data[0] = array_merge($attributes, $fields);
+        $this->data[0] = array_filter(array_merge($attributes, $fields));
 
         return new QueryBatcher($query);
     }
