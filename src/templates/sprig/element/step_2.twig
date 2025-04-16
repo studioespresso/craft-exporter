@@ -52,10 +52,10 @@
             {% set allFields = export.getSupportedFields(element) %}
             {% set showNotSupportedNotice = false %}
             {% for field in allFields %}
-                {% set parser = craft.exporter.getFieldParser(field) %}
+                {% set parser = craft.exporter.getFieldParser(field.field) %}
                 {% if not parser %}
                     {# Parser not found #}
-                    {% if craft.exporter.getClass(field) in craft.exporter.getIgnoredFieldTypes() %}
+                    {% if craft.exporter.getClass(field.field) in craft.exporter.getIgnoredFieldTypes() %}
 
                     {% else %}
                         {% set showNotSupportedNotice = true %}

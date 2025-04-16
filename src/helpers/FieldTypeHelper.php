@@ -5,6 +5,8 @@ namespace studioespresso\exporter\helpers;
 use craft\base\Event;
 use craft\base\Field;
 use craft\base\FieldInterface;
+use craft\fieldlayoutelements\BaseField;
+use craft\fieldlayoutelements\TextField;
 use craft\fields\Assets;
 use craft\fields\Categories;
 use craft\fields\Checkboxes;
@@ -78,6 +80,7 @@ class FieldTypeHelper
             Color::class,
             Url::class,
             Lightswitch::class,
+            TextField::class,
         ],
     ];
 
@@ -115,7 +118,7 @@ class FieldTypeHelper
         return self::$_supportedFieldTypes;
     }
 
-    public function isFieldSupported(FieldInterface $field)
+    public function isFieldSupported(FieldInterface|BaseField $field)
     {
         $item = array_filter(self::$_supportedFieldTypes, function($fields) use ($field) {
             foreach ($fields as $f) {
@@ -129,7 +132,7 @@ class FieldTypeHelper
         return reset($parser);
     }
 
-    public function getParser(Field $field): BaseFieldParser|bool
+    public function getParser(Field|BaseField $field): BaseFieldParser|bool
     {
         if ($this->isFieldSupported($field)) {
             return \Craft::createObject($this->isFieldSupported($field));

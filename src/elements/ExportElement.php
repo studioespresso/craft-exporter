@@ -26,6 +26,8 @@ class ExportElement extends Element
 
     public $fields;
 
+    public $parsdedFields;
+
     public $runSettings;
 
     public const STEP_1 = "step1";
@@ -292,12 +294,40 @@ class ExportElement extends Element
 
     public function getSupportedFields(Element $element): array
     {
-        //$supportedFields = Exporter::getInstance()->fields->getAvailableFieldTypes();
         $elementFields = $element->fieldLayout->getCustomFields();
 
-        return array_filter($elementFields, function($field) {
+        if(!$elementFields) {
+            $elementFields = [];
+            $tabs = collect($element->getFieldLayout()->getTabs());
+            foreach ($tabs as $tab) {
+                $fields = $tab->getElements();
+                foreach ($fields as $field) {
+                    $elementFields[] = $field;
+                }
+            }
+
+        }
+
+        $filterdFields =  array_filter($elementFields, function($field) {
             return true;
         });
+        $mapped = collect($filterdFields)->map(function($field) {
+            $data =  [
+                'field' => $field,
+            ];
+            if(isset($field->handle)) {
+                $data['handle'] = $field->handle;
+                $data['name'] = $field->name;
+            } else {
+                $data['handle'] = $field->attribute;
+                $data['name'] = $field->label;
+            }
+            return $data;
+        })->toArray();
+
+        $this->parsdedFields = $mapped;
+
+        return $mapped;
     }
 
     public function getSettings(): null|array

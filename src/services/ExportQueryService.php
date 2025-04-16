@@ -11,6 +11,7 @@ use craft\helpers\DateTimeHelper;
 use studioespresso\exporter\elements\ExportElement;
 use studioespresso\exporter\Exporter;
 use studioespresso\exporter\fields\PlainTextParser;
+use verbb\formie\Formie;
 use yii\base\Exception;
 
 class ExportQueryService extends Component
@@ -86,14 +87,22 @@ class ExportQueryService extends Component
     public function getFields(ExportElement $export, Element $element): array
     {
         $data = [];
+
         $layout = $element->getFieldLayout();
+
         foreach ($export->getFields() as $field) {
             try {
                 if (!$field['handle']) {
                     continue;
                 }
 
-                $craftField = $layout->getFieldByHandle($field['handle']);
+                if($element instanceof \verbb\formie\elements\Submission) {
+                    $craftField = Formie::$plugin->fields->getFieldByHandle($field['handle']);
+                } else {
+                    $craftField = $layout->getFieldByHandle($field['handle']);
+
+                }
+
                 $parser = Exporter::getInstance()->fields->isFieldSupported($craftField);
 
                 if (!$parser) {
@@ -112,5 +121,42 @@ class ExportQueryService extends Component
             }
         }
         return $data;
+    }
+
+    private function parseFields(Element $element): array
+    {
+        $elementFields = $element->fieldLayout->getCustomFields();
+
+        if(!$elementFields) {
+            $elementFields = [];
+            $tabs = collect($element->getFieldLayout()->getTabs());
+            foreach ($tabs as $tab) {
+                $fields = $tab->getElements();
+                foreach ($fields as $field) {
+                    $elementFields[] = $field;
+                }
+            }
+
+        }
+
+        $filterdFields =  array_filter($elementFields, function($field) {
+            return true;
+        });
+        $mapped = collect($filterdFields)->map(function($field) {
+            $data =  [
+                'field' => $field,
+            ];
+            if(isset($field->handle)) {
+                $data['handle'] = $field->handle;
+                $data['name'] = $field->name;
+            } else {
+                $data['handle'] = $field->attribute;
+                $data['name'] = $field->label;
+            }
+            return $data;
+        })->toArray();
+
+
+        return $mapped;
     }
 }

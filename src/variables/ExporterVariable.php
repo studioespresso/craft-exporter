@@ -4,6 +4,7 @@ namespace studioespresso\exporter\variables;
 
 use craft\base\Field;
 use craft\db\Query;
+use craft\fieldlayoutelements\BaseField;
 use ReflectionClass;
 use studioespresso\exporter\elements\ExportElement;
 use studioespresso\exporter\Exporter;
@@ -46,7 +47,7 @@ class ExporterVariable
         return $object->$function($id);
     }
 
-    public function getFieldParser(Field $field): BaseFieldParser|bool
+    public function getFieldParser(Field|BaseField $field): BaseFieldParser|bool
     {
         return Exporter::getInstance()->fields->getParser($field);
     }
