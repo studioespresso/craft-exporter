@@ -296,7 +296,7 @@ class ExportElement extends Element
     {
         $elementFields = $element->fieldLayout->getCustomFields();
 
-        if(!$elementFields) {
+        if (!$elementFields) {
             $elementFields = [];
             $tabs = collect($element->getFieldLayout()->getTabs());
             foreach ($tabs as $tab) {
@@ -305,17 +305,16 @@ class ExportElement extends Element
                     $elementFields[] = $field;
                 }
             }
-
         }
 
-        $filterdFields =  array_filter($elementFields, function($field) {
+        $filterdFields = array_filter($elementFields, function($field) {
             return true;
         });
         $mapped = collect($filterdFields)->map(function($field) {
-            $data =  [
+            $data = [
                 'field' => $field,
             ];
-            if(isset($field->handle)) {
+            if (isset($field->handle)) {
                 $data['handle'] = $field->handle;
                 $data['name'] = $field->name;
             } else {

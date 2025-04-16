@@ -96,11 +96,10 @@ class ExportQueryService extends Component
                     continue;
                 }
 
-                if($element instanceof \verbb\formie\elements\Submission) {
+                if ($element instanceof \verbb\formie\elements\Submission) {
                     $craftField = Formie::$plugin->fields->getFieldByHandle($field['handle']);
                 } else {
                     $craftField = $layout->getFieldByHandle($field['handle']);
-
                 }
 
                 $parser = Exporter::getInstance()->fields->isFieldSupported($craftField);
@@ -127,7 +126,7 @@ class ExportQueryService extends Component
     {
         $elementFields = $element->fieldLayout->getCustomFields();
 
-        if(!$elementFields) {
+        if (!$elementFields) {
             $elementFields = [];
             $tabs = collect($element->getFieldLayout()->getTabs());
             foreach ($tabs as $tab) {
@@ -136,17 +135,16 @@ class ExportQueryService extends Component
                     $elementFields[] = $field;
                 }
             }
-
         }
 
-        $filterdFields =  array_filter($elementFields, function($field) {
+        $filterdFields = array_filter($elementFields, function($field) {
             return true;
         });
         $mapped = collect($filterdFields)->map(function($field) {
-            $data =  [
+            $data = [
                 'field' => $field,
             ];
-            if(isset($field->handle)) {
+            if (isset($field->handle)) {
                 $data['handle'] = $field->handle;
                 $data['name'] = $field->name;
             } else {
