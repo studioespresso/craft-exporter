@@ -1,18 +1,19 @@
-{% extends "_layouts/cp" %}
-{% import "_includes/forms" as forms %}
+{% extends '_layouts/cp' %}
+{% import '_includes/forms' as forms %}
 
-{% set title = "Run export" %}
+{% set title = 'Run export' %}
 {% set crumbs = [
-    { label: "Exporter", url: url('exporter') },
+    { label: 'Exporter', url: url('exporter') },
 ] %}
 
 {% block actionButton %}
-    <a href="{{ cpUrl("exporter/" ~ export.getCanonicalId() ~ "/1") }}" class="btn submit">{{ "Edit export"|t('exporter') }}</a>
+    <a href="{{ cpUrl('exporter/' ~ export.getCanonicalId() ~ '/conditions') }}" class="btn">{{ 'Configure filter'|t('exporter') }}</a>
+    <a href="{{ cpUrl('exporter/' ~ export.getCanonicalId() ~ '/1') }}" class="btn submit">{{ 'Edit export'|t('exporter') }}</a>
 {% endblock %}
 
 {% block content %}
     {{  sprig('exporter/sprig/run', {
-        'exportId': export ? export.id : null,
-        's-trigger': 'load',
-    }) }}
+            exportId: export ? export.id : null,
+            's-trigger': 'load',
+        }) }}
 {% endblock %}
