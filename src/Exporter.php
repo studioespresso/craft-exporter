@@ -39,6 +39,7 @@ use studioespresso\exporter\records\ExportRecord;
 use studioespresso\exporter\services\ElementService;
 use studioespresso\exporter\services\ExportQueryService;
 use studioespresso\exporter\services\MailService;
+use studioespresso\exporter\services\QueueService;
 use studioespresso\exporter\variables\CraftVariableBehavior;
 use studioespresso\exporter\variables\ExporterVariable;
 use yii\base\Event;
@@ -57,6 +58,7 @@ use yii\console\Application as ConsoleApplication;
  * @property-read FieldTypeHelper $fields
  * @property-read MailService $mail
  * @property-read ElementService $element
+ * @property-read QueueService $queue
  **/
 class Exporter extends Plugin
 {
@@ -104,6 +106,7 @@ class Exporter extends Plugin
                 'query' => ['class' => ExportQueryService::class],
                 'mail' => ['class' => MailService::class],
                 'element' => ['class' => ElementService::class],
+                'queue' => ['class' => QueueService::class],
             ],
         ];
     }
