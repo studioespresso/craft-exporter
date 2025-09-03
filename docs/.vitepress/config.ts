@@ -38,6 +38,7 @@ module.exports = {
             {text: 'Usage', link: '/usage'},
             {text: 'Elements, fields & formats', link: '/fields'},
             {text: 'Settings', link: '/settings'},
+            {text: 'Command line', link: '/cli'},
             {
                 text: 'Extending',
                 items: [
