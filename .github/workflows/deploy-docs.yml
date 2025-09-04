@@ -1,10 +1,10 @@
-name: Deploy vitepress
-
+name: Build documentation (vitepress)
 on:
   push:
     branches:
       - develop
-
+      - develop-v5
+      - v5
 jobs:
   deploy:
     runs-on: ubuntu-latest
