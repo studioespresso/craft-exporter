@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 5.1.0 - 2025-09-03
+### Added
+- Added support for running exports from command line ([#21](https://github.com/studioespresso/craft-exporter/issues/21))
+
 ## 5.0.0 - 2025-04-16
 ### Added
 - Added support for Craft 5!
