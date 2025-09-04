@@ -95,8 +95,9 @@ class ExportQueryService extends Component
                 if (!$field['handle']) {
                     continue;
                 }
-
+                /** @phpstan-ignore-next-line */
                 if ($element instanceof \verbb\formie\elements\Submission) {
+                    /** @phpstan-ignore-next-line */
                     $craftField = Formie::$plugin->fields->getFieldByHandle($field['handle']);
                 } else {
                     $craftField = $layout->getFieldByHandle($field['handle']);
