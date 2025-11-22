@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 5.1.1 - 2025-11-22
+### Added
+- Added support for the latest version of phpoffice/phpspreadsheet ([#23](https://github.com/studioespresso/craft-exporter/issues/23))
+
 ## 5.1.0 - 2025-09-03
 ### Added
 - Added support for running exports from command line ([#21](https://github.com/studioespresso/craft-exporter/issues/21))
