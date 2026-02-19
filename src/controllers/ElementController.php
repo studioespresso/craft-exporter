@@ -12,6 +12,8 @@ use studioespresso\exporter\elements\ExportElement;
 use studioespresso\exporter\Exporter;
 use studioespresso\exporter\helpers\ElementTypeHelper;
 use studioespresso\exporter\jobs\ExportBatchJob;
+use studioespresso\exporter\records\ExportRecord;
+use yii\web\NotFoundHttpException;
 use yii\web\UnauthorizedHttpException;
 
 class ElementController extends Controller
@@ -133,6 +135,47 @@ class ElementController extends Controller
 
         return $this->renderTemplate('exporter/_export/_run', [
             'export' => $element,
+        ], View::TEMPLATE_MODE_CP);
+    }
+
+    public function actionSaveConditionBuilder(): \yii\web\Response
+    {
+        $this->requirePostRequest();
+        $request = $this->request;
+
+        $elementId = $request->getBodyParam('elementId');
+
+        if ($elementId) {
+            /** @var ExportElement $element */
+            $element = ExportElement::find()->id($elementId)->one();
+            if (!$element) {
+                throw new NotFoundHttpException('Element not found');
+            }
+        }
+        $conditionData = $request->getBodyParam('condition');
+        // Save this as JSON to a DB column or a config file
+        $conditionJson = Json::encode($conditionData);
+
+        $record = ExportRecord::findOne(['id' => $elementId]);
+        $record->conditionConfig = $conditionJson;
+        $record->save();
+
+        return $this->redirect('exporter/' . $elementId . '/run');
+    }
+
+    public function actionConditionBuilder($elementId = null): \yii\web\Response
+    {
+        /** @var ExportElement $element */
+        $element = null;
+        if ($elementId) {
+            $element = ExportElement::find()->id($elementId)->one();
+        }
+
+        $condition = $element->getCondition();
+
+        return $this->renderTemplate('exporter/_export/_conditionBuilder', [
+            'export' => $element,
+            'condition' => $condition,
         ], View::TEMPLATE_MODE_CP);
     }
 

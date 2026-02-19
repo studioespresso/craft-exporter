@@ -144,10 +144,13 @@ class Exporter extends Plugin
 
     private function registerElementTypes(): void
     {
-        Event::on(Elements::class, Elements::EVENT_REGISTER_ELEMENT_TYPES,
+        Event::on(
+            Elements::class,
+            Elements::EVENT_REGISTER_ELEMENT_TYPES,
             function(RegisterComponentTypesEvent $event) {
                 $event->types[] = ExportElement::class;
-            });
+            }
+        );
     }
 
     private function registerCpRoutes(): void
@@ -159,6 +162,8 @@ class Exporter extends Plugin
                 $event->rules['exporter'] = 'exporter/element/index';
                 $event->rules['exporter/create'] = 'exporter/element/edit';
                 $event->rules['exporter/<elementId:\\d+>/<step:\\d+>'] = 'exporter/element/edit';
+                $event->rules['exporter/<elementId:\\d+>/conditions'] = 'exporter/element/condition-builder';
+                $event->rules['exporter/save-conditions'] = 'exporter/element/save-condition-builder';
                 $event->rules['exporter/<elementId:\\d+>/run'] = 'exporter/element/run';
                 $event->rules['exporter/<elementId:\\d+>/watch'] = 'exporter/element/watch';
             }
@@ -179,7 +184,8 @@ class Exporter extends Plugin
                     Category::class => $categoryModel,
                     User::class => $userModel,
                 ]);
-            });
+            }
+        );
     }
 
     private function attachEventHandlers(): void
@@ -241,7 +247,8 @@ class Exporter extends Plugin
                     $parsers = $event->fieldTypes;
                     $parsers[PlainTextParser::class][] = \craft\redactor\Field::class; // @phpstan-ignore-line
                     $event->fieldTypes = $parsers;
-                });
+                }
+            );
         }
     }
 
@@ -255,7 +262,8 @@ class Exporter extends Plugin
                     $parsers = $event->fieldTypes;
                     $parsers[PlainTextParser::class][] = \craft\ckeditor\Field::class; // @phpstan-ignore-line
                     $event->fieldTypes = $parsers;
-                });
+                }
+            );
         }
     }
 
@@ -273,7 +281,8 @@ class Exporter extends Plugin
                         /** @phpstan-ignore-next-line */
                         \verbb\formie\elements\Submission::class => $model,
                     ]);
-                });
+                }
+            );
 
             Event::on(
                 FieldTypeHelper::class,
@@ -311,7 +320,8 @@ class Exporter extends Plugin
                     $event->fieldTypes = array_merge($event->fieldTypes, [FormieNameParser::class => [
                         \verbb\formie\fields\formfields\Name::class, // @phpstan-ignore-line
                     ]]);
-                });
+                }
+            );
         }
     }
 }
