@@ -74,18 +74,20 @@ class ExportBatchJob extends BaseBatchedJob
     {
         $attributes = array_values($this->attributes);
         $fields = array_values($this->fields);
-//        $data[] = array_merge($attributes, $fields);
 
-        $values = $item->toArray(array_values($attributes));
-        // Convert values to strings
-        $values = array_map(function($item) {
-            return (string)$item;
-        }, $values);
+        $values = $item->toArray($attributes);
+
+        // Reorder values to match the header order, since toArray() returns
+        // keys in the element's internal field order, not the requested order
+        $orderedValues = [];
+        foreach ($attributes as $attr) {
+            $orderedValues[] = isset($values[$attr]) ? (string)$values[$attr] : '';
+        }
 
         // Fetch the custom field content, already prepped
         $fieldValues = $this->export->parseFieldValues($item);
 
-        $this->data[] = array_merge($values, $fieldValues);
+        $this->data[] = array_merge($orderedValues, array_values($fieldValues));
     }
 
 
