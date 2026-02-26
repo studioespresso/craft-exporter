@@ -236,7 +236,7 @@ class ExportElement extends Element
         ];
     }
 
-    protected static function defineSources(string $context = null): array
+    protected static function defineSources(string $context): array
     {
         return [
             [
