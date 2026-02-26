@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 5.1.2 - 2026-02-26
+### Fixed
+- Fixed an issue where export column headers for element attributes could be swapped ([#30](https://github.com/studioespresso/craft-exporter/issues/30))
+
 ## 5.1.1 - 2025-11-22
 ### Added
 - Added support for the latest version of phpoffice/phpspreadsheet ([#23](https://github.com/studioespresso/craft-exporter/issues/23))
